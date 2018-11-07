@@ -10,28 +10,15 @@ var TITLE = 'app - main'
 module.exports = view
 
 
-const mainStyle = css`
-main{
-flex:1;
-}
-`
+function view(state, emit) {
 
-const headerStyle = css`
-header{
-height:60px;
-}
-`
+  if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
 
+  return html `
 
-function view (state, emit) {
-
-if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
-
-return html`
-
-<body class="${styles} code lh-copy bg-washed-blue container flex flex-column">
-  <header class="${headerStyle} flex flex-column justify-center pa2">
-    <nav class="w-100 h-100 flex flex-row justify-between">
+<body class="w-100 h-100 code lh-copy bg-washed-blue ma0 flex flex-column">
+  <header class="flex h-60px flex-column justify-center pa2">
+    <nav class="w-100 h-100 ma0 flex flex-row justify-between">
       <ul class="flex flex-row list pl0 justify-start h-100 ma0 items-center">
         <li><img id="logo" class="pr2" src="../assets/magic-tracks-logo-nobg.png" alt="magic tracks logo"></li>
         <li> ✨ Magic Tracks ✨</li>
@@ -41,7 +28,7 @@ return html`
       </ul>
     </nav>
   </header>
-  <main class="${mainStyle} flex flex-column justify-center items-center pa2">
+  <main class="flex flex-column justify-center items-center pa2 flex-1">
     <!-- row1 -->
     <section class="flex-m flex-l flex-ns flex-row items-center justify-center flex-wrap-l flex-wrap-m">
         <!-- left -->
