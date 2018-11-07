@@ -1,14 +1,13 @@
 var feathers = require('@feathersjs/feathers');
 var rest = require('@feathersjs/rest-client');
 const auth = require('@feathersjs/authentication-client');
-// Configure feathers
-const feathersConnection = feathers();
 // Connect to a different URL
-const restClient = rest('http://127.0.0.1:3030')
+const restClient = rest('https://127.0.0.1:3030')
 // Configure an AJAX library (see below) with that client 
-const api = feathersConnection.configure(restClient.fetch(window.fetch));
+// const api = feathersConnection.configure(restClient.axios(axios));
+const feathersClient = feathers().configure(restClient.fetch(window.fetch));
 
-api.configure(auth({
+feathersClient.configure(auth({
     header: 'Authorization', // the default authorization header for REST
     prefix: '', // if set will add a prefix to the header value. for example if prefix was 'JWT' then the header would be 'Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOi...'
     path: '/authentication', // the server-side authentication service path
@@ -22,5 +21,5 @@ api.configure(auth({
 
 
 module.exports = {
-    api
+    feathersClient
 };

@@ -12,11 +12,16 @@
   },
   "dependencies": {
     "@feathersjs/authentication-client": "^1.0.8",
+    "@feathersjs/client": "^3.7.5",
     "@feathersjs/feathers": "^3.2.3",
     "@feathersjs/rest-client": "^1.4.5",
+    "@feathersjs/socketio-client": "^1.1.5",
+    "axios": "^0.18.0",
     "choo": "^6.13.1",
     "choo-service-worker": "^2.4.0",
+    "node-fetch": "^2.2.1",
     "sheetify": "^7.3.3",
+    "socket.io-client": "^2.1.1",
     "tachyons": "^4.11.1"
   },
   "devDependencies": {
