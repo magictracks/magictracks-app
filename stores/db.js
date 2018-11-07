@@ -7,9 +7,25 @@ module.exports = store
 
 function store(state, emitter, app) {
   // state.totalClicks = 0
+  state.authenticated;
+  feathersClient.authenticate().then(() => {
+    console.log("brilliant! you're auth'd!")
+    state.authenticated = true;
+  }).catch( err =>{
+    console.log("not auth'd friend!")
+    state.authenticated = false;
+  });
 
 
   emitter.on('DOMContentLoaded', function () {
+    
+    emitter.on('db:users:redirect', function () {
+      // state.totalClicks += count
+      emitter.emit("pushState", "/");
+      // emitter.emit(state.events.RENDER);
+    })
+
+
     emitter.on('db:test', function (count) {
       // state.totalClicks += count
 
@@ -42,9 +58,14 @@ function store(state, emitter, app) {
     emitter.on("db:users:login", function (formData) {
       if (!formData) {
         // try to auth using JWT from local Storage
-        api.authenticate().then(() => {
-          console.log("brilliant! you're auth'd!")
+        feathersClient.authenticate().then((resp) => {
+          console.log("brilliant! you're auth'd!", resp)
+          state.authenticated = true;
           emitter.emit("pushState", "app")
+        }).catch( err =>{
+          console.log("not auth'd friend!")
+          state.authenticated = false;
+          emitter.emit("pushState", "login")
         });
       } else {
         // If we get login information, add the strategy we want to use for login
@@ -62,11 +83,13 @@ function store(state, emitter, app) {
         feathersClient.authenticate(payload).then(() => {
           // Logged in
           console.log("logged in!")
+          state.authenticated = true;
           emitter.emit("pushState", "app")
         }).catch(e => {
           // Show login page (potentially with `e.message`)
           console.error('Authentication error', e);
-          emitter.emit("pushState", "")
+          state.authenticated = false;
+          emitter.emit("pushState", "/")
         });
       }
 

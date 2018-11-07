@@ -6,9 +6,7 @@ module.exports = function (id, state, emit) {
   const onSubmit = function(e){
     e.preventDefault();
     console.log("submitted signup!")
-
     let formData = new FormData(e.target);
-    console.log(formData.get("username"));
     emit("db:users:signup", formData);
   }
 

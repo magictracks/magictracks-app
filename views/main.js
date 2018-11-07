@@ -14,6 +14,12 @@ function view(state, emit) {
 
   if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
 
+  const triggerLogin = function(e){
+    e.preventDefault();
+    console.log("clicked");
+    emit("db:users:login")
+  }
+
   return html `
 
 <body class="w-100 h-100 code lh-copy bg-washed-blue ma0 flex flex-column">
@@ -24,7 +30,7 @@ function view(state, emit) {
         <li> ✨ Magic Tracks ✨</li>
       </ul>
       <ul class="flex flex-row list pl0 justify-end ma0 h-100 items-center">
-        <li class="pa2">Log In</li>
+        <li class="pa2" onclick=${triggerLogin}>Log In</li>
       </ul>
     </nav>
   </header>
