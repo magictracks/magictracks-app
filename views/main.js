@@ -1,7 +1,7 @@
 var html = require('choo/html')
 var css = require('sheetify');
 var SignupForm = require('../components/SignupForm')
-var LoginForm = require('../components/LoginForm')
+// var LoginForm = require('../components/LoginForm')
 const styles = css('../styles/global.css');
 
 
@@ -37,7 +37,6 @@ return html`
         <li> ✨ Magic Tracks ✨</li>
       </ul>
       <ul class="flex flex-row list pl0 justify-end ma0 h-100 items-center">
-        <li class="pa2">Sign up</li>
         <li class="pa2">Log In</li>
       </ul>
     </nav>
@@ -55,8 +54,6 @@ return html`
           <div class="flex flex-column w-100 pa4 br2 bg-washed-red dark-pink">
             <p class="f4 lh-copy">Join the community and start building!</p>
             ${state.cache(SignupForm, "SignupForm", state, emit)}
-            <h2>login</h2>
-            ${state.cache(LoginForm, "LoginForm", state, emit)}
           </div>
         </section>
       </section> <!-- row1 -->

@@ -17,6 +17,8 @@ if (process.env.NODE_ENV !== 'production') {
 app.use(require('./stores/db'))
 app.route('/', require('./views/main'))
 app.route('/app', require('./views/app'))
+app.route('/login', require('./views/login'))
+app.route('/signup', require('./views/signup'))
 app.route('/*', require('./views/404'))
 
 
