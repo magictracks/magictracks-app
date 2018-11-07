@@ -20,15 +20,17 @@ function store(state, emitter, app) {
   emitter.on('DOMContentLoaded', function () {
     
     emitter.on('db:users:redirect', function () {
-      // state.totalClicks += count
       emitter.emit("pushState", "/");
-      // emitter.emit(state.events.RENDER);
     })
 
 
-    emitter.on('db:test', function (count) {
-      // state.totalClicks += count
-
+    emitter.on('db:test', function (test) {
+      if(!test){
+        console.log("testing testing testing");
+      }else{
+        console.log("testing with a payload:", test);
+      }
+      
       emitter.emit(state.events.RENDER)
     })
 
