@@ -2,7 +2,7 @@ var html = require('choo/html')
 var css = require('sheetify');
 var SignupForm = require('../components/SignupForm')
 // var LoginForm = require('../components/LoginForm')
-const styles = css('../styles/global.css');
+
 
 
 var TITLE = 'app - main'

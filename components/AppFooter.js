@@ -1,7 +1,7 @@
 var Component = require('choo/component')
 var html = require('choo/html')
 
-class Header extends Component {
+class AppFooter extends Component {
   constructor (id, state, emit) {
     super(id)
     this.local = state.components[id] = {}
@@ -9,8 +9,8 @@ class Header extends Component {
 
   createElement () {
     return html`
-      <div>
-      </div>
+    <footer class="w-100 h3 flex flex-column bg-navy pa2 dark-pink">
+    </footer>
     `
   }
 
@@ -19,4 +19,4 @@ class Header extends Component {
   }
 }
 
-module.exports = Header
+module.exports = AppFooter

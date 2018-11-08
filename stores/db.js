@@ -8,13 +8,25 @@ module.exports = store
 function store(state, emitter, app) {
   // state.totalClicks = 0
   state.authenticated;
+  state.playlists = [];
+
+  // check auth status
   feathersClient.authenticate().then(() => {
     console.log("brilliant! you're auth'd!")
+    emitter.emit("pushState", "app");
     state.authenticated = true;
   }).catch( err =>{
     console.log("not auth'd friend!")
     state.authenticated = false;
   });
+
+  // get playlists
+  feathersClient.service("playlists").find({}).then((data) =>{
+    state.playlists = data;
+  }).catch(err => {
+    console.log(err);
+    state.playlists = [];
+  })
 
 
   emitter.on('DOMContentLoaded', function () {
@@ -61,7 +73,7 @@ function store(state, emitter, app) {
       if (!formData) {
         // try to auth using JWT from local Storage
         feathersClient.authenticate().then((resp) => {
-          console.log("brilliant! you're auth'd!", resp)
+          console.log("brilliant! you're auth'd!")
           state.authenticated = true;
           emitter.emit("pushState", "app")
         }).catch( err =>{

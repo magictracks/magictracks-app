@@ -3,6 +3,7 @@ var choo = require('choo')
 // var cors = require('cors');
 
 css('tachyons')
+const styles = css('./styles/global.css');
 
 var app = choo()
 if (process.env.NODE_ENV !== 'production') {
