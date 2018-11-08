@@ -50,19 +50,44 @@ function view (state, emit) {
         </section>
         <section class="flex flex-column h-100 ma0 w-100 pl2 pr2">
           <div class="bt bb bw2 w-100 h-100">
+            <!-- Meta Details -->
             <section class="flex flex-row w-100 h5 mt2">
               <section class="h5 w5">
-                <div class="bg-moon-gray w-100 h-100"></div>
+                <div class="bg-near-white w-100 h-100"></div>
               </section>
-              <section class="flex flex-column justify-end pl4 pr2">
-                <p class="ma0">Playlist</p>
-                <h1 class="ma0">Interactive Web Maps</h1>
-                <p class="ma0">Created by @joeyklee in collaboration with @shiffman</p>
-                <p class="ma0">Tags: maps, cartography, leafletjs, web, mapping</p>
-                <p class="ma0">⚙️ Edit Details </p>
+              <section class="flex flex-column justify-end pl4 pr2 w-60">
+                <p class="ma0 f6">Playlist</p>
+                <h1 class="ma0 f3">Mapping New York City 3-1-1 Phone calls</h1>
+                <p class="ma0 f6">Created by @joeyklee in collaboration with @shiffman</p>
+                <p class="ma0 f6">Description: This is a playlist of references for building an interactive web map of New York City 3-1-1 maintenance request phone calls.</p>
+                <p class="ma0 f6">Tags: maps, cartography, leafletjs, web, mapping</p>
+                <p class="ma0 f6">⚙️ Edit Details </p>
               </section>
             </section>
-            <section class="flex flex-row w-100">
+            <!-- Playlist Tools -->
+            <section class="flex flex-row w-100 items-center justify-between pt2 pb2">
+              <form class="pl2 black-80">
+                <div class="measure">
+                  <input id="name" placeholder="filter" class="input-reset br4 ba b--black-20 pa2 mb2 db w-100" type="text" aria-describedby="name-desc">
+                </div>
+              </form>
+              <div>
+                <p>Export 🚀</p>
+                <ul class="list pl0">
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                </ul>
+              </div>
+            </section>
+            <!-- Sections -->
+            <section class="flex flex-column w-100 h5 ba bw1">
+              
+            </section>
+            <section class="flex flex-column w-100 h5 ba bw1">
+              
+            </section>
+            <section class="flex flex-column w-100 h5 ba bw1">
               
             </section>
           </div> 
