@@ -5,13 +5,22 @@ var html = require('choo/html')
 class AppHeader extends Component {
   constructor(id, state, emit) {
     super(id)
-    this.local = state.components[id] = {}
+    this.id = id;
+    this.state = state;
+    this.emit = emit;
+    // this.local = state.components[id] = {}
     this.toggleUserSettings = this.toggleUserSettings.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   toggleUserSettings(e){
     e.preventDefault();
     document.querySelector("#userSettings").classList.toggle("dn");
+  }
+
+  logout(e){
+    e.preventDefault();
+    this.emit("db:users:logout");
   }
 
 
@@ -32,7 +41,7 @@ class AppHeader extends Component {
         </ul>
         <ul id="userSettings" class=" dn f7 list bg-pink absolute mt6 pa2" style="width:150px; height:150px margin-top:80px;">
           <li>settings</li>  
-          <li>logout</li>
+          <li onclick=${this.logout}>logout</li>
         </ul>
       </ul>
     </nav>
