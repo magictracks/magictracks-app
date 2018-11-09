@@ -9,7 +9,7 @@ class AppFooter extends Component {
 
   createElement () {
     return html`
-    <footer class="w-100 h3 flex flex-column bg-navy pa2 dark-pink">
+    <footer class="fixed bottom-0 w-100 h3 flex flex-column bg-navy pa2 dark-pink">
     </footer>
     `
   }
