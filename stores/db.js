@@ -8,7 +8,10 @@ module.exports = store
 function store(state, emitter, app) {
   // state.totalClicks = 0
   state.authenticated;
-  state.playlists = [];
+  state.playlists = {
+    selected: {},
+    all: []
+  }
 
   // check auth status
   feathersClient.authenticate().then(() => {
@@ -22,7 +25,8 @@ function store(state, emitter, app) {
 
   // get playlists
   feathersClient.service("playlists").find({}).then((data) =>{
-    state.playlists = data;
+    state.playlists.selected = data[0];
+    state.playlists.all = data;
   }).catch(err => {
     console.log(err);
     state.playlists = [];
@@ -32,6 +36,11 @@ function store(state, emitter, app) {
   emitter.on('DOMContentLoaded', function () {
     
     emitter.on('db:users:redirect', function () {
+      emitter.emit("pushState", "/");
+    })
+
+    emitter.on('db:users:logout', function () {
+      feathersClient.logout();
       emitter.emit("pushState", "/");
     })
 
