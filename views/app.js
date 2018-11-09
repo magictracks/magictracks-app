@@ -10,9 +10,9 @@ function view (state, emit) {
     return html`
     <body class="w-100 h-100 code lh-copy bg-washed-blue ma0 flex flex-column">
       ${state.cache(AppHeader, "AppHeader", state, emit).render()}
-      <main class="flex flex-column pa2 flex-1 h-100">
+      <main class="flex flex-column pl2 pr2 flex-1 h-100 pb6">
         <div class="flex flex-row w-100 h-100">
-        <section class="w5 flex flex-column h-100 ma0 bt bb bw2">
+        <section class="w-20 flex flex-column h-100 ma0 bt bb bw2">
           <!-- Browse -->
           <section class="mt2">
             <!-- <h6 class="f6 ma0">BROWSE</h6> -->
@@ -48,52 +48,46 @@ function view (state, emit) {
             </ul>
           </section>
         </section>
-        <section class="flex flex-column h-100 ma0 w-100 pl2 pr2">
-          <div class="bt bb bw2 w-100 h-100">
+        <section class="flex flex-column h-100 ma0 w-60 pl2 pr2">
+          <div class="bt bb bw2 w-100 h-auto mb6">
             <!-- Meta Details -->
             <section class="flex flex-row w-100 h5 mt2">
               <section class="h5 w5">
                 <div class="bg-near-white w-100 h-100"></div>
               </section>
-              <section class="flex flex-column justify-end pl4 pr2 w-60">
-                <p class="ma0 f6">Playlist</p>
-                <h1 class="ma0 f3">${state.playlists.selected.title}</h1>
-                <p class="ma0 f6">Created by ${ state.playlists.selected.submittedBy || "username"}</p>
-                <p class="ma0 f6">Description: ${ state.playlists.selected.description || "description"}</p>
-                <p class="ma0 f6">Tags: ${ state.playlists.selected.tags.map(tag => html`${tag}`) || "tags"}</p>
-                <p class="ma0 f6">⚙️ Edit Details </p>
+              <section class="flex flex-column justify-end pl4 pr2 w-100">
+                <p class="ma0 f7">Playlist</p>
+                <h1 class="ma0 f4">${state.playlists.selected.title}</h1>
+                <p class="ma0 f7">Created by ${ state.playlists.selected.submittedBy || "username"}</p>
+                <p class="ma0 f7">Description: ${ state.playlists.selected.description || "description"}</p>
+                <p class="ma0 f7">Tags: ${ state.playlists.selected.tags.map(tag => html`${tag}`) || "tags"}</p>
+                <p class="ma0 f7">⚙️ Edit Details </p>
+                <div>
+                  <p>Export 🚀</p>
+                    <ul class="list pl0">
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                    </ul>
+                  </div>
               </section>
             </section>
-            <!-- Playlist Tools -->
-            <section class="flex flex-row w-100 items-center justify-between pt2 pb2">
-              <form class="pl2 black-80">
-                <div class="measure">
-                  <input id="name" placeholder="filter" class="input-reset br4 ba b--black-20 pa2 mb2 db w-100" type="text" aria-describedby="name-desc">
-                </div>
-              </form>
-              <div>
-                <p>Export 🚀</p>
-                <ul class="list pl0">
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                </ul>
-              </div>
-            </section>
+            <!-- TODO: Playlist Tools for filtering sections -->
+            
             <!-- Sections -->
 
-            <section class="flex flex-column w-100">
+            <section class="flex flex-column w-100 mt4">
               ${state.playlists.selected.sections.map(section =>
                 html`
-                <section class="flex flex-row w-100 mt2">
+                <section class="flex flex-row w-100 mt2 mb4 pb4">
                   <section class="h5 w5 ba bw1 pa2">
                     <p class="ma0 f7">section</p>
-                    <p class="ma0 f7">${section.title}</p>
+                    <p class="ma0 f6 b">${section.title}</p>
                     <p class="ma0 f7">Created by ${ section.submittedBy || "username"}</p>
                     <p class="ma0 f7">Description: ${ section.description || "description"}</p>
                     <p class="ma0 f7">⚙️ Edit Details </p>
                   </section>
-                  <section class="flex flex-column justify-end w-60 pl4">
+                  <section class="flex flex-column justify-end pl4 w-100">
                   <div class="overflow-auto">
                     <table class="f6 w-100 mw8 center" cellspacing="0">
                       <thead>
@@ -126,6 +120,9 @@ function view (state, emit) {
             </section>
             
           </div> 
+        </section>
+        <section class="w-20 flex flex-column h-100 ma0 bt bb bw2">
+        hello
         </section>
         </div>
       </main>
