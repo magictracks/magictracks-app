@@ -2,7 +2,7 @@ var feathers = require('@feathersjs/feathers');
 var rest = require('@feathersjs/rest-client');
 const auth = require('@feathersjs/authentication-client');
 // Connect to a different URL
-const restClient = rest('https://127.0.0.1:3030')
+const restClient = rest('https://localhost:3030')
 // Configure an AJAX library (see below) with that client 
 // const api = feathersConnection.configure(restClient.axios(axios));
 const feathersClient = feathers().configure(restClient.fetch(window.fetch));
@@ -18,6 +18,22 @@ feathersClient.configure(auth({
     storageKey: 'feathers-jwt', // the key to store the accessToken in localstorage or AsyncStorage on React Native
     storage: localStorage // Passing a WebStorage-compatible object to enable automatic storage on the client.
 }));
+
+console.log('-------------------------')
+console.log(`
+NOTE: if you are having trouble with https issues during development
+- FIRST: Follow along here: https://alexanderzeitler.com/articles/Fixing-Chrome-missing_subjectAltName-selfsigned-cert-openssl/
+- THEN: in your browser add the security exceptions for the URLS:
+https://localhost:3030
+https://localhost:8080
+
+To do this you can just navigate to those URLs and you'll get a prompt
+asking you to confirm the security exception.
+
+This should be sorted in production with an actual HTTPS certificate
+
+`)
+console.log('-------------------------')
 
 
 module.exports = {
