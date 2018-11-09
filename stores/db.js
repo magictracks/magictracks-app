@@ -8,29 +8,37 @@ module.exports = store
 function store(state, emitter, app) {
   // state.totalClicks = 0
   state.authenticated;
+  state.user = {
+    username: "",
+    id:""
+  }
   state.playlists = {
     selected: {},
     all: []
   }
 
   // check auth status
-  feathersClient.authenticate().then(() => {
+  feathersClient.authenticate().then((response) => {
     console.log("brilliant! you're auth'd!")
+    state.user.username = response.username;
+    state.user.id = response.id;
     emitter.emit("pushState", "app");
     state.authenticated = true;
-  }).catch( err =>{
+  }).then(() => {
+    feathersClient.service("playlists").find({_id: state.user.id}).then((data) =>{
+      state.playlists.selected = data[0];
+      state.playlists.all = data;
+    }).catch(err => {
+      console.log(err);
+      state.playlists = [];
+    })
+  })
+  .catch( err =>{
     console.log("not auth'd friend!")
     state.authenticated = false;
   });
 
-  // get playlists
-  feathersClient.service("playlists").find({}).then((data) =>{
-    state.playlists.selected = data[0];
-    state.playlists.all = data;
-  }).catch(err => {
-    console.log(err);
-    state.playlists = [];
-  })
+
 
 
   emitter.on('DOMContentLoaded', function () {
@@ -42,6 +50,11 @@ function store(state, emitter, app) {
     emitter.on('db:users:logout', function () {
       feathersClient.logout();
       emitter.emit("pushState", "/");
+    })
+
+    emitter.on('db:playlists:select', function (_id) {
+      state.playlists.selected = state.playlists.all.filter(playlist => playlist._id == _id)[0];
+      emitter.emit(state.events.RENDER)
     })
 
 
@@ -81,8 +94,10 @@ function store(state, emitter, app) {
     emitter.on("db:users:login", function (formData) {
       if (!formData) {
         // try to auth using JWT from local Storage
-        feathersClient.authenticate().then((resp) => {
-          console.log("brilliant! you're auth'd!")
+        feathersClient.authenticate().then((response) => {
+          console.log("from db:users:login")
+          state.user.username = response.username;
+          state.user.id = response._id;
           state.authenticated = true;
           emitter.emit("pushState", "app")
         }).catch( err =>{
@@ -103,10 +118,12 @@ function store(state, emitter, app) {
         }, credentials);
 
         // call authenticate!
-        feathersClient.authenticate(payload).then(() => {
+        feathersClient.authenticate(payload).then((response) => {
           // Logged in
           console.log("logged in!")
           state.authenticated = true;
+          state.user.username = response.username;
+          state.user.id = response._id;
           emitter.emit("pushState", "app")
         }).catch(e => {
           // Show login page (potentially with `e.message`)
