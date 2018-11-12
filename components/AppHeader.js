@@ -37,11 +37,12 @@ class AppHeader extends Component {
         <ul class="flex flex-row list pl0 justify-end ma0 h-100 items-center" onclick=${this.toggleUserSettings}>
           <li><img class="br-100 ba h2 w2 mr2 dib" src="http://tachyons.io/img/logo.jpg" alt="user avatar"></li>
           <li class="mr2 f7">username</li>
-          <li><img style="width:20px; height:10px" class="mr2" src="../assets/down-arrow.png" alt="open settings arrow"></li>
-        </ul>
-        <ul id="userSettings" class=" dn f7 list bg-pink absolute mt6 pa2" style="width:150px; height:150px margin-top:80px;">
-          <li>settings</li>  
-          <li onclick=${this.logout}>logout</li>
+          <li><img style="width:20px; height:10px" class="mr2" src="../assets/down-arrow.png" alt="open settings arrow">
+            <ul id="userSettings" class="dn f7 absolute list bg-pink pa2 right-1">
+              <li>settings</li>  
+              <li onclick=${this.logout}>logout</li>
+            </ul>
+          </li>
         </ul>
       </ul>
     </nav>
