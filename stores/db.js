@@ -25,7 +25,9 @@ function store(state, emitter, app) {
     emitter.emit("pushState", "app");
     state.authenticated = true;
   }).then(() => {
-    feathersClient.service("playlists").find({_id: state.user.id}).then((data) =>{
+    // then get the playlists 
+    feathersClient.service("playlists").find({_id: state.user.id})
+    .then((data) =>{
       state.playlists.selected = data[0];
       state.playlists.all = data;
     }).catch(err => {
