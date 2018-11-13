@@ -36,9 +36,13 @@ function view(state, emit) {
     e.target.classList.replace('bg-near-black', 'bg-near-white');
   }
 
-  const selectItem = function(e){
-    emit('db:feature:select', e.target.dataset.id, e.target.dataset.db )
+  const toggleDropdown = function(e){
+    e.target.nextElementSibling.classList.toggle('dn');
   }
+
+  // const selectItem = function(e){
+  //   emit('db:feature:select', e.target.dataset.id, e.target.dataset.db )
+  // }
 
 
   if (state.authenticated === true) {
@@ -124,9 +128,23 @@ function view(state, emit) {
       <section class="w-100 flex-1 ba bw2 mt2 bg-near-white">
         <!-- NAV -->
         <nav class="w-100 b--near-black bg-near-black h2 flex flex-row items-center">
-          <ul class="list flex flex-row ma0 pa0 h-100">
-            <li onclick=${toggleSelectedTab} class="mainNavTab h-100 bg-near-white near-black pr2 pl2">Edit ▾</li>
-            <li onclick=${toggleSelectedTab} class="mainNavTab h-100 bg-near-black near-white pr2 pl2">Export ▾</li>
+          <ul class="list flex flex-row ma0 pa0 h-100 z-max">
+            <li onclick=${toggleSelectedTab} class="mainNavTab h-100 bg-near-white near-black pr2 pl2">
+              Edit <span onclick=${toggleDropdown}>▾</span>
+              <ul class="dn ba bw1 pa2 bg-pink list black">
+                <li>new playlist</li>
+                <li>new section</li>
+                <li>new resource</li>
+              </ul>
+            </li>
+            <li onclick=${toggleSelectedTab} class="mainNavTab h-100 bg-near-black near-white pr2 pl2">
+              Export <span onclick=${toggleDropdown}>▾</span>
+              <ul class="dn ba bw1 pa2 bg-pink list black">
+                <li>as HTML</li>
+                <li>as Markdown</li>
+                <li>as PDF</li>
+              </ul>
+            </li>
             <li onclick=${toggleSelectedTab} class="mainNavTab h-100 bg-near-black near-white pr2 pl2">Browse</li>
           </ul>
         </nav>
