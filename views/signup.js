@@ -5,13 +5,13 @@ module.exports = view
 
 function view (state, emit) {
   return html`
-    <body>
-    <section class="pa4 flex flex-column bg-washed-blue w-40-l w-100-m w-100-ns justify-center">
-    <div class="flex flex-column w-100 pa4 br2 bg-washed-red dark-pink">
-      <p class="f4 lh-copy">Join the community and start building!</p>
+    <body class="w-100 h-100 code lh-copy bg-washed-blue ma0 flex flex-column items-center">
+    <section class="mw6 w-100 h-100 pa2 flex flex-column justify-center items-center">
+      <h2>Create an Account</h2>
+      <p class="w-100">Start using Magic Tracks by creating an account with your email & password.</p>
       ${state.cache(SignupForm, "SignupForm", state, emit)}
-    </div>
-  </section>
+      <p class="w-100 f6">Already have an account? <a href="/login">Log in here</a>.</p>
+    </section>
     </body>
   `
 }
