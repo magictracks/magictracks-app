@@ -204,6 +204,9 @@ function makeSections(state){
     }
   }
 
+  const toggleResourceDetails = function(e){
+    this.parentNode.querySelector('.hiddenDetails').classList.toggle('dn');
+  }
 
   function makeResources(section){
     if(section.resources !== undefined){
@@ -226,8 +229,11 @@ function makeSections(state){
                   <td class="pa3">${resourceIndex}</td>
                   <td class="pa3">☑️</td>
                   <td class="pa3"><a class="link black hover-bg-purple hover-white" href="${resource.url}" target="_blank">${resource.title}</a></td>
-                  <td class="pa3">${resource.description}</td>
-                  <td class="pa3">▾</td>
+                  <td class="pa3">
+                    ${resource.description}
+                    <p class="hiddenDetails dn"> ${resource.url}</p>
+                  </td>
+                  <td class="pa3" onclick=${toggleResourceDetails}>▾</td>
                 </tr>
                 `
               })}
