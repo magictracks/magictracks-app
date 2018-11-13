@@ -133,7 +133,7 @@ function view(state, emit) {
         <!-- main -->
         <section id="mainContent" class="w-100 h-auto overflow-y-scroll flex flex-column pa2 mt2 mh-500px">
           <!-- ARTICLE HEADER -->
-          <section class="w-100 h-auto flex flex-column pa2">
+          <section class="w-100 h-auto flex flex-column pa2" data-id=${state.playlists.selected._id} data-db="playlists" onclick=${(e) => emit("db:feature:select", state.playlists.selected._id, "playlists") }>
             <div><h3 class="f3 mt0 mb2">${state.playlists.selected.title}</h3></div>
             <div class="flex flex-row w-100">
               <div class="w-40 pr2 f7 flex flex-column">
