@@ -19,10 +19,10 @@ function view(state, emit) {
     emit('db:playlists:select', e.target.dataset.id);
   };
 
-  const toggleSelectedTab = function(e){
+  const toggleSelectedTab = function (e) {
     let listItems = document.querySelectorAll(".mainNavTab");
     listItems.forEach(item => {
-      if(item.classList.contains('near-black') ){
+      if (item.classList.contains('near-black')) {
         item.classList.replace('near-black', 'near-white');
         item.classList.replace('bg-near-white', 'bg-near-black');
       }
@@ -85,10 +85,13 @@ function view(state, emit) {
 
           <p>PLAYLISTS ⊕</p>
           <ul class="list pl0">
-            <li>HTML & CSS Primer</li>
-            <li>Interactive Web Maps</li>
-            <li>Data Visualization with P5.js</li>
-            <li>Color Theory & Practice Workshop</li>
+            ${
+              state.playlists.all.map( (playlist) => {
+              return html`
+                <li data-id=${playlist._id}>${playlist.title}</li>
+                `
+              })
+            }
           </ul>
         </div>
       </section>
@@ -119,14 +122,29 @@ function view(state, emit) {
         </nav>
         <!-- main -->
         <section class="w-100 h-auto overflow-y-scroll flex flex-column pa2">
+          <!-- ARTICLE HEADER -->
+          <section class="w-100 outline h-auto flex flex-column pa2">
+            <h3 class="f3 mt0 mb2">${state.playlists.selected.title}</h3>
+            <div class="flex flex-row w-100">
+              <div class="w-40 pr2 f7 flex flex-column">
+                <p class="ma0">created by:</p>
+                <p class="ma0">tags:</p>
+                <p class="ma0">comments:</p>
+                <p class="ma0">images:</p>
+              </div>
+              <div class="w-60 pl2 f7">
+                ${state.playlists.selected.description}
+              </div>
+            </div>
+          </section>
+          <!-- Sections & Resources --> 
+          ${makeSections(state)}
 
-        </section>
-      </section>
-
-    </section>
-
-  </section>
-</body>
+        </section> <!-- end main edit/export/browse -->
+      </section> <!-- end main container -->
+    </section> <!-- end main container -->
+  </section> <!-- end mw8 container -->
+</body> 
 `;
   } else {
     const redirect = function () {
@@ -134,16 +152,56 @@ function view(state, emit) {
     };
 
     return html `
-
-<body>
-  <h1>You're not authorized!</h1>
-  <button onclick="${redirect}">go to login</button>
-</body>
+    <body>
+      <h1>You're not authorized!</h1>
+      <button onclick="${redirect}">go to login</button>
+    </body>
 `;
   }
 }
 
+function makeSections(state){
+  if(state.playlists.selected.sections !== undefined){
+    return html`
+      <section class="w-100 outline pa2 h-auto mt2">
+      ${ 
+        state.playlists.selected.sections.map( (section, sectionIndex) => {
+          return html`
+            <section class="w-100 ba bw2">
+              <!-- SECTION HEADER -->
+              <section class="w-100 pa2 bg-near-black white flex flex-column">
+                <h4 class="f4 mt0 mb2">${section.title}</h4>
+                <div class="flex flex-row w-100">
+                  <div class="w-40 pr2 f7 flex flex-column">
+                    <p class="ma0">created by:</p>
+                    <p class="ma0">tags:</p>
+                    <p class="ma0">comments:</p>
+                    <p class="ma0">images:</p>
+                  </div>
+                  <div class="w-60 pl2 f7">
+                    ${section.description}
+                  </div>
+                </div>
+              </section>
+              <section>
+                hello
+              </section>
+            </section>
+          `
+        })
+      }
+    </section>
+    `
+    } else{
+      return html`
+        <div>nothing yet</div>
+      `
+    }
+  }
+
 /**
+ 
+
 
 <!-- <ul class="mainNavSelected list h-100 pl2 flex flex-row near-black bg-near-white f7 mr2 items-center">
             <li onclick=${toggleSelectedNav} class="mr2">Edit ▾</li>

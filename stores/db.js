@@ -24,24 +24,24 @@ function store(state, emitter, app) {
     state.user.id = response.id;
     emitter.emit("pushState", "app");
     state.authenticated = true;
-  }).then(() => {
+  }).then( () => {
     // then get the playlists 
-    feathersClient.service("playlists").find({_id: state.user.id})
+    feathersClient.service("playlists").find({query:{submittedBy: state.user.id}})
     .then((data) =>{
-      state.playlists.selected = data[0];
+      state.playlists.selected = data[data.length-1];
       state.playlists.all = data;
+      emitter.emit(state.events.RENDER);
     }).catch(err => {
       console.log(err);
       state.playlists = [];
+      emitter.emit(state.events.RENDER);
     })
   })
   .catch( err =>{
     console.log("not auth'd friend!")
     state.authenticated = false;
+    emitter.emit(state.events.RENDER);
   });
-
-
-
 
   emitter.on('DOMContentLoaded', function () {
     

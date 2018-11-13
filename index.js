@@ -1,6 +1,5 @@
 var css = require('sheetify')
 var choo = require('choo')
-// var cors = require('cors');
 
 css('tachyons')
 const styles = css('./styles/global.css');
@@ -24,4 +23,3 @@ app.route('/*', require('./views/404'))
 
 
 module.exports = app.mount('body')
-
