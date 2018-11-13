@@ -1,11 +1,11 @@
 const html = require('choo/html');
-const AppHeader = require('../components/AppHeader');
-const AppFooter = require('../components/AppFooter');
-const EditorMain = require('../components/EditorMain');
-const SidebarNav = require('../components/SidebarNav');
+// const AppHeader = require('../components/AppHeader');
+// const AppFooter = require('../components/AppFooter');
+// const EditorMain = require('../components/EditorMain');
+// const SidebarNav = require('../components/SidebarNav');
 const css = require('sheetify');
 
-css`
+css `
 .mh-400px {
 max-height: 300px;
 }
@@ -14,13 +14,25 @@ max-height: 300px;
 module.exports = view;
 
 function view(state, emit) {
-const switchSelected = function(e) {
-console.log(e.target.dataset.id);
-emit('db:playlists:select', e.target.dataset.id);
-};
+  const switchSelected = function (e) {
+    console.log(e.target.dataset.id);
+    emit('db:playlists:select', e.target.dataset.id);
+  };
 
-if (state.authenticated === true) {
-return html`
+  const toggleSelectedTab = function(e){
+    let listItems = document.querySelectorAll(".mainNavTab");
+    listItems.forEach(item => {
+      if(item.classList.contains('near-black') ){
+        item.classList.replace('near-black', 'near-white');
+        item.classList.replace('bg-near-white', 'bg-near-black');
+      }
+    })
+    e.target.classList.replace('near-white', 'near-black');
+    e.target.classList.replace('bg-near-black', 'bg-near-white');
+  }
+
+  if (state.authenticated === true) {
+    return html `
 
 <body class="w-100 h-100 code lh-copy bg-washed-blue ma0 flex flex-column items-center">
   <section class="mw8 w-100 h-100 pa2 flex flex-row">
@@ -35,12 +47,13 @@ return html`
           <p class="ma0 f7">Magic Tracks ✨</p>
         </div>
         <div>
-          <p class="ma0 f7">Hi @username! | Account ▾</p>
+          <p class="ma0 f7">Hi @${state.user.username}! | Account ▾</p>
         </div>
       </section>
 
       <!-- Editor -->
       <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto overflow-y-scroll flex-1 justify-between">
+        <div class="w-100 tc"><small class="f7">Edit Selected</small></div>
         <div class="w-100 pa2">
           <form class="w-100 flex flex-column f7">
             <label class="">Title</label> <input type="text" />
@@ -53,7 +66,7 @@ return html`
             <input type="text" />
           </form>
         </div>
-        <button class="pa2 ba bw2 b--near-black white bg-near-black">SAVE</button>
+        <button class="pa2 ba bw2 b--near-black white bg-near-black hover-washed-blue">SAVE</button>
       </section>
 
       <!-- Nav -->
@@ -98,18 +111,14 @@ return html`
       <section class="w-100 flex-1 ba bw2 mt2 bg-near-white">
         <!-- NAV -->
         <nav class="w-100 b--near-black bg-near-black h2 flex flex-row items-center">
-          <ul class="list h-100 pl2 flex flex-row near-black bg-near-white f7 mr2 items-center">
-            <li class="mr2">Edit ▾</li>
-          </ul>
-          <ul class="list h-100 pl2 flex flex-row near-white bg-near-black f7 mr2 items-center">
-              <li class="mr2">Export ▾</li>
-            </ul>
-          <ul class="list h-100 pl0 flex flex-row white f7 items-center">
-              <li class="mr2">Browse</li>
+          <ul class="list flex flex-row ma0 pa0 h-100">
+            <li onclick=${toggleSelectedTab} class="mainNavTab h-100 bg-near-white near-black pr2 pl2">Edit ▾</li>
+            <li onclick=${toggleSelectedTab} class="mainNavTab h-100 bg-near-black near-white pr2 pl2">Export ▾</li>
+            <li onclick=${toggleSelectedTab} class="mainNavTab h-100 bg-near-black near-white pr2 pl2">Browse</li>
           </ul>
         </nav>
         <!-- main -->
-        <section class="w-100 h-auto overflow-y-scroll">
+        <section class="w-100 h-auto overflow-y-scroll flex flex-column pa2">
 
         </section>
       </section>
@@ -119,22 +128,33 @@ return html`
   </section>
 </body>
 `;
-} else {
-const redirect = function() {
-emit('db:users:redirect');
-};
+  } else {
+    const redirect = function () {
+      emit('db:users:redirect');
+    };
 
-return html`
+    return html `
 
 <body>
   <h1>You're not authorized!</h1>
   <button onclick="${redirect}">go to login</button>
 </body>
 `;
-}
+  }
 }
 
 /**
+
+<!-- <ul class="mainNavSelected list h-100 pl2 flex flex-row near-black bg-near-white f7 mr2 items-center">
+            <li onclick=${toggleSelectedNav} class="mr2">Edit ▾</li>
+          </ul>
+          <ul class="mainNavSelected list h-100 pl2 flex flex-row near-white bg-near-black f7 mr2 items-center">
+              <li onclick=${toggleSelectedNav} class="mr2">Export ▾</li>
+            </ul>
+          <ul class="mainNavSelected list h-100 pl0 flex flex-row white f7 items-center">
+              <li onclick=${toggleSelectedNav} class="mr2">Browse</li>
+          </ul> -->
+
 <!--Editor Area -->
 <main class="w-100 flex flex-column flex-row-ns mt2 ma0 pa0">
   <!--Editor sidebar -->
