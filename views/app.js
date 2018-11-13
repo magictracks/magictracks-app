@@ -93,7 +93,7 @@ function view(state, emit) {
             ${
               state.playlists.all.map( (playlist) => {
               return html`
-                <li onclick=${switchSelected} data-id=${playlist._id}>${playlist.title}</li>
+                <li class="hover-bg-purple hover-white black" onclick=${switchSelected} data-id=${playlist._id}>${playlist.title}</li>
                 `
               })
             }
