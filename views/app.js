@@ -9,6 +9,10 @@ css `
 .mh-400px {
 max-height: 300px;
 }
+
+.mh-500px{
+  max-height:500px;
+}
 `;
 
 module.exports = view;
@@ -30,6 +34,7 @@ function view(state, emit) {
     e.target.classList.replace('near-white', 'near-black');
     e.target.classList.replace('bg-near-black', 'bg-near-white');
   }
+
 
   if (state.authenticated === true) {
     return html `
@@ -73,18 +78,18 @@ function view(state, emit) {
       <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto mh-400px overflow-y-scroll f7">
         <div class="w-100 pa2">
           <p>YOUR LIBRARY</p>
-          <ul class="list pl0">
+          <ul class="list pl1">
             <li>Starred Playlists</li>
             <li>Your Resources</li>
           </ul>
 
           <p>COLLABORATIONS</p>
-          <ul class="list pl0">
+          <ul class="list pl1">
             <li>None yet!</li>
           </ul>
 
           <p>PLAYLISTS ⊕</p>
-          <ul class="list pl0">
+          <ul class="list pl1">
             ${
               state.playlists.all.map( (playlist) => {
               return html`
@@ -96,7 +101,7 @@ function view(state, emit) {
         </div>
       </section>
     </section>
-    <!-- main -->
+    <!-- Add resouces container -->
     <section class="main w-100 flex flex-column ml2-ns">
       <!-- add and recent items -->
       <section class="main flex flex-row ba bw2 items-end w-100 pa2 h4">
@@ -121,7 +126,7 @@ function view(state, emit) {
           </ul>
         </nav>
         <!-- main -->
-        <section class="w-100 h-auto overflow-y-scroll flex flex-column pa2 mt2">
+        <section id="mainContent" class="w-100 h-auto overflow-y-scroll flex flex-column pa2 mt2 mh-500px">
           <!-- ARTICLE HEADER -->
           <section class="w-100 h-auto flex flex-column pa2">
             <h3 class="f3 mt0 mb2">${state.playlists.selected.title}</h3>
@@ -167,7 +172,7 @@ function makeSections(state){
       ${ 
         state.playlists.selected.sections.map( (section, sectionIndex) => {
           return html`
-            <section class="w-100 ba bw1">
+            <section class="w-100 ba bw1 mt2">
               <!-- SECTION HEADER -->
               <section class="w-100 pa2 bg-near-black white flex flex-column">
                 <h4 class="f4 mt0 mb2">${section.title}</h4>
