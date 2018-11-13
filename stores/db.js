@@ -16,7 +16,15 @@ function store(state, emitter, app) {
     selected: {},
     all: []
   }
-  state.selectedItem = {}
+  state.selectedItem = {};
+
+  state.browse = {
+    playlists:[],
+    sections:[],
+    resource:[],
+    starred:[]
+  }
+  
 
   // check auth status
   feathersClient.authenticate().then((response) => {
