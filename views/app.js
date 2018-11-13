@@ -21,6 +21,7 @@ function view(state, emit) {
   const switchSelected = function (e) {
     console.log(e.target.dataset.id);
     emit('db:playlists:select', e.target.dataset.id);
+    emit('db:feature:select', e.target.dataset.id, e.target.dataset.db)
   };
 
   const toggleSelectedTab = function (e) {
@@ -33,6 +34,10 @@ function view(state, emit) {
     })
     e.target.classList.replace('near-white', 'near-black');
     e.target.classList.replace('bg-near-black', 'bg-near-white');
+  }
+
+  const selectItem = function(e){
+    emit('db:feature:select', e.target.dataset.id, e.target.dataset.db )
   }
 
 
@@ -61,9 +66,9 @@ function view(state, emit) {
         <div class="w-100 tc"><small class="f7">Edit Selected</small></div>
         <div class="w-100 pa2 overflow-y-scroll">
           <form class="w-100 flex flex-column f7">
-            <label class="">Title</label> <input type="text" value=${state.playlists.selected.title}/>
+            <label class="">Title</label> <input type="text" value=${state.selectedItem.title}/>
 
-            <label class="">Description</label> <textarea class="h4">${state.playlists.selected.description}</textarea>
+            <label class="">Description</label> <textarea class="h4">${state.selectedItem.description}</textarea>
 
             <label class="">Tags</label> <input type="text" />
 
@@ -93,7 +98,7 @@ function view(state, emit) {
             ${
               state.playlists.all.map( (playlist) => {
               return html`
-                <li class="hover-bg-purple hover-white black" onclick=${switchSelected} data-id=${playlist._id}>${playlist.title}</li>
+                <li class="hover-bg-purple hover-white black" onclick=${switchSelected} data-id=${playlist._id} data-db="playlists">${playlist.title}</li>
                 `
               })
             }
@@ -143,7 +148,7 @@ function view(state, emit) {
             </div>
           </section>
           <!-- Sections & Resources --> 
-          ${makeSections(state)}
+          ${makeSections(state, emit)}
 
         </section> <!-- end main edit/export/browse -->
       </section> <!-- end main container -->
@@ -165,16 +170,16 @@ function view(state, emit) {
   }
 }
 
-function makeSections(state){
+function makeSections(state, emit){
   if(state.playlists.selected.sections !== undefined){
     return html`
       <section class="w-100 h-auto mt4">
       ${ 
         state.playlists.selected.sections.map( (section, sectionIndex) => {
           return html`
-            <section class="w-100 ba bw1 mt2" data-id=${section._id}>
+            <section class="w-100 ba bw1 mt2" data-id=${section._id} data-db="sections">
               <!-- SECTION HEADER -->
-              <section class="w-100 pa2 bg-near-black white flex flex-column">
+              <section class="w-100 pa2 bg-near-black white flex flex-column" data-id=${section._id} data-db="sections" onclick=${ function(e){emit("db:feature:select", String(section._id), "sections") }}>
                 <h4 class="f4 mt0 mb2">${section.title}</h4>
                 <div class="flex flex-row w-100">
                   <div class="w-40 pr2 f7 flex flex-column">
@@ -189,7 +194,7 @@ function makeSections(state){
                 </div>
               </section>
               <section class="w-100">
-                ${makeResources(section)}
+                ${makeResources(section, emit)}
               </section>
             </section>
           `
@@ -204,11 +209,12 @@ function makeSections(state){
     }
   }
 
+
   const toggleResourceDetails = function(e){
     this.parentNode.querySelector('.hiddenDetails').classList.toggle('dn');
   }
 
-  function makeResources(section){
+  function makeResources(section, emit){
     if(section.resources !== undefined){
       return html`
         <div class="overflow-auto">
@@ -225,7 +231,7 @@ function makeSections(state){
             <tbody class="lh-copy">
               ${section.resources.map( (resource, resourceIndex) => {
                 return html`
-                <tr class="stripe-dark" data-id=${resource._id}>
+                <tr class="stripe-dark" data-id=${resource._id} data-db="resources" onclick=${ function(e){emit("db:feature:select", String(resource._id), "resources") }}>
                   <td class="pa3">${resourceIndex}</td>
                   <td class="pa3">☑️</td>
                   <td class="pa3"><a class="link black hover-bg-purple hover-white" href="${resource.url}" target="_blank">${resource.title}</a></td>

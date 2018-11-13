@@ -38,6 +38,7 @@ function store(state, emitter, app) {
     feathersClient.service("playlists").find({query:{submittedBy: state.user.id}})
     .then((data) =>{
       state.playlists.selected = data[data.length-1];
+      state.selectedItem = data[data.length-1];
       state.playlists.all = data;
       emitter.emit(state.events.RENDER);
     }).catch(err => {
@@ -66,6 +67,18 @@ function store(state, emitter, app) {
     emitter.on('db:playlists:select', function (_id) {
       state.playlists.selected = state.playlists.all.filter(playlist => playlist._id == _id)[0];
       emitter.emit(state.events.RENDER)
+    })
+
+    emitter.on('db:feature:select', function (_id, _db) {
+      console.log(_id, _db);
+      feathersClient.service(_db).get(_id)
+        .then( data => {
+          state.selectedItem  = data;
+          emitter.emit(state.events.RENDER)
+        }).catch(err =>{
+          return err;
+        })
+      
     })
 
 
