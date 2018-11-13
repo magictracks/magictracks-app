@@ -93,7 +93,7 @@ function view(state, emit) {
             ${
               state.playlists.all.map( (playlist) => {
               return html`
-                <li data-id=${playlist._id}>${playlist.title}</li>
+                <li onclick=${switchSelected} data-id=${playlist._id}>${playlist.title}</li>
                 `
               })
             }
@@ -129,7 +129,7 @@ function view(state, emit) {
         <section id="mainContent" class="w-100 h-auto overflow-y-scroll flex flex-column pa2 mt2 mh-500px">
           <!-- ARTICLE HEADER -->
           <section class="w-100 h-auto flex flex-column pa2">
-            <h3 class="f3 mt0 mb2">${state.playlists.selected.title}</h3>
+            <div><h3 class="f3 mt0 mb2">${state.playlists.selected.title}</h3></div>
             <div class="flex flex-row w-100">
               <div class="w-40 pr2 f7 flex flex-column">
                 <p class="ma0">created by:</p>
@@ -172,7 +172,7 @@ function makeSections(state){
       ${ 
         state.playlists.selected.sections.map( (section, sectionIndex) => {
           return html`
-            <section class="w-100 ba bw1 mt2">
+            <section class="w-100 ba bw1 mt2" data-id=${section._id}>
               <!-- SECTION HEADER -->
               <section class="w-100 pa2 bg-near-black white flex flex-column">
                 <h4 class="f4 mt0 mb2">${section.title}</h4>
@@ -216,16 +216,18 @@ function makeSections(state){
                 <th class="fw6 tl pa3 bg-white">☑️</th>
                 <th class="fw6 tl pa3 bg-white">Title</th>
                 <th class="fw6 tl pa3 bg-white">Details</th>
+                <th class="fw6 tl pa3 bg-white">▾</th>
               </tr>
             </thead>
             <tbody class="lh-copy">
               ${section.resources.map( (resource, resourceIndex) => {
                 return html`
-                <tr class="stripe-dark">
+                <tr class="stripe-dark" data-id=${resource._id}>
                   <td class="pa3">${resourceIndex}</td>
                   <td class="pa3">☑️</td>
-                  <td class="pa3">${resource.title}</td>
+                  <td class="pa3"><a class="link black hover-bg-purple hover-white" href="${resource.url}" target="_blank">${resource.title}</a></td>
                   <td class="pa3">${resource.description}</td>
+                  <td class="pa3">▾</td>
                 </tr>
                 `
               })}
