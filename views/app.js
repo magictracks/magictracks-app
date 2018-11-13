@@ -57,13 +57,13 @@ function view(state, emit) {
       </section>
 
       <!-- Editor -->
-      <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto overflow-y-scroll flex-1 justify-between">
+      <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between">
         <div class="w-100 tc"><small class="f7">Edit Selected</small></div>
-        <div class="w-100 pa2">
+        <div class="w-100 pa2 overflow-y-scroll">
           <form class="w-100 flex flex-column f7">
-            <label class="">Title</label> <input type="text" />
+            <label class="">Title</label> <input type="text" value=${state.playlists.selected.title}/>
 
-            <label class="">Description</label> <textarea></textarea>
+            <label class="">Description</label> <textarea class="h4">${state.playlists.selected.description}</textarea>
 
             <label class="">Tags</label> <input type="text" />
 
