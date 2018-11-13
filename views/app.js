@@ -121,9 +121,9 @@ function view(state, emit) {
           </ul>
         </nav>
         <!-- main -->
-        <section class="w-100 h-auto overflow-y-scroll flex flex-column pa2">
+        <section class="w-100 h-auto overflow-y-scroll flex flex-column pa2 mt2">
           <!-- ARTICLE HEADER -->
-          <section class="w-100 outline h-auto flex flex-column pa2">
+          <section class="w-100 h-auto flex flex-column pa2">
             <h3 class="f3 mt0 mb2">${state.playlists.selected.title}</h3>
             <div class="flex flex-row w-100">
               <div class="w-40 pr2 f7 flex flex-column">
@@ -163,11 +163,11 @@ function view(state, emit) {
 function makeSections(state){
   if(state.playlists.selected.sections !== undefined){
     return html`
-      <section class="w-100 outline pa2 h-auto mt2">
+      <section class="w-100 h-auto mt4">
       ${ 
         state.playlists.selected.sections.map( (section, sectionIndex) => {
           return html`
-            <section class="w-100 ba bw2">
+            <section class="w-100 ba bw1">
               <!-- SECTION HEADER -->
               <section class="w-100 pa2 bg-near-black white flex flex-column">
                 <h4 class="f4 mt0 mb2">${section.title}</h4>
@@ -183,8 +183,8 @@ function makeSections(state){
                   </div>
                 </div>
               </section>
-              <section>
-                hello
+              <section class="w-100">
+                ${makeResources(section)}
               </section>
             </section>
           `
@@ -199,68 +199,36 @@ function makeSections(state){
     }
   }
 
-/**
- 
 
-
-<!-- <ul class="mainNavSelected list h-100 pl2 flex flex-row near-black bg-near-white f7 mr2 items-center">
-            <li onclick=${toggleSelectedNav} class="mr2">Edit ▾</li>
-          </ul>
-          <ul class="mainNavSelected list h-100 pl2 flex flex-row near-white bg-near-black f7 mr2 items-center">
-              <li onclick=${toggleSelectedNav} class="mr2">Export ▾</li>
-            </ul>
-          <ul class="mainNavSelected list h-100 pl0 flex flex-row white f7 items-center">
-              <li onclick=${toggleSelectedNav} class="mr2">Browse</li>
-          </ul> -->
-
-<!--Editor Area -->
-<main class="w-100 flex flex-column flex-row-ns mt2 ma0 pa0">
-  <!--Editor sidebar -->
-  <section class="flex flex-column w5-ns w-100">
-    <section class="w-100 h-auto pa2 ba bw2">
-      <div class="w-100">
-        <form class="w-100">
-          <label class="f7">Title
-            <input type="text">
-          </label>
-          <label class="f7">Description
-            <textarea></textarea>
-          </label>
-          <label class="f7">Tags
-            <input type="text">
-          </label>
-          <label class="f7">Collaborators
-            <input type="text">
-          </label>
-        </form>
-      </div>
-      <button class="w-100 h2 mt2">save</button>
-    </section>
-
-    <section class="w-100 h5 ba bw2 mt2 pa2">
-      hello
-    </section>
-
-  </section>
-  <!--Editor area -->
-  <section class="flex flex-column w-100 h-100 ml2-ns ba bw2">
-
-  </section>
-</main>
-*/
-
-/**
-
-<body class="w-100 h-100 code lh-copy bg-washed-blue ma0 flex flex-column">
-  ${state.cache(AppHeader, "AppHeader", state, emit).render()}
-  <main class="flex flex-column pl2 pr2 flex-1 h-100 pb6">
-    <div class="flex flex-row w-100 h-100">
-      ${state.cache( SidebarNav,"SidebarNav", state, emit).render()}
-      <section class="flex flex-column h-100 ma0 w-100 pl2 pr2">
-        ${state.cache(EditorMain, "EditorMain", state, emit).render()}
-      </section>
-    </div>
-  </main>
-  ${state.cache(AppFooter, "AppFooter", state, emit).render()}
-</body>
-*/
+  function makeResources(section){
+    if(section.resources !== undefined){
+      return html`
+        <div class="overflow-auto">
+          <table class="f6 w-100 center" cellspacing="0">
+            <thead>
+              <tr class="stripe-dark">
+                <th class="fw6 tl pa3 bg-white">#</th>
+                <th class="fw6 tl pa3 bg-white">☑️</th>
+                <th class="fw6 tl pa3 bg-white">Title</th>
+                <th class="fw6 tl pa3 bg-white">Details</th>
+              </tr>
+            </thead>
+            <tbody class="lh-copy">
+              ${section.resources.map( (resource, resourceIndex) => {
+                return html`
+                <tr class="stripe-dark">
+                  <td class="pa3">${resourceIndex}</td>
+                  <td class="pa3">☑️</td>
+                  <td class="pa3">${resource.title}</td>
+                  <td class="pa3">${resource.description}</td>
+                </tr>
+                `
+              })}
+            </tbody>
+          </table>
+        </div>
+      `
+    } else{
+      return html`<div>no resources yet!</div>`
+    }
+  }
