@@ -32,8 +32,8 @@ function view(state, emit) {
         item.classList.replace('bg-near-white', 'bg-near-black');
       }
     })
-    e.target.classList.replace('near-white', 'near-black');
-    e.target.classList.replace('bg-near-black', 'bg-near-white');
+    e.target.parentNode.classList.replace('near-white', 'near-black');
+    e.target.parentNode.classList.replace('bg-near-black', 'bg-near-white');
   }
 
   const toggleDropdown = function(e){
@@ -129,8 +129,8 @@ function view(state, emit) {
         <!-- NAV -->
         <nav class="w-100 b--near-black bg-near-black h2 flex flex-row items-center">
           <ul class="list flex flex-row ma0 pa0 h-100 z-max">
-            <li onclick=${toggleSelectedTab} class="mainNavTab h-100 bg-near-white near-black pr2 pl2">
-              Edit <span onclick=${toggleDropdown}>▾</span>
+            <li class="mainNavTab h-100 bg-near-white near-black pr2 pl2">
+              <span onclick=${toggleSelectedTab}>Edit</span> <span onclick=${toggleDropdown}>▾</span>
               <ul class="dn ba bw1 pa2 bg-pink list black">
                 <li>new playlist</li>
                 <li>new section</li>
@@ -138,14 +138,14 @@ function view(state, emit) {
               </ul>
             </li>
             <li onclick=${toggleSelectedTab} class="mainNavTab h-100 bg-near-black near-white pr2 pl2">
-              Export <span onclick=${toggleDropdown}>▾</span>
+                <span onclick=${toggleSelectedTab}>Export</span> <span onclick=${toggleDropdown}>▾</span>
               <ul class="dn ba bw1 pa2 bg-pink list black">
                 <li>as HTML</li>
                 <li>as Markdown</li>
                 <li>as PDF</li>
               </ul>
             </li>
-            <li onclick=${toggleSelectedTab} class="mainNavTab h-100 bg-near-black near-white pr2 pl2">Browse</li>
+            <li class="mainNavTab h-100 bg-near-black near-white pr2 pl2"><span onclick=${toggleSelectedTab}>Browse</span></li>
           </ul>
         </nav>
         <!-- main -->
