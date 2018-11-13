@@ -23,9 +23,9 @@ if (state.authenticated === true) {
 return html`
 
 <body class="w-100 h-100 code lh-copy bg-washed-blue ma0 flex flex-column items-center">
-  <section class="mw8 w-100 h-100 pa2 bg-near-white flex flex-row">
+  <section class="mw8 w-100 h-100 pa2 flex flex-row">
     <!-- sidebar -->
-    <section class="flex flex-column h-100 w5-ns w-100">
+    <section class="flex flex-column h-100 w5-ns w-100 flex-1">
       <!-- logo and profile -->
       <section class="flex flex-column ba bw2 w5-ns w-100 items-center justify-center pa2 h4">
         <div class="ma0">
@@ -40,7 +40,7 @@ return html`
       </section>
 
       <!-- Editor -->
-      <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto mh-400px overflow-y-scroll flex-1 justify-between">
+      <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto overflow-y-scroll flex-1 justify-between">
         <div class="w-100 pa2">
           <form class="w-100 flex flex-column f7">
             <label class="">Title</label> <input type="text" />
@@ -95,7 +95,8 @@ return html`
       </section>
 
       <!-- main -->
-      <section class="w-100 flex-1 ba bw2 mt2">
+      <section class="w-100 flex-1 ba bw2 mt2 bg-near-white">
+        <!-- NAV -->
         <nav class="w-100 b--near-black bg-near-black h2 flex flex-row items-center">
           <ul class="list h-100 pl2 flex flex-row near-black bg-near-white f7 mr2 items-center">
             <li class="mr2">Edit ▾</li>
@@ -107,6 +108,10 @@ return html`
               <li class="mr2">Browse</li>
           </ul>
         </nav>
+        <!-- main -->
+        <section class="w-100 h-auto overflow-y-scroll">
+
+        </section>
       </section>
 
     </section>
@@ -160,7 +165,7 @@ return html`
 
   </section>
   <!--Editor area -->
-  <section class="flex flex-column w-100 ml2-ns ba bw2">
+  <section class="flex flex-column w-100 h-100 ml2-ns ba bw2">
 
   </section>
 </main>
