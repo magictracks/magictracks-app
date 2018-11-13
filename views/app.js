@@ -249,7 +249,7 @@ function makeSections(state, emit){
             <tbody class="lh-copy">
               ${section.resources.map( (resource, resourceIndex) => {
                 return html`
-                <tr class="stripe-dark" data-id=${resource._id} data-db="resources" onclick=${ function(e){emit("db:feature:select", String(resource._id), "resources") }}>
+                <tr class="stripe-dark" data-id=${resource._id} data-db="resources" onclick=${ (e) => { if(!e.target.classList.contains("dropdown")) emit("db:feature:select", String(resource._id), "resources") }}>
                   <td class="pa3">${resourceIndex}</td>
                   <td class="pa3">☑️</td>
                   <td class="pa3"><a class="link black hover-bg-purple hover-white" href="${resource.url}" target="_blank">${resource.title}</a></td>
@@ -257,7 +257,7 @@ function makeSections(state, emit){
                     ${resource.description}
                     <p class="hiddenDetails dn"> ${resource.url}</p>
                   </td>
-                  <td class="pa3" onclick=${toggleResourceDetails}>▾</td>
+                  <td class="pa3 dropdown" onclick=${toggleResourceDetails}>▾</td>
                 </tr>
                 `
               })}
