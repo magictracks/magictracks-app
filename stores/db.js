@@ -16,6 +16,7 @@ function store(state, emitter, app) {
     selected: {},
     all: []
   }
+  state.selectedItem = {}
 
   // check auth status
   feathersClient.authenticate().then((response) => {
