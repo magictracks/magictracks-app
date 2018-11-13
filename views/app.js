@@ -61,7 +61,11 @@ function view(state, emit) {
           <p class="ma0 f7">Magic Tracks ✨</p>
         </div>
         <div>
-          <p class="ma0 f7">Hi @${state.user.username}! | Account ▾</p>
+          <p class="ma0 f7 w-100">Hi @${state.user.username}! | <span onclick=${toggleDropdown}>Account ▾</span>  
+          <ul class="list ma0 pa2 ba bw1 bg-pink absolute mt1 ml4 w4 dn tr">
+            <li onclick=${(e) => { emit("db:users:logout")}}>logout</li>
+          </ul>
+          </p>
         </div>
       </section>
 
