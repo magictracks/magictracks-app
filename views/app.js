@@ -219,7 +219,7 @@ function makeSections(state, emit){
                 </div>
               </section>
               <section class="w-100">
-                ${makeResources(section, emit)}
+                ${makeResources(section,state, emit)}
               </section>
             </section>
           `
@@ -239,7 +239,7 @@ function makeSections(state, emit){
     this.parentNode.querySelector('.hiddenDetails').classList.toggle('dn');
   }
 
-  function makeResources(section, emit){
+  function makeResources(section, state, emit){
     if(section.resources !== undefined){
       return html`
         <div class="overflow-auto">

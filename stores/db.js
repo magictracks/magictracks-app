@@ -57,18 +57,35 @@ function store(state, emitter, app) {
   emitter.on('DOMContentLoaded', function () {
     // general purpose
 
+    emitter.on('db:playlists:find', function(){
+      feathersClient.service("playlists").find({query:{submittedBy: state.user.id}})
+        .then((data) =>{
+          state.playlists.selected = data[data.length-1];
+          // state.selectedItem = data[data.length-1];
+          state.playlists.all = data;
+          emitter.emit(state.events.RENDER);
+        }).catch(err => {
+          console.log(err);
+          state.playlists = [];
+          emitter.emit(state.events.RENDER);
+        })
+    })
+
     emitter.on('db:patch', function (_id, _formData) {
       // state.playlists.selected = state.playlists.all.filter(playlist => playlist._id == _id)[0];
       let title = _formData.get("title");
       let description = _formData.get("description");
+      
+      // TODO -- refactor: https://github.com/choojs/choo/issues/645
 
       feathersClient.authenticate().then((response) => {
         
         feathersClient.service(state.selectedItemDb).patch(_id, {title, description}, {})
         .then( data => {
-          console.log(data);
           state.selectedItem  = data;
-          emitter.emit(state.events.RENDER)
+
+          // emitter.emit(state.events.RENDER)
+          emitter.emit("db:playlists:find");
         }).catch(err =>{
           console.log(err);
           return err;
