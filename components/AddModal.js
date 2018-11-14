@@ -21,6 +21,10 @@ class AddModal extends Component {
 
     this.stepForward = this.stepForward.bind(this);
     this.stepBackward = this.stepBackward.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.markSelected = this.markSelected.bind(this);
+
+    this.quickSave = this.quickSave.bind(this);
   }
 
 
@@ -39,32 +43,63 @@ class AddModal extends Component {
     this.emit("db:AddModal:currentStep", this.local.currentStep);
   }
 
-  stepForward(e){
+  stepForward(e) {
     e.preventDefault();
-    
-    if(this.local.currentStep >= 2){
-      this.local.currentStep = 2;  
-    } else{
+
+    if (this.local.currentStep >= 2) {
+      this.local.currentStep = 2;
+    } else {
       this.local.currentStep++;
     }
     this.emit("db:AddModal:currentStep", this.local.currentStep);
   }
 
-  stepBackward(e){
+  stepBackward(e) {
     e.preventDefault();
-    
-    if(this.local.currentStep <= 0){
-      this.local.currentStep = 0;  
-    } else{
+
+    if (this.local.currentStep <= 0) {
+      this.local.currentStep = 0;
+    } else {
       this.local.currentStep--;
     }
     this.emit("db:AddModal:currentStep", this.local.currentStep);
   }
 
+  handleChange(e) {
+    e.preventDefault();
+    let form = new FormData(e.target.form);
+    let selectedPlaylist = form.get("playlistSelect")
+    if (selectedPlaylist !== "") {
+      this.emit("db:AddModal:selectedPlaylist", selectedPlaylist)
+    }
+  }
 
-  addURL(){
+  handleSectionChange(e) {
+    e.preventDefault();
+    let form = new FormData(e.target.form);
+    let selectedSection = form.get("sectionSelect")
+    if (selectedSection !== "") {
+      this.emit("db:AddModal:selectedSection", selectedSection)
+    }
+  }
+
+  quickSave(e) {
+    e.preventDefault();
+    let form = document.querySelector("#addModalEditor");
+    let formData = new FormData(form);
+    let resourceData = {
+      url: formData.get("url")
+    }
+    this.emit("db:resources:create", resourceData);
+    this.emit("db:AddModal:toggle");
+  }
+
+
+
+
+  addURL() {
     console.log("addUrl!")
-    return html`
+    return html `
       <section class="flex flex-column flex-1 w-100 pa4">
         <!-- FORM Editing: Step 1 
         Add the URL of the resource
@@ -79,10 +114,10 @@ class AddModal extends Component {
       </section>
     `
   }
-  
-  editDetails(){
+
+  editDetails() {
     console.log("edit details!")
-    return html`
+    return html `
       <section class="flex flex-column flex-1 w-100 pa4">
         
         <!-- FORM Editing: Step 2 
@@ -106,10 +141,37 @@ class AddModal extends Component {
       </section>
     `
   }
-  
-  organize(){
+
+  showPlaylistSections() {
+    if (Object.keys(this.state.addModal.selectedPlaylist).length > 0 && this.state.addModal.selectedPlaylist.sections.length > 0) {
+      return html `
+      <select class="w-100 pa2" onchange=${this.handleSectionChange} name="sectionsSelect">
+        <option value=""></option>
+        ${this.state.addModal.selectedPlaylist.sections.map( section => {
+          return html`
+          <option data-id="${section._id}" value="${section._id}" 
+          selected=${this.markSelected(section, this.state.addModal.selectedSection)}>${section.title}</option>
+          `
+        })}
+      </select>
+      `
+    } else {
+      return html `<div>no sections</div>`
+    }
+
+  }
+
+  markSelected(selected, _selectedObject) {
+    if (Object.keys(_selectedObject).length > 0 && selected._id == _selectedObject._id) {
+      return "selected"
+    } else {
+      return ""
+    }
+  }
+
+  organize() {
     console.log("organize")
-    return html`
+    return html `
     <section class="flex flex-column flex-1 w-100 pa4">
     <!-- FORM Editing: Step 3 
         Add it to any of the playlists or sections of interest
@@ -118,15 +180,18 @@ class AddModal extends Component {
     <fieldset class="ba bw2 b--purple">
       <legend class="pl2 pr2">Organize</legend>
       <form id="addModalEditor" name="addModalEditor" class="w-100 flex flex-column f7">
-        <label class="f7">Playlists</label>
-        <select class="w-100 pa2">
-          <option value="">no playlist selected</option>
+        <label class="f7">Add to Existing Playlist</label>
+        <select class="w-100 pa2" onchange=${this.handleChange} name="playlistSelect">
+          <option value=""></option>
           ${this.state.playlists.all.map(playlist => {
             return html`
-              <option value="${playlist._id}" data-id=${playlist._id} data-db="playlists">${playlist.title}</option>  
+              <option value="${playlist._id}" data-id=${playlist._id} data-db="playlists" 
+              selected=${this.markSelected(playlist, this.state.addModal.selectedPlaylist)}>${playlist.title}</option>  
             `
           })}
         </select> 
+        <!-- Select Sections -->
+          ${this.showPlaylistSections()}
       </form>
       <div>create new playlist</div>
       <div>create new section</div>
@@ -135,22 +200,23 @@ class AddModal extends Component {
     `
   }
 
-  showCurrentStep(step){
+  showCurrentStep(step) {
     console.log(step);
-    if(step == 0){
+    if (step == 0) {
       return this.addURL();
-    } else if (step == 1){
+    } else if (step == 1) {
       return this.editDetails();
-    } else if(step == 2){
+    } else if (step == 2) {
       return this.organize();
-    } else{
+    } else {
       return this.addURL();
     }
   }
-  
+
+
 
   createElement() {
-    return html`
+    return html `
 <div class="${this.isToggled()} w-100 h-100 pa2 fixed z-max">
   <div class="w-100 h-100 flex flex-column justify-center items-center ba bw2 bg-white">
     <div class="w-100 mw6 h-auto flex flex-column ba bw2 pa2">
@@ -167,7 +233,7 @@ class AddModal extends Component {
       <!-- Bottom buttons -->
       <div class="flex flex-row justify-between">
         <div>
-          <button class="pa2 ba bw2">Quick Save</button>
+          <button class="pa2 ba bw2" onclick=${this.quickSave}>Quick Save</button>
         </div>
         <div>
           <button class="pa2 ba bw2" onclick=${this.stepBackward}>Back</button>
@@ -187,20 +253,3 @@ class AddModal extends Component {
 }
 
 module.exports = AddModal
-
-
-
-/**
-
-
-<!-- <label class="">Type</label>
-              <div>
-                <input class="mr1" type="radio" name="db" value="resources">
-                <label for="resources">Resources</label>
-              </div> -->
-              <!-- <label class="">Title</label> <input type="text" name="title" />
-              <label class="">Description</label> <textarea form="addModalEditor" name="description"></textarea>
-              <label class="">Tags</label> <input type="text" name="tags" />
-              <label class="">Collaborators</label><input type="text" name="collaborators" /> -->
-
-*/

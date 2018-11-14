@@ -28,7 +28,10 @@ function store(state, emitter, app) {
 
   state.addModal = {
     toggled: false,
-    currentStep:0
+    currentStep:0,
+    selectedPlaylist:{},
+    selectedSection:{},
+    submittedResource:{}
   }
   
 
@@ -70,6 +73,30 @@ function store(state, emitter, app) {
     emitter.on('db:AddModal:currentStep', function(_currentStep){
       state.addModal.currentStep = _currentStep;
       emitter.emit(state.events.RENDER);
+    })
+    emitter.on('db:AddModal:selectedPlaylist', function(_id){
+      state.addModal.selectedPlaylist = state.playlists.all.filter(playlist => playlist._id == _id)[0];
+      emitter.emit(state.events.RENDER);
+    })
+    emitter.on('db:AddModal:selectedSection', function(_id){
+      state.addModal.selectedSection = state.addModal.selectedPlaylist.sections.filter(section => section._id == _id)[0];
+      emitter.emit(state.events.RENDER);
+    })
+
+    // send the data to resources
+    emitter.on("db:resources:create", function(resourceData){
+      feathersClient.authenticate().then(response => {
+        feathersClient.service('resources').create(resourceData).then( data => {
+          console.log("Resource subcessfully submitted");
+          console.log(data);
+          state.addModal.submittedResource = data;
+          emitter.emit(state.events.RENDER);
+        }).catch(err => {
+          return err;
+        })
+      }).catch(err => {
+        return err;
+      })
     })
     
 
@@ -142,7 +169,6 @@ function store(state, emitter, app) {
         }).catch(err =>{
           return err;
         })
-      
     })
 
 
