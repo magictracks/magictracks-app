@@ -73,14 +73,18 @@ function store(state, emitter, app) {
 
     emitter.on('db:patch', function (_id, _formData) {
       // state.playlists.selected = state.playlists.all.filter(playlist => playlist._id == _id)[0];
-      let title = _formData.get("title");
-      let description = _formData.get("description");
+
+      let formData = {
+        title: _formData.get("title"),
+        description: _formData.get("description"),
+        url: _formData.get("url")
+      }
       
       // TODO -- refactor: https://github.com/choojs/choo/issues/645
 
       feathersClient.authenticate().then((response) => {
         
-        feathersClient.service(state.selectedItemDb).patch(_id, {title, description}, {})
+        feathersClient.service(state.selectedItemDb).patch(_id, formData, {})
         .then( data => {
           state.selectedItem  = data;
 
