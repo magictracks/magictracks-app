@@ -4,6 +4,7 @@ const html = require('choo/html');
 // const EditorMain = require('../components/EditorMain');
 // const SidebarNav = require('../components/SidebarNav');
 const css = require('sheetify');
+const AddModal = require('../components/AddModal');
 
 css `
 .mh-400px {
@@ -49,6 +50,11 @@ function view(state, emit) {
     let form = document.querySelector("#inputEditor");
     let formData = new FormData(form);
     emit("db:patch", state.selectedItem._id, formData);
+  }
+
+  const toggleAddModal = function(e){
+    e.preventDefault();
+    emit("db:AddModal:toggle");
   }
 
 
@@ -122,7 +128,7 @@ function view(state, emit) {
     <section class="main w-100 flex flex-column ml2-ns">
       <!-- add and recent items -->
       <section class="main flex flex-row ba bw2 items-end w-100 pa2 h4">
-        <div class="flex flex-column bg-near-white h3 w3 justify-center items-center ba bw2">
+        <div onclick=${toggleAddModal} class="flex flex-column bg-near-white h3 w3 justify-center items-center ba bw2">
           <div>+</div>
           <div>ADD</div>
         </div>
@@ -180,6 +186,7 @@ function view(state, emit) {
       </section> <!-- end main container -->
     </section> <!-- end main container -->
   </section> <!-- end mw8 container -->
+  ${state.cache(AddModal, "AddModal", state, emit).render()}
 </body> 
 `;
   } else {

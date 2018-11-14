@@ -25,6 +25,11 @@ function store(state, emitter, app) {
     resource:[],
     starred:[]
   }
+
+  state.addModal = {
+    toggled: false,
+    currentStep:0
+  }
   
 
   // check auth status
@@ -56,6 +61,17 @@ function store(state, emitter, app) {
 
   emitter.on('DOMContentLoaded', function () {
     // general purpose
+
+    emitter.on('db:AddModal:toggle', function(){
+      state.addModal.toggled = !state.addModal.toggled;
+      console.log(state.addModal.toggled);
+      emitter.emit(state.events.RENDER);
+    })
+    emitter.on('db:AddModal:currentStep', function(_currentStep){
+      state.addModal.currentStep = _currentStep;
+      emitter.emit(state.events.RENDER);
+    })
+    
 
     emitter.on('db:playlists:find', function(){
       feathersClient.service("playlists").find({query:{submittedBy: state.user.id}})
