@@ -68,9 +68,9 @@ function view(state, emit) {
           <p class="ma0 f7">Magic Tracks ✨</p>
         </div>
         <div>
-          <p class="ma0 f7 w-100">Hi @${state.user.username}! | <span onclick=${toggleDropdown}>Account ▾</span>  
+          <p class="ma0 f7 w-100">Hi @${state.user.username}! | <span class="cursor hover-bg-purple hover-white" onclick=${toggleDropdown}>Account ▾</span>  
           <ul class="list ma0 pa2 ba bw1 bg-pink absolute mt1 ml4 w4 dn tr">
-            <li onclick=${(e) => { emit("db:users:logout")}}>logout</li>
+            <li class="cursor hover-bg-purple hover-white" onclick=${(e) => { emit("db:users:logout")}}>logout</li>
           </ul>
           </p>
         </div>
@@ -85,6 +85,7 @@ function view(state, emit) {
             <label class="">Description</label> <textarea form="inputEditor" name="description" class="h4">${state.selectedItem.description}</textarea>
             <label class="">Tags</label> <input type="text" name="tags" />
             <label class="">Collaborators</label><input type="text" name="collaborators" />
+            <label class="">URL</label> <input type="text" name="url" value=${state.selectedItem.url}/>
           </form>
         </div>
         <button onclick=${submitInputEditor} class="pa2 ba bw2 b--near-black white bg-near-black hover-washed-blue">SAVE</button>
