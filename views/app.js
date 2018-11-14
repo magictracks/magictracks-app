@@ -44,6 +44,13 @@ function view(state, emit) {
   //   emit('db:feature:select', e.target.dataset.id, e.target.dataset.db )
   // }
 
+  const submitInputEditor = function(e){
+    e.preventDefault();
+    let form = document.querySelector("#inputEditor");
+    let formData = new FormData(form);
+    emit("db:patch", state.selectedItem._id, formData);
+  }
+
 
   if (state.authenticated === true) {
     return html `
@@ -73,18 +80,14 @@ function view(state, emit) {
       <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between">
         <div class="w-100 tc"><small class="f7">Edit Selected</small></div>
         <div class="w-100 pa2 overflow-y-scroll">
-          <form class="w-100 flex flex-column f7">
-            <label class="">Title</label> <input type="text" value=${state.selectedItem.title}/>
-
-            <label class="">Description</label> <textarea class="h4">${state.selectedItem.description}</textarea>
-
-            <label class="">Tags</label> <input type="text" />
-
-            <label class="">Collaborators</label>
-            <input type="text" />
+          <form id="inputEditor" name="inputEditor" class="w-100 flex flex-column f7">
+            <label class="">Title</label> <input type="text" name="title" value=${state.selectedItem.title}/>
+            <label class="">Description</label> <textarea form="inputEditor" name="description" class="h4">${state.selectedItem.description}</textarea>
+            <label class="">Tags</label> <input type="text" name="tags" />
+            <label class="">Collaborators</label><input type="text" name="collaborators" />
           </form>
         </div>
-        <button class="pa2 ba bw2 b--near-black white bg-near-black hover-washed-blue">SAVE</button>
+        <button onclick=${submitInputEditor} class="pa2 ba bw2 b--near-black white bg-near-black hover-washed-blue">SAVE</button>
       </section>
 
       <!-- Nav -->

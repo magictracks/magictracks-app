@@ -17,6 +17,7 @@ function store(state, emitter, app) {
     all: []
   }
   state.selectedItem = {};
+  state.selectedItemDb = "";
 
   state.browse = {
     playlists:[],
@@ -54,6 +55,31 @@ function store(state, emitter, app) {
   });
 
   emitter.on('DOMContentLoaded', function () {
+    // general purpose
+
+    emitter.on('db:patch', function (_id, _formData) {
+      // state.playlists.selected = state.playlists.all.filter(playlist => playlist._id == _id)[0];
+      let title = _formData.get("title");
+      let description = _formData.get("description");
+
+      feathersClient.authenticate().then((response) => {
+        
+        feathersClient.service(state.selectedItemDb).patch(_id, {title, description}, {})
+        .then( data => {
+          console.log(data);
+          state.selectedItem  = data;
+          emitter.emit(state.events.RENDER)
+        }).catch(err =>{
+          console.log(err);
+          return err;
+        })
+      }).catch(err => {
+        console.log(err);
+        return err;
+      })
+      console.log(emitter);
+      // emitter.emit(state.events.RENDER)
+    })
     
     emitter.on('db:users:redirect', function () {
       emitter.emit("pushState", "/");
@@ -74,6 +100,7 @@ function store(state, emitter, app) {
       feathersClient.service(_db).get(_id)
         .then( data => {
           state.selectedItem  = data;
+          state.selectedItemDb = _db;
           emitter.emit(state.events.RENDER)
         }).catch(err =>{
           return err;
