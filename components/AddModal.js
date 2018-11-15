@@ -69,6 +69,7 @@ class AddModal extends Component {
 
     if(this.local.currentStep == 4){
       this.emit("db:AddModal:toggle");
+      this.emit("db:playlists:find");
     }
 
     this.emit("db:AddModal:currentStep", this.local.currentStep);
