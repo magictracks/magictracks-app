@@ -132,7 +132,13 @@ function store(state, emitter, app) {
     emitter.on('db:playlists:find', function(){
       feathersClient.service("playlists").find({query:{submittedBy: state.user.id}})
         .then((data) =>{
-          state.playlists.selected = data[data.length-1];
+          console.log("the latest playlist edited is", )
+          if(Object.keys(state.playlists.selected).length >0 ){
+            state.playlists.selected = data.filter(playlist => playlist._id ==  state.playlists.selected._id)[0];
+          } else{
+            state.playlists.selected = data[data.length-1];
+          }
+          
           // state.selectedItem = data[data.length-1];
           state.playlists.all = data;
           emitter.emit(state.events.RENDER);

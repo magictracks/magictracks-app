@@ -51,7 +51,7 @@ class AddModal extends Component {
   stepForward(e) {
     e.preventDefault();
 
-    if (this.local.currentStep >= 3) {
+    if (this.local.currentStep >= 4) {
       this.local.currentStep = 2;
     } else {
       this.local.currentStep++;
@@ -65,6 +65,10 @@ class AddModal extends Component {
     // TODO: add submission notification at index 3
     if(this.local.currentStep == 3){
       this.submitOrganize();
+    }
+
+    if(this.local.currentStep == 4){
+      this.emit("db:AddModal:toggle");
     }
 
     this.emit("db:AddModal:currentStep", this.local.currentStep);
@@ -92,7 +96,7 @@ class AddModal extends Component {
       return this.organize();
     } else if (step == 3) {
       return this.submissionComplete();
-    }
+    } 
   }
 
   handleChange(e) {
@@ -324,7 +328,7 @@ class AddModal extends Component {
         </div>
         <div>
           <button class="pa2 ba bw2" onclick=${this.stepBackward}>Back</button>
-          <button class="pa2 ba bw2" onclick=${this.stepForward}>Next</button>
+          <button class="pa2 ba bw2" onclick=${this.stepForward}>${ (this.local.currentStep == 3) ? "Close" : "Next"  }</button>
         </div>
       </div>
     </div>
