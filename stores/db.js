@@ -98,6 +98,20 @@ function store(state, emitter, app) {
         return err;
       })
     })
+    emitter.on("db:resources:patch", function(_id, resourceData){
+      feathersClient.authenticate().then(response => {
+        feathersClient.service('resources').patch(_id,resourceData).then( data => {
+          console.log("Resource subcessfully submitted");
+          console.log(data);
+          state.addModal.submittedResource = data;
+          emitter.emit(state.events.RENDER);
+        }).catch(err => {
+          return err;
+        })
+      }).catch(err => {
+        return err;
+      })
+    })
     
 
     emitter.on('db:playlists:find', function(){

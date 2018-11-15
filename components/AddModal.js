@@ -25,6 +25,9 @@ class AddModal extends Component {
     this.markSelected = this.markSelected.bind(this);
 
     this.quickSave = this.quickSave.bind(this);
+
+    this.submitAddURL = this.submitAddURL.bind(this);
+    this.submitEditDetails = this.submitEditDetails.bind(this);
   }
 
 
@@ -51,6 +54,13 @@ class AddModal extends Component {
     } else {
       this.local.currentStep++;
     }
+    if(this.local.currentStep == 1){
+      this.submitAddURL();
+    }
+    if(this.local.currentStep == 2){
+      this.submitEditDetails();
+    }
+
     this.emit("db:AddModal:currentStep", this.local.currentStep);
   }
 
@@ -62,6 +72,7 @@ class AddModal extends Component {
     } else {
       this.local.currentStep--;
     }
+
     this.emit("db:AddModal:currentStep", this.local.currentStep);
   }
 
@@ -94,7 +105,24 @@ class AddModal extends Component {
     this.emit("db:AddModal:toggle");
   }
 
+  submitAddURL(){
+    let form = document.querySelector("#addModalEditor");
+    let formData = new FormData(form);
+    let resourceData = {
+      url: formData.get("url")
+    }
+    this.emit("db:resources:create", resourceData);
+  }
 
+  submitEditDetails(){
+    let form = document.querySelector("#addModalEditor");
+    let formData = new FormData(form);
+    let resourceData = {
+      title: formData.get("title"),
+      description: formData.get("description")
+    }
+    this.emit("db:resources:patch", this.state.addModal.submittedResource._id, resourceData);
+  }
 
 
   addURL() {
@@ -121,17 +149,17 @@ class AddModal extends Component {
       <section class="flex flex-column flex-1 w-100 pa4">
         
         <!-- FORM Editing: Step 2 
-    Add or update any details of the resource that have been auto generated
-    -->
+        Add or update any details of the resource that have been auto generated
+        -->
         <p class="f7">Step 2: Edit the details, if you'd like. Details will be auto-filled if/when possible. Specific details are always helpful!</p>
         <fieldset class="ba bw2 b--purple">
           <legend class="pl2 pr2">Organize</legend>
           <form id="addModalEditor" name="addModalEditor" class="w-100 flex flex-column f7">
             <label class="f7">Title
-              <input class="h2 b--blue w-100 f5 pl2 pr2 ba bw1" type="text" name="title" placeholder="title" />
+              <input class="h2 b--blue w-100 f5 pl2 pr2 ba bw1" type="text" name="title" placeholder="title" value=${(typeof this.state.addModal.submittedResource.title == undefined) ? this.state.addModal.submittedResource.title : ''}/>
             </label>
             <label class="f7 mt2">Description
-              <textarea class="h3 b--pink w-100 f5 pl2 pr2 ba bw1" type="text" name="url" placeholder="description"></textarea>
+              <textarea class="h3 b--pink w-100 f5 pl2 pr2 ba bw1" type="text" name="description" form="addModalEditor" placeholder="description">${ (typeof this.state.addModal.submittedResource.description == undefined) ? this.state.addModal.submittedResource.description : ''}</textarea>
             </label>
             <label class="f7 mt2">Tags
               <input class="h2 b--yellow w-100 f5 pl2 pr2 ba bw1" type="text" name="url" placeholder="tags" />
