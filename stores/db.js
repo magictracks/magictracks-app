@@ -112,6 +112,21 @@ function store(state, emitter, app) {
         return err;
       })
     })
+
+    emitter.on("db:sections:patch", function(_id, _data){
+      feathersClient.authenticate().then(response => {
+        feathersClient.service('sections').patch(_id,_data).then( data => {
+          console.log("Resource subcessfully submitted");
+          console.log(data);
+          state.addModal.selectedSection = data;
+          emitter.emit(state.events.RENDER);
+        }).catch(err => {
+          return err;
+        })
+      }).catch(err => {
+        return err;
+      })
+    })
     
 
     emitter.on('db:playlists:find', function(){

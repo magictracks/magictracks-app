@@ -24,6 +24,8 @@ class AddModal extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.markSelected = this.markSelected.bind(this);
 
+    this.handleSectionChange = this.handleSectionChange.bind(this);
+
     this.quickSave = this.quickSave.bind(this);
 
     this.submitAddURL = this.submitAddURL.bind(this);
@@ -49,7 +51,7 @@ class AddModal extends Component {
   stepForward(e) {
     e.preventDefault();
 
-    if (this.local.currentStep >= 2) {
+    if (this.local.currentStep >= 3) {
       this.local.currentStep = 2;
     } else {
       this.local.currentStep++;
@@ -59,6 +61,10 @@ class AddModal extends Component {
     }
     if(this.local.currentStep == 2){
       this.submitEditDetails();
+    }
+    // TODO: add submission notification at index 3
+    if(this.local.currentStep == 3){
+      this.submitOrganize();
     }
 
     this.emit("db:AddModal:currentStep", this.local.currentStep);
@@ -74,6 +80,19 @@ class AddModal extends Component {
     }
 
     this.emit("db:AddModal:currentStep", this.local.currentStep);
+  }
+
+  showCurrentStep(step) {
+    console.log(step);
+    if (step == 0) {
+      return this.addURL();
+    } else if (step == 1) {
+      return this.editDetails();
+    } else if (step == 2) {
+      return this.organize();
+    } else if (step == 3) {
+      return this.submissionComplete();
+    }
   }
 
   handleChange(e) {
@@ -124,6 +143,31 @@ class AddModal extends Component {
     this.emit("db:resources:patch", this.state.addModal.submittedResource._id, resourceData);
   }
 
+  submitOrganize(){
+    let form = document.querySelector("#addModalEditor");
+    let formData = new FormData(form);
+    // get the id of the playlist
+
+    // get the id of the section
+    let selectedPlaylistId = formData.get("playlistSelect");
+    let selectedSectionId = formData.get("sectionSelect");
+
+    console.log(selectedPlaylistId, selectedSectionId)
+
+    if(selectedPlaylistId !== "" && selectedSectionId !== ""){
+
+      let data = {
+        "$push": {"resources": this.state.addModal.submittedResource._id}
+      }
+      this.emit("db:sections:patch", selectedSectionId, data)
+    }
+
+    // TODO add ability to add to new section for selected playlist
+
+    // TODO add ability add to new playlist and new section
+
+  }
+
 
   addURL() {
     console.log("addUrl!")
@@ -170,10 +214,67 @@ class AddModal extends Component {
     `
   }
 
-  showPlaylistSections() {
+  organize() {
+    console.log("organize")
+    return html `
+    <section class="flex flex-column flex-1 w-100 pa4">
+    <!-- FORM Editing: Step 3 
+        Add it to any of the playlists or sections of interest
+        -->
+    <p class="f7">Step 3: Sort your resource into a playlist or section or just keep choo chooing along! You can find your unsorted resources in Your Library.</p>
+    <fieldset class="ba bw2 b--purple">
+      <legend class="pl2 pr2">Organize</legend>
+      <form id="addModalEditor" name="addModalEditor" class="w-100 flex flex-column f7">
+        <label class="f7">Add to Existing Playlist</label>
+        <select class="w-100 pa2" onchange=${this.handleChange} name="playlistSelect">
+          <option value=""></option>
+          ${this.state.playlists.all.map(playlist => {
+            return html`
+              <option value="${playlist._id}" data-id=${playlist._id} data-db="playlists" 
+              selected=${this.markSelected(playlist, this.state.addModal.selectedPlaylist)}>${playlist.title}</option>  
+            `
+          })}
+        </select> 
+        <!-- Select Sections -->
+          ${this.showSectionsSelect()}
+      </form>
+      <fieldset>
+        <legend>New Playlist & Section</legend>
+        <div>
+            <label> add to new playlist</label>
+            <form name="newPlaylistForm">
+              <input type="text" name="newTitle"/>
+            </form>
+          </div>
+        <div>
+          <label> add to new section</label>
+            <form name="newSectionForm">
+            <input type="text" name="newTitle"/>
+            </form>
+        </div>
+      </fieldset>
+      <button class="ba bw2" onclick=${this.toggleModal}>skip organizing</button>
+    </fieldset>
+  </section>
+    `
+  }
+
+  submissionComplete(){
+    return html`
+    <section class="flex flex-column flex-1 w-100 pa4">
+        <!-- FORM Editing: Step 3 
+            Add it to any of the playlists or sections of interest
+            -->
+        <p class="f7">Submission succesful!: Thanks for submitting helpful resources to the creative community! </p>
+        <div>🌈🚀✨</div> 
+      </section>
+    `
+  }
+
+  showSectionsSelect() {
     if (Object.keys(this.state.addModal.selectedPlaylist).length > 0 && this.state.addModal.selectedPlaylist.sections.length > 0) {
       return html `
-      <select class="w-100 pa2" onchange=${this.handleSectionChange} name="sectionsSelect">
+      <select class="w-100 pa2" onchange=${this.handleSectionChange} name="sectionSelect">
         <option value=""></option>
         ${this.state.addModal.selectedPlaylist.sections.map( section => {
           return html`
@@ -197,49 +298,7 @@ class AddModal extends Component {
     }
   }
 
-  organize() {
-    console.log("organize")
-    return html `
-    <section class="flex flex-column flex-1 w-100 pa4">
-    <!-- FORM Editing: Step 3 
-        Add it to any of the playlists or sections of interest
-        -->
-    <p class="f7">Step 3: Sort your resource into a playlist or section or just keep choo chooing along! You can find your unsorted resources in Your Library.</p>
-    <fieldset class="ba bw2 b--purple">
-      <legend class="pl2 pr2">Organize</legend>
-      <form id="addModalEditor" name="addModalEditor" class="w-100 flex flex-column f7">
-        <label class="f7">Add to Existing Playlist</label>
-        <select class="w-100 pa2" onchange=${this.handleChange} name="playlistSelect">
-          <option value=""></option>
-          ${this.state.playlists.all.map(playlist => {
-            return html`
-              <option value="${playlist._id}" data-id=${playlist._id} data-db="playlists" 
-              selected=${this.markSelected(playlist, this.state.addModal.selectedPlaylist)}>${playlist.title}</option>  
-            `
-          })}
-        </select> 
-        <!-- Select Sections -->
-          ${this.showPlaylistSections()}
-      </form>
-      <div>create new playlist</div>
-      <div>create new section</div>
-    </fieldset>
-  </section>
-    `
-  }
-
-  showCurrentStep(step) {
-    console.log(step);
-    if (step == 0) {
-      return this.addURL();
-    } else if (step == 1) {
-      return this.editDetails();
-    } else if (step == 2) {
-      return this.organize();
-    } else {
-      return this.addURL();
-    }
-  }
+  
 
 
 
