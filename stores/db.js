@@ -3,6 +3,8 @@ const {
   feathersClient
 } = require('../components/api');
 
+const axios = require('axios');
+
 module.exports = store
 
 function store(state, emitter, app) {
@@ -127,6 +129,51 @@ function store(state, emitter, app) {
         return err;
       })
     })
+
+
+    emitter.on("db:playlists:add", function(){
+      feathersClient.authenticate().then(response => {
+        let newPlaylist = {
+          "title":"New Playlist! Edit me!",
+          "description":"New Playlist description! Edit me!",
+          "sections":[{
+            "title":"Unsorted",
+            "description":"a section for all your unsorted links",
+            "resources":[
+              {"title":"empty resource container"}
+            ]
+          }]
+        }
+        console.log("trying to post to playlists")
+
+        console.log(response)
+        axios.post('https://localhost:3030/playlists/addJSON', newPlaylist, {
+          "headers": {'Authorization': "bearer " + response.accessToken},
+          'Content-Type': 'application/json'
+        })
+        .then(function (data) {
+          console.log(data);
+          
+          emitter.emit("db:playlists:find")
+          // emitter.emit(state.events.RENDER);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+        // feathersClient.service('playlists').create().then( data => {
+        //   console.log("Resource subcessfully submitted");
+        //   console.log(data);
+        //   state.addModal.selectedSection = data;
+        //   emitter.emit(state.events.RENDER);
+        // }).catch(err => {
+        //   return err;
+        // })
+
+      }).catch(err => {
+        return err;
+      })
+    })
+    
     
 
     emitter.on('db:playlists:find', function(){
@@ -138,7 +185,6 @@ function store(state, emitter, app) {
           } else{
             state.playlists.selected = data[data.length-1];
           }
-          
           // state.selectedItem = data[data.length-1];
           state.playlists.all = data;
           emitter.emit(state.events.RENDER);

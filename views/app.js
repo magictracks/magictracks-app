@@ -84,7 +84,7 @@ function view(state, emit) {
 
       <!-- Editor -->
       <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between">
-        <div class="w-100 tc"><small class="f7">Edit Selected</small></div>
+        <div class="w-100 tc"><small class="f7">Edit Selected | <span onclick=${() => console.log("delete this?")}>🗑 delete </delete> </small></div>
         <div class="w-100 pa2 overflow-y-scroll">
           <form id="inputEditor" name="inputEditor" class="w-100 flex flex-column f7">
             <label class="">Title</label> <input type="text" name="title" value=${state.selectedItem.title}/>
@@ -111,7 +111,7 @@ function view(state, emit) {
             <li>None yet!</li>
           </ul>
 
-          <p>PLAYLISTS ⊕</p>
+          <p>PLAYLISTS <span onclick=${(e) => { emit("db:playlists:add")}}>⊕</span> </p>
           <ul class="list pl1">
             ${
               state.playlists.all.map( (playlist) => {
