@@ -32,6 +32,7 @@ function view(state, emit) {
         <!-- PRIMARY -->
         ${state.cache(AppMain, "AppMain", state, emit).render() }
       </section>
+      
       <!-- ADD RESOURCES MODAL -->
       ${state.cache(AddModal, "AddModal", state, emit).render()}
     </body> 
