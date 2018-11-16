@@ -9,7 +9,7 @@ class AppMain extends Component {
     this.state = state;
     this.emit = emit;
     this.local = state.components[id] = {
-      
+
     }
 
     this.toggleSelectedTab = this.toggleSelectedTab.bind(this);
@@ -117,7 +117,6 @@ function exportView(state, emit){
 function browseView(state, emit){
   return html`
   <section class="w-100 h-auto flex flex-row pa2">
-    ${}
     <div id="paginator" class="w-100 pa2 tc"> back | 1, 2, 3, ... | next</div>
   </section>
   `
