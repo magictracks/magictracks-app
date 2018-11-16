@@ -130,6 +130,33 @@ function store(state, emitter, app) {
       })
     })
 
+    emitter.on('db:playlists:addNewSection', function(_id, _data){
+      feathersClient.authenticate().then(authResponse => {
+
+        feathersClient.service('sections').create(_data).then( (sectionResponse) => {
+            
+            let patchData = {
+              "$push": {"sections": sectionResponse._id}
+            }
+
+            feathersClient.service('playlists').patch(_id, patchData).then( (playlistResponse) => {
+              // console.log(playlistResponse);
+              console.log(_id, sectionResponse, playlistResponse)
+              state.addModal.selectedPlaylist = playlistResponse;
+              state.playlists.selected = state.addModal.selectedPlaylist;
+              state.addModal.selectedSection = sectionResponse;
+              console.log("update dropdown!!!")
+              // emitter.emit("db:playlists:find");
+              emitter.emit(state.events.RENDER);
+            }).catch(err => {
+              return err;
+            })
+          });
+      }).catch(err => {
+        return err;
+      })
+    })
+
 
     emitter.on("db:playlists:add", function(){
       feathersClient.authenticate().then(response => {
@@ -176,16 +203,14 @@ function store(state, emitter, app) {
     
     
 
-    emitter.on('db:playlists:find', function(){
+    emitter.on('db:playlists:find', function(_id){
       feathersClient.service("playlists").find({query:{submittedBy: state.user.id}})
         .then((data) =>{
-          console.log("the latest playlist edited is", )
-          if(Object.keys(state.playlists.selected).length >0 ){
-            state.playlists.selected = data.filter(playlist => playlist._id ==  state.playlists.selected._id)[0];
-          } else{
-            state.playlists.selected = data[data.length-1];
-          }
-          // state.selectedItem = data[data.length-1];
+            if(Object.keys(state.playlists.selected).length > 0 ){
+              state.playlists.selected = data.filter(playlist => playlist._id ==  state.playlists.selected._id)[0];
+            } else{
+              state.playlists.selected = data[data.length-1];
+            }
           state.playlists.all = data;
           emitter.emit(state.events.RENDER);
         }).catch(err => {

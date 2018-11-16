@@ -30,6 +30,8 @@ class AddModal extends Component {
 
     this.submitAddURL = this.submitAddURL.bind(this);
     this.submitEditDetails = this.submitEditDetails.bind(this);
+
+    this.createSection = this.createSection.bind(this);
   }
 
 
@@ -145,6 +147,7 @@ class AddModal extends Component {
       title: formData.get("title"),
       description: formData.get("description")
     }
+
     this.emit("db:resources:patch", this.state.addModal.submittedResource._id, resourceData);
   }
 
@@ -156,6 +159,7 @@ class AddModal extends Component {
     // get the id of the section
     let selectedPlaylistId = formData.get("playlistSelect");
     let selectedSectionId = formData.get("sectionSelect");
+    let newSectionTitle = formData.get("newSectionTitle");
 
     console.log(selectedPlaylistId, selectedSectionId)
 
@@ -164,7 +168,9 @@ class AddModal extends Component {
       let data = {
         "$push": {"resources": this.state.addModal.submittedResource._id}
       }
+
       this.emit("db:sections:patch", selectedSectionId, data)
+      
     }
 
     // TODO add ability to add to new section for selected playlist
@@ -227,6 +233,7 @@ class AddModal extends Component {
         Add it to any of the playlists or sections of interest
         -->
     <p class="f7">Step 3: Sort your resource into a playlist or section or just keep choo chooing along! You can find your unsorted resources in Your Library.</p>
+    <button class="ba bw2" onclick=${this.toggleModal}>skip organizing</button>
     <fieldset class="ba bw2 b--purple">
       <legend class="pl2 pr2">Organize</legend>
       <form id="addModalEditor" name="addModalEditor" class="w-100 flex flex-column f7">
@@ -240,26 +247,26 @@ class AddModal extends Component {
             `
           })}
         </select> 
+        
         <!-- Select Sections -->
-          ${this.showSectionsSelect()}
+        ${this.showSectionsSelect()}
       </form>
-      <fieldset>
-        <legend>New Playlist & Section</legend>
-        <div>
-            <label> add to new playlist</label>
-            <form name="newPlaylistForm">
-              <input type="text" name="newTitle"/>
-            </form>
-          </div>
-        <div>
-          <label> add to new section</label>
-            <form name="newSectionForm">
-            <input type="text" name="newTitle"/>
-            </form>
-        </div>
-      </fieldset>
-      <button class="ba bw2" onclick=${this.toggleModal}>skip organizing</button>
     </fieldset>
+    <fieldset class="ba bw2 b--green mt2">
+    <legend class="pl2 pr2">New Playlist & Section</legend>
+    <div>
+        <label> add to new playlist</label>
+        <form name="newPlaylistForm">
+          <input type="text" name="newTitle"/>
+        </form>
+      </div>
+    <div>
+      <label> add to new section</label>
+        <form name="newSectionForm">
+        <input type="text" name="newTitle"/>
+        </form>
+    </div>
+  </fieldset>
   </section>
     `
   }
@@ -276,9 +283,28 @@ class AddModal extends Component {
     `
   }
 
+  
+  createSection(e){
+    e.preventDefault();
+    console.log(e.target);
+    let form = new FormData(e.target.form);
+
+    let sectionTitle = form.get("newSectionTitle");
+    let selectedPlaylistId = form.get("playlistSelect");
+
+    let data = {
+      "title": sectionTitle
+    }
+
+    this.emit("db:playlists:addNewSection",selectedPlaylistId,  data)
+  }
+  
+
   showSectionsSelect() {
     if (Object.keys(this.state.addModal.selectedPlaylist).length > 0 && this.state.addModal.selectedPlaylist.sections.length > 0) {
       return html `
+      <div>
+      <p>Select an existing section...</p>
       <select class="w-100 pa2" onchange=${this.handleSectionChange} name="sectionSelect">
         <option value=""></option>
         ${this.state.addModal.selectedPlaylist.sections.map( section => {
@@ -288,6 +314,13 @@ class AddModal extends Component {
           `
         })}
       </select>
+      <p>...or add to a <span>new section</span></p>
+      <label>New Section title
+        <input class="ml2" type="text" name="newSectionTitle" placeholder="Section Title"/>
+        <button onclick=${this.createSection}>➕</button>
+      </label>
+      
+      </div>
       `
     } else {
       return html `<div>no sections</div>`

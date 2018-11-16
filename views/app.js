@@ -160,6 +160,7 @@ function view(state, emit) {
               </ul>
             </li>
             <li class="mainNavTab h-100 bg-near-black near-white pr2 pl2"><span onclick=${toggleSelectedTab}>Browse</span></li>
+            <li class="mainNavTab h-100 bg-near-black near-white pr2 pl2"><span onclick=${toggleSelectedTab}><input class="bn" type="text" placeholder="🔎 search"></span></li>
           </ul>
         </nav>
         <!-- main -->
