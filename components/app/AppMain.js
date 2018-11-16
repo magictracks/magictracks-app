@@ -8,7 +8,9 @@ class AppMain extends Component {
     this.id = id;
     this.state = state;
     this.emit = emit;
-    this.local = state.components[id] = {}
+    this.local = state.components[id] = {
+      
+    }
 
     this.toggleSelectedTab = this.toggleSelectedTab.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
@@ -35,7 +37,7 @@ class AppMain extends Component {
     <section class="main w-100 flex flex-column ml2-ns">
       <!-- TOPTOOLBAR -->
       ${this.state.cache(AppTopToolbar, "AppTopToolbar", this.state, this.emit).render() }
-      <!-- main -->
+      <!-- PRIMARY AREA -->
       <section class="w-100 flex-1 ba bw2 mt2 bg-near-white">
         <!-- NAV -->
         <nav class="w-100 b--near-black bg-near-black h2 flex flex-row items-center">
@@ -62,24 +64,7 @@ class AppMain extends Component {
         </nav>
         <!-- main -->
         <section id="mainContent" class="w-100 h-auto overflow-y-scroll flex flex-column pa2 mt2 mh-500px">
-          <!-- ARTICLE HEADER -->
-          <section class="w-100 h-auto flex flex-column pa2" data-id=${this.state.playlists.selected._id} data-db="playlists" onclick=${(e) => this.emit("db:feature:select", this.state.playlists.selected._id, "playlists") }>
-            <div><h3 class="f3 mt0 mb2">${this.state.playlists.selected.title}</h3></div>
-            <div class="flex flex-row w-100">
-              <div class="w-40 pr2 f7 flex flex-column">
-                <p class="ma0">created by:</p>
-                <p class="ma0">tags:</p>
-                <p class="ma0">comments:</p>
-                <p class="ma0">images:</p>
-              </div>
-              <div class="w-60 pl2 f7">
-                ${this.state.playlists.selected.description}
-              </div>
-            </div>
-          </section>
-          <!-- Sections & Resources --> 
-          ${makeSections(this.state, this.emit)}
-
+          ${editView(this.state, this.emit)}
         </section> <!-- end main edit/export/browse -->
       </section> <!-- end main container -->
     </section>
@@ -90,6 +75,55 @@ class AppMain extends Component {
     return true
   }
 }
+
+
+function toggleMainView(){
+
+
+}
+
+
+function editView(state, emit){
+  return html`
+    
+    <section class="w-100 h-auto flex flex-column pa2" data-id=${state.playlists.selected._id} data-db="playlists" onclick=${(e) => this.emit("db:feature:select", this.state.playlists.selected._id, "playlists") }>
+      <!-- HEADER AREA -->  
+      <div><h3 class="f3 mt0 mb2">${state.playlists.selected.title}</h3></div>
+      <div class="flex flex-row w-100">
+        <div class="w-40 pr2 f7 flex flex-column">
+          <p class="ma0">created by:</p>
+          <p class="ma0">tags:</p>
+          <p class="ma0">comments:</p>
+          <p class="ma0">images:</p>
+        </div>
+        <div class="w-60 pl2 f7">
+          ${state.playlists.selected.description}
+        </div>
+      </div>
+
+      <!-- Sections & Resources --> 
+      ${makeSections(state, emit)}
+    </section>
+    
+  `
+}
+
+function exportView(state, emit){
+  return html`
+  <div> Export view! </div>
+  `
+}
+
+function browseView(state, emit){
+  return html`
+  <section class="w-100 h-auto flex flex-row pa2">
+    ${}
+    <div id="paginator" class="w-100 pa2 tc"> back | 1, 2, 3, ... | next</div>
+  </section>
+  `
+}
+
+
 
 function makeSections(state, emit){
   if(state.playlists.selected.sections !== undefined){
