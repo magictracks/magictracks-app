@@ -10,23 +10,42 @@ module.exports = store
 function store(state, emitter, app) {
   // state.totalClicks = 0
   state.authenticated;
+
   state.user = {
     username: "",
-    id:""
+    id:"",
+    selectedCollection:"",
+    playlists:{
+      selected:{},
+      all:[]
+    },
+    sections:{
+      selected:{},
+      all:[]
+    },
+    resources:{
+      selected:{},
+      all:[]
+    },
+    comments:{
+      selected:{},
+      all:[]
+    },
+    tags:{
+      selected:{},
+      all:[]
+    }
   }
+
   state.playlists = {
     selected: {},
     all: []
   }
+
   state.selectedItem = {};
   state.selectedItemDb = "";
 
-  state.browse = {
-    playlists:[],
-    sections:[],
-    resource:[],
-    starred:[]
-  }
+  
 
   state.addModal = {
     toggled: false,
