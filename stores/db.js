@@ -220,6 +220,24 @@ function store(state, emitter, app) {
         })
     })
 
+    emitter.on('db:delete', function(){
+        feathersClient.authenticate()
+          .then( (response) => {
+            console.log(state.selectedItemDb)
+            console.log(state.selectedItem._id)
+            feathersClient.service(state.selectedItemDb).remove(state.selectedItem._id)
+            .then( (deleteResponse) => {
+              console.log(deleteResponse);
+              // emitter.emit(state.events.RENDER);
+              emitter.emit("db:playlists:find")
+            }).catch(innerErr => {
+              return innerErr
+            })
+          }).catch(outerErr => {
+            return outerErr;
+          })        
+    })
+
     emitter.on('db:patch', function (_id, _formData) {
       // state.playlists.selected = state.playlists.all.filter(playlist => playlist._id == _id)[0];
 
