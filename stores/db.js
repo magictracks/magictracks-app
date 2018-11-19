@@ -12,7 +12,9 @@ function store(state, emitter, app) {
   state.user = {
     username: "",
     id: "",
+    authenticated:"",
     selectedCollection: "",
+    selectedId: "",
     playlists: {
       selected: {},
       all: []
@@ -24,16 +26,27 @@ function store(state, emitter, app) {
     resources: {
       selected: {},
       all: []
-    },
-    comments: {
-      selected: {},
-      all: []
-    },
-    tags: {
-      selected: {},
-      all: []
     }
+    // TODO: 
+    // comments: {
+    //   selected: {},
+    //   all: []
+    // },
+    // tags: {
+    //   selected: {},
+    //   all: []
+    // }
+  };
+
+  state.editing = {
+
   }
+
+  state.browsing = {
+
+  }
+  
+
 
   state.playlists = {
     selected: {},
@@ -60,7 +73,7 @@ function store(state, emitter, app) {
       state.user.username = response.username;
       state.user.id = response.id;
       emitter.emit("pushState", "app");
-      state.authenticated = true;
+      state.user.authenticated = true;
     }).then(() => {
       // then get the playlists 
       feathersClient.service("playlists").find({
@@ -81,7 +94,7 @@ function store(state, emitter, app) {
     })
     .catch(err => {
       console.log("not auth'd friend!")
-      state.authenticated = false;
+      state.user.authenticated = false;
       emitter.emit(state.events.RENDER);
     });
 
@@ -327,17 +340,16 @@ function store(state, emitter, app) {
      * ROUTING
      ****************************/    
     emitter.on('db:users:redirect', pushState("/"))
-    
-    emitter.on('db:users:logout', logout());
 
     /***************************
      * AUTH
      ****************************/
     // SIGNUP
     emitter.on('db:users:signup', signup(formData));
-
     // LOGIN
     emitter.on("db:users:login", login(formData));
+    // LOGOUT
+    emitter.on('db:users:logout', logout());
 
     /***************************
      * TEST
