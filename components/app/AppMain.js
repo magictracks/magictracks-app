@@ -9,7 +9,7 @@ class AppMain extends Component {
     this.state = state;
     this.emit = emit;
     this.local = state.components[id] = {
-
+      
     }
 
     this.toggleSelectedTab = this.toggleSelectedTab.bind(this);
