@@ -11,6 +11,7 @@ class AppSidebarEditor extends Component {
     this.local = state.components[id] = {}
 
     this.submitInputEditor = this.submitInputEditor.bind(this);
+    this.deleteSelected = this.deleteSelected.bind(this);
   }
 
   submitInputEditor(e){
@@ -22,12 +23,19 @@ class AppSidebarEditor extends Component {
     this.emit("db:updateSelectedFeature", id, db, formData);
   }
 
+  deleteSelected(e){
+    let id = this.state.selected.data._id;
+    let db = this.state.selected.data.featureType;
+    this.emit("db:deleteSelectedFeature", id, db);
+    
+  }
+
   createElement () {
     let selected = this.state.selected.data;
 
     return html`
       <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between mh-440px">
-      <div class="w-100 tc"><small class="f7">Edit Selected | <span class="pointer hover-bg-purple" onclick=${(e) => this.emit("db:feature:delete")}>🗑 delete </delete> </small></div>
+      <div class="w-100 tc"><small class="f7">Edit Selected | <span class="pointer hover-bg-purple" onclick=${this.deleteSelected}>🗑 delete </delete> </small></div>
       <div class="w-100 pa2 overflow-y-scroll">
         <form id="inputEditor" name="inputEditor" class="w-100 flex flex-column f7">
           <label class="">Title</label> <input type="text" name="title" value=${selected.title || "title"}/>

@@ -74,6 +74,8 @@ function store(state, emitter, app) {
       emitter.emit("db:getSelectedFeature", _id, _db);
     });
 
+
+
     emitter.on("db:getSelectedFeature", function(_id, _db){
       console.log(_id, _db);
       feathersClient.service(_db).get(_id).then( feature => {
@@ -85,6 +87,8 @@ function store(state, emitter, app) {
         return err;
       })
     })
+
+
 
     emitter.on("db:updateSelectedFeature", function(_id, _db, _formData){
       // TODO: add in handling array features
@@ -103,22 +107,78 @@ function store(state, emitter, app) {
       })
     })
 
+
+
+    emitter.on("db:deleteSelectedFeature", function(_id, _db){
+      feathersClient.service(_db).remove(_id).then( deleteResponse => {
+        console.log(deleteResponse)
+        state.selected.id = "";
+        state.selected.db = "";
+        state.selected.data = {};
+        if(_db == "playlists"){
+          state.user.playlists.selected = {};
+        }
+        emitter.emit("user:playlists:refresh");
+      }).catch(err => {
+        return err;
+      })
+    })
+
+
     emitter.on("user:playlists:refresh", function(){
       let query = { query: { "submittedBy": state.user.id }}
       feathersClient.service("playlists").find(query).then( selectedPlaylists => {
         state.user.playlists.all = selectedPlaylists;
 
+        console.log("BEFORE 🍕🍕🍕🍕", state.user.playlists.selected)
         // set the selected playlist
         if(isEmpty(state.user.playlists.selected) === true){
           state.user.playlists.selected =  state.user.playlists.all[ state.user.playlists.all.length - 1];
         } else {
           state.user.playlists.selected =  state.user.playlists.all.filter( playlist => playlist._id == state.user.playlists.selected._id )[0];
         }
+
+        console.log("AFTER 🍕🍕🍕🍕", state.user.playlists.selected)
+        // TODO: THE ISSUE HERE IS THAT WHEN THINGS GET DEELTED, THAT PLAYLIST NO LONGER EXITS
+        // THEREFORE YOU NEED TO REMOVE THAT PLAYLIST FROM THE EXISTING SELECTED PLAYLIST IN THE 
+        // DELETE EMITTER, THEN RUN THE REFRESH!!!
         emitter.emit(state.events.RENDER);
       })
     })
 
+    emitter.on("user:playlists:addJSON", function () {
+      feathersClient.authenticate().then(response => {
+        let newPlaylist = {
+          "title": "New Playlist! Edit me!",
+          "description": "New Playlist description! Edit me!",
+          "sections": [{
+            "title": "Unsorted",
+            "description": "a section for all your unsorted links",
+            "resources": [{
+              "title": "empty resource container"
+            }]
+          }]
+        }
+        axios.post('https://localhost:3030/playlists/addJSON', newPlaylist, {
+            "headers": {
+              'Authorization': "bearer " + response.accessToken
+            },
+            'Content-Type': 'application/json'
+          })
+          .then(function (_newData) {
+            state.user.playlists.selected.data = _newData.data;
+            state.user.playlists.selected.id = _newData.data._id;
+            state.user.playlists.selected.db = _newData.data.featureType;
 
+            emitter.emit("user:playlists:refresh");
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }).catch(err => {
+        return err;
+      })
+    });
 
 
   }) // end DOMCONTENTLOADED

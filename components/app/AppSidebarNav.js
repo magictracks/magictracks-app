@@ -22,7 +22,8 @@ class AppSidebarNav extends Component {
 
   addPlaylist(e){
     e.preventDefault();
-    console.log("addPlaylist: ", e.currentTarget);
+    console.log("addPlaylist");
+    this.emit("user:playlists:addJSON");
   }
 
   createElement () {
