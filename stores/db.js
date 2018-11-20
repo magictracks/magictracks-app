@@ -224,6 +224,12 @@ function store(state, emitter, app) {
     })
 
 
+    emitter.on("db:sections:reorder", function(_id, _newIndex){
+      let p = state.user.db.playlists.selected;
+      p.sections.push(p.sections.splice(p.sections.findIndex(v => v._id == _id), _newIndex)[0])
+      emitter.emit(state.events.RENDER)
+
+    })
 
 
     // emitter.on('db:AddModal:toggle', function () {
