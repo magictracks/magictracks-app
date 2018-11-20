@@ -28,6 +28,7 @@ function view(state, emit) {
 
         <!-- PRIMARY -->
         ${state.cache(AppMain, "AppMain", state, emit).render() }
+        
       </section>
 
     </body> 

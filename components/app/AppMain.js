@@ -31,6 +31,7 @@ class AppMain extends Component {
   toggleDropdown(e) {
     e.target.nextElementSibling.classList.toggle('dn');
   }
+  
 
   createElement () {
     return html`
@@ -79,31 +80,39 @@ class AppMain extends Component {
 
 function toggleMainView(){
 
-
 }
 
 
+
 function editView(state, emit){
+  
+  function setSelected(e){
+    e.preventDefault();
+    let id = e.currentTarget.dataset.id;
+    let db = e.currentTarget.dataset.db;
+    emit("db:getSelectedFeature", id, db);
+  }
+
   return html`
     
     <section class="w-100 h-auto flex flex-column pa2">
       
     <!-- HEADER AREA -->  
-      <div data-id=${state.user.db.playlists.selected._id} 
-      data-db="${state.user.db.playlists.selected.featureType}" 
-      onclick=${(e) => emit("db:feature:select", state.user.db.playlists.selected._id, "playlists") }>
+      <div data-id=${state.user.playlists.selected._id} 
+      data-db="${state.user.playlists.selected.featureType}" 
+      onclick=${setSelected }>
       <div>
-      <h3 class="f3 mt0 mb2">${state.user.db.playlists.selected.title}</h3>
+      <h3 class="f3 mt0 mb2">${state.user.playlists.selected.title}</h3>
       </div>
       <div class="flex flex-row w-100">
         <div class="w-40 pr2 f7 flex flex-column">
-          <p class="ma0">created by:</p>
+          <p class="ma0">created by: ${state.user.playlists.selected.submittedBy}</p>
           <p class="ma0">tags:</p>
           <p class="ma0">comments:</p>
           <p class="ma0">images:</p>
         </div>
         <div class="w-60 pl2 f7">
-          ${state.user.db.playlists.selected.description}
+          ${state.user.playlists.selected.description}
         </div>
       </div>
       </div>
@@ -114,6 +123,8 @@ function editView(state, emit){
     
   `
 }
+
+// ${makeSections(state, emit)}
 
 function exportView(state, emit){
   return html`
@@ -132,17 +143,26 @@ function browseView(state, emit){
 
 
 function makeSections(state, emit){
-  if(state.user.db.playlists.selected.sections !== undefined){
+  
+  function setSelected(e){
+    e.preventDefault();
+    let id = e.currentTarget.dataset.id;
+    let db = e.currentTarget.dataset.db;
+    emit("db:getSelectedFeature", id, db);
+  }
+
+  
+  if(state.user.playlists.selected.sections !== undefined){
     return html`
       <section class="w-100 h-auto mt4">
       ${ 
-        state.user.db.playlists.selected.sections.map( (section, sectionIndex) => {
+        state.user.playlists.selected.sections.map( (section, sectionIndex) => {
           return html`
             <section class="w-100 ba bw1 mt2" data-id=${section._id} data-db="sections">
               <!-- SECTION HEADER -->
               <section class="w-100 pa2 bg-near-black white flex flex-column" 
               data-id=${section._id} data-db="sections" 
-              onclick=${ function(e){ emit("db:feature:select", String(section._id), "sections") }}>
+              onclick=${setSelected}>
                 <h4 class="f4 mt0 mb2">${section.title}</h4>
                 <div class="flex flex-row w-100">
                   <div class="w-40 pr2 f7 flex flex-column">
@@ -178,6 +198,13 @@ function makeSections(state, emit){
   }
 
   function makeResources(section, state, emit){
+    function setSelected(e){
+      e.preventDefault();
+      let id = e.currentTarget.dataset.id;
+      let db = e.currentTarget.dataset.db;
+      emit("db:getSelectedFeature", id, db);
+    }
+
     if(section.resources !== undefined){
       return html`
         <div class="overflow-auto">
@@ -197,7 +224,7 @@ function makeSections(state, emit){
                 <tr class="stripe-dark" 
                 data-id=${resource._id} 
                 data-db="resources" 
-                onclick=${ (e) => { if(!e.target.classList.contains("dropdown")) emit("db:feature:select", String(resource._id), "resources") }}>
+                onclick=${ (e) => { if(!e.target.classList.contains("dropdown")) setSelected(e) }}>
                   <td class="pa3">${resourceIndex}</td>
                   <td class="pa3">☑️</td>
                   <td class="pa3"><a class="link black hover-bg-purple hover-white" href="${resource.url}" target="_blank">${resource.title}</a></td>
