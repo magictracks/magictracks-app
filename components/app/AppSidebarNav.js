@@ -15,15 +15,14 @@ class AppSidebarNav extends Component {
 
   switchSelected(e) {
     console.log(e.target.dataset.id);
-    emit('db:playlists:select', e.target.dataset.id);
-    emit('db:feature:select', e.target.dataset.id, e.target.dataset.db)
+    this.emit('db:feature:select', e.target.dataset.id, e.target.dataset.db)
   };
 
   submitInputEditor(e) {
     e.preventDefault();
     let form = document.querySelector("#inputEditor");
     let formData = new FormData(form);
-    emit("db:patch", state.selectedItem._id, formData);
+    this.emit("db:patch", state.selectedItem._id, formData);
   }
 
   createElement () {
@@ -41,12 +40,12 @@ class AppSidebarNav extends Component {
         <li>None yet!</li>
       </ul>
 
-      <p>PLAYLISTS <span onclick=${(e) => { this.emit("db:playlists:add")}}>⊕</span> </p>
+      <p>PLAYLISTS <span class="hover-bg-purple cursor" onclick=${(e) => { this.emit("db:playlists:addJSON")}}>⊕</span> </p>
       <ul class="list pl1">
         ${
-          this.state.playlists.all.map( (playlist) => {
+          this.state.user.db.playlists.all.map( (playlist) => {
           return html`
-            <li class="hover-bg-purple hover-white black" onclick=${this.switchSelected} data-id=${playlist._id} data-db="playlists">${playlist.title}</li>
+            <li class="hover-bg-purple hover-white black" onclick=${this.switchSelected} data-id=${playlist._id} data-db="${playlist.featureType}">${playlist.title}</li>
             `
           })
         }

@@ -9,7 +9,7 @@ class AppMain extends Component {
     this.state = state;
     this.emit = emit;
     this.local = state.components[id] = {
-      
+
     }
 
     this.toggleSelectedTab = this.toggleSelectedTab.bind(this);
@@ -86,9 +86,15 @@ function toggleMainView(){
 function editView(state, emit){
   return html`
     
-    <section class="w-100 h-auto flex flex-column pa2" data-id=${state.playlists.selected._id} data-db="playlists" onclick=${(e) => this.emit("db:feature:select", this.state.playlists.selected._id, "playlists") }>
-      <!-- HEADER AREA -->  
-      <div><h3 class="f3 mt0 mb2">${state.playlists.selected.title}</h3></div>
+    <section class="w-100 h-auto flex flex-column pa2">
+      
+    <!-- HEADER AREA -->  
+      <div data-id=${state.user.db.playlists.selected._id} 
+      data-db="${state.user.db.playlists.selected.featureType}" 
+      onclick=${(e) => emit("db:feature:select", state.user.db.playlists.selected._id, "playlists") }>
+      <div>
+      <h3 class="f3 mt0 mb2">${state.user.db.playlists.selected.title}</h3>
+      </div>
       <div class="flex flex-row w-100">
         <div class="w-40 pr2 f7 flex flex-column">
           <p class="ma0">created by:</p>
@@ -97,8 +103,9 @@ function editView(state, emit){
           <p class="ma0">images:</p>
         </div>
         <div class="w-60 pl2 f7">
-          ${state.playlists.selected.description}
+          ${state.user.db.playlists.selected.description}
         </div>
+      </div>
       </div>
 
       <!-- Sections & Resources --> 
@@ -125,15 +132,17 @@ function browseView(state, emit){
 
 
 function makeSections(state, emit){
-  if(state.playlists.selected.sections !== undefined){
+  if(state.user.db.playlists.selected.sections !== undefined){
     return html`
       <section class="w-100 h-auto mt4">
       ${ 
-        state.playlists.selected.sections.map( (section, sectionIndex) => {
+        state.user.db.playlists.selected.sections.map( (section, sectionIndex) => {
           return html`
             <section class="w-100 ba bw1 mt2" data-id=${section._id} data-db="sections">
               <!-- SECTION HEADER -->
-              <section class="w-100 pa2 bg-near-black white flex flex-column" data-id=${section._id} data-db="sections" onclick=${ function(e){emit("db:feature:select", String(section._id), "sections") }}>
+              <section class="w-100 pa2 bg-near-black white flex flex-column" 
+              data-id=${section._id} data-db="sections" 
+              onclick=${ function(e){ emit("db:feature:select", String(section._id), "sections") }}>
                 <h4 class="f4 mt0 mb2">${section.title}</h4>
                 <div class="flex flex-row w-100">
                   <div class="w-40 pr2 f7 flex flex-column">
@@ -185,7 +194,10 @@ function makeSections(state, emit){
             <tbody class="lh-copy">
               ${section.resources.map( (resource, resourceIndex) => {
                 return html`
-                <tr class="stripe-dark" data-id=${resource._id} data-db="resources" onclick=${ (e) => { if(!e.target.classList.contains("dropdown")) emit("db:feature:select", String(resource._id), "resources") }}>
+                <tr class="stripe-dark" 
+                data-id=${resource._id} 
+                data-db="resources" 
+                onclick=${ (e) => { if(!e.target.classList.contains("dropdown")) emit("db:feature:select", String(resource._id), "resources") }}>
                   <td class="pa3">${resourceIndex}</td>
                   <td class="pa3">☑️</td>
                   <td class="pa3"><a class="link black hover-bg-purple hover-white" href="${resource.url}" target="_blank">${resource.title}</a></td>

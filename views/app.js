@@ -17,12 +17,9 @@ max-height: 300px;
 module.exports = view;
 
 
-
-// 
-
 function view(state, emit) {
 
-  if (state.authenticated === true) {
+  if (state.user.authenticated === true) {
     return html `
     <body class="w-100 h-100 code lh-copy bg-washed-blue ma0 flex flex-column items-center">
       <section class="mw8 w-100 h-100 pa2 flex flex-row">
@@ -32,9 +29,7 @@ function view(state, emit) {
         <!-- PRIMARY -->
         ${state.cache(AppMain, "AppMain", state, emit).render() }
       </section>
-      
-      <!-- ADD RESOURCES MODAL -->
-      ${state.cache(AddModal, "AddModal", state, emit).render()}
+
     </body> 
   `;
   } else {
@@ -48,3 +43,10 @@ function view(state, emit) {
     `;
   }
 }
+
+
+/**
+ * 
+ * <!-- ADD RESOURCES MODAL -->
+      ${state.cache(AddModal, "AddModal", state, emit).render()}
+ */

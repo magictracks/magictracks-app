@@ -6,15 +6,32 @@ const axios = require('axios');
 
 module.exports = store
 
-function store(state, emitter, app) {
-  state.authenticated;
 
-  state.user = {
-    username: "",
-    id: "",
-    authenticated:"",
-    selectedCollection: "",
-    selectedId: "",
+function store(state, emitter, app) {
+  // const playlists = new Playlists();
+
+  state.community = {
+    db:{
+      playlists: {
+        currentPage:"",
+        selected: {},
+        all: []
+      },
+      sections: {
+        currentPage:"",
+        selected: {},
+        all: []
+      },
+      resources: {
+        currentPage:"",
+        selected: {},
+        all: []
+      }
+    }
+  }
+
+  state.user.db = {
+    editing: "playlists", // set initial state to playlists
     playlists: {
       selected: {},
       all: []
@@ -27,175 +44,154 @@ function store(state, emitter, app) {
       selected: {},
       all: []
     }
-    // TODO: 
-    // comments: {
-    //   selected: {},
-    //   all: []
-    // },
-    // tags: {
-    //   selected: {},
-    //   all: []
-    // }
   };
 
-  state.editing = {
-
-  }
-
-  state.browsing = {
-
-  }
-  
-
+  state.selected = {
+    id:"",
+    db:""
+  };
 
   state.playlists = {
-    selected: {},
-    all: []
+    selected:{},
+    all:[]  
   }
+  
+  
 
-  state.selectedItem = {};
-  state.selectedItemDb = "";
+  // state.addModal = {
+  //   toggled: false,
+  //   currentStep: 0,
+  //   selectedPlaylist: {},
+  //   selectedSection: {},
+  //   submittedResource: {}
+  // }
 
-
-
-  state.addModal = {
-    toggled: false,
-    currentStep: 0,
-    selectedPlaylist: {},
-    selectedSection: {},
-    submittedResource: {}
-  }
-
-
-  // check auth status
-  feathersClient.authenticate().then((response) => {
+  
+  function initialize(){
+    feathersClient.authenticate().then( (authResponse) => {
       console.log("brilliant! you're auth'd!")
-      state.user.username = response.username;
-      state.user.id = response.id;
-      emitter.emit("pushState", "app");
-      state.user.authenticated = true;
-    }).then(() => {
-      // then get the playlists 
-      feathersClient.service("playlists").find({
-          query: {
-            submittedBy: state.user.id
-          }
-        })
-        .then((data) => {
-          state.playlists.selected = data[data.length - 1];
-          state.selectedItem = data[data.length - 1];
-          state.playlists.all = data;
-          emitter.emit(state.events.RENDER);
-        }).catch(err => {
-          console.log(err);
-          state.playlists = [];
-          emitter.emit(state.events.RENDER);
-        })
-    })
-    .catch(err => {
-      console.log("not auth'd friend!")
-      state.user.authenticated = false;
+        state.user.username = authResponse.username;
+        state.user.id = authResponse.id;
+        state.user.authenticated = true;
+        emitter.emit("pushState", "app");
+        return authResponse;
+    }).then( (authResponse) => {
+      let query = { query: { "submittedBy": state.user.id }}
+      return feathersClient.service("playlists").find(query)
+    }).then(selectedPlaylists => {
+
+      state.user.db.playlists.all = selectedPlaylists;
+
+      if(isEmpty(state.user.db.playlists.selected) == true){
+        state.user.db.playlists.selected = selectedPlaylists[selectedPlaylists.length - 1];
+        state.user.db.editing = state.user.db.playlists.selected.featureType
+      } else { 
+        state.user.db.playlists.selected = selectedPlaylists.filter( item => item._id == state.user.db.playlists.selected._id)[0];
+        state.user.db.editing = state.user.db.playlists.selected.featureType
+      }
       emitter.emit(state.events.RENDER);
+    })
+    .catch( err => {
+      return err;
     });
+  }
+  initialize();
+
 
   emitter.on('DOMContentLoaded', function () {
-    // general purpose
 
-    emitter.on('db:AddModal:toggle', function () {
-      state.addModal.toggled = !state.addModal.toggled;
-      console.log(state.addModal.toggled);
-      emitter.emit(state.events.RENDER);
-    })
-    emitter.on('db:AddModal:currentStep', function (_currentStep) {
-      state.addModal.currentStep = _currentStep;
-      emitter.emit(state.events.RENDER);
-    })
-    emitter.on('db:AddModal:selectedPlaylist', function (_id) {
-      state.addModal.selectedPlaylist = state.playlists.all.filter(playlist => playlist._id == _id)[0];
-      emitter.emit(state.events.RENDER);
-    })
-    emitter.on('db:AddModal:selectedSection', function (_id) {
-      state.addModal.selectedSection = state.addModal.selectedPlaylist.sections.filter(section => section._id == _id)[0];
-      emitter.emit(state.events.RENDER);
-    })
-
-    // send the data to resources
-    emitter.on("db:resources:create", function (resourceData) {
-      feathersClient.authenticate().then(response => {
-        feathersClient.service('resources').create(resourceData).then(data => {
-          console.log("Resource subcessfully submitted");
-          console.log(data);
-          state.addModal.submittedResource = data;
-          emitter.emit(state.events.RENDER);
+    /** 
+     * When a feature is clicked > query the respective collection by id >
+     * user.db.editing == "playlists", "sections", or "resources"
+     */
+    emitter.on('db:feature:select', function (_id, _db) {
+      feathersClient.service(_db).get(_id).then(data => {
+          state.user.db[_db].selected = data;
+          state.user.db.editing = _db;
+          emitter.emit(state.events.RENDER)
         }).catch(err => {
           return err;
-        })
-      }).catch(err => {
-        return err;
-      })
-    })
-
-    emitter.on("db:resources:patch", function (_id, resourceData) {
-      feathersClient.authenticate().then(response => {
-        feathersClient.service('resources').patch(_id, resourceData).then(data => {
-          console.log("Resource subcessfully submitted");
-          console.log(data);
-          state.addModal.submittedResource = data;
-          emitter.emit(state.events.RENDER);
-        }).catch(err => {
-          return err;
-        })
-      }).catch(err => {
-        return err;
-      })
-    })
-
-    emitter.on("db:sections:patch", function (_id, _data) {
-      feathersClient.authenticate().then(response => {
-        feathersClient.service('sections').patch(_id, _data).then(data => {
-          console.log("Resource subcessfully submitted");
-          console.log(data);
-          state.addModal.selectedSection = data;
-          emitter.emit(state.events.RENDER);
-        }).catch(err => {
-          return err;
-        })
-      }).catch(err => {
-        return err;
-      })
-    })
-
-    emitter.on('db:playlists:addNewSection', function (_id, _data) {
-      feathersClient.authenticate().then(authResponse => {
-
-        feathersClient.service('sections').create(_data).then((sectionResponse) => {
-
-          let patchData = {
-            "$push": {
-              "sections": sectionResponse._id
-            }
-          }
-
-          feathersClient.service('playlists').patch(_id, patchData).then((playlistResponse) => {
-            // console.log(playlistResponse);
-            console.log(_id, sectionResponse, playlistResponse)
-            state.addModal.selectedPlaylist = playlistResponse;
-            state.playlists.selected = state.addModal.selectedPlaylist;
-            state.addModal.selectedSection = sectionResponse;
-            console.log("update dropdown!!!")
-            // emitter.emit("db:playlists:find");
-            emitter.emit(state.events.RENDER);
-          }).catch(err => {
-            return err;
-          })
         });
+    });
+
+    // delete a feature from the DB
+    emitter.on('db:feature:delete', function () {
+      feathersClient.authenticate()
+        .then((response) => {
+
+          feathersClient.service(state.user.db.editing).remove(state.user.db[state.user.db.editing].selected._id)
+            .then((deleteResponse) => {
+              // emitter.emit(state.events.RENDER);
+              // if it is a playlist, set the selected to the next available playlist
+              if(state.user.db.editing == "playlists"){
+                let idx = state.user.db.playlists.all.findIndex( i => i._id == state.user.db.playlists.selected._id)
+                if(idx == 0){
+                  state.user.db.playlists.selected = state.user.db.playlists.all[idx + 1]
+                } else {
+                  state.user.db.playlists.selected = state.user.db.playlists.all[idx - 1]
+                }
+              }
+              
+              emitter.emit("db:playlists:find", {"query":{ "submittedBy": state.user.id }})
+            }).catch(innerErr => {
+              return innerErr
+            })
+        }).catch(outerErr => {
+          return outerErr;
+        })
+    })
+
+    emitter.on('db:feature:patch', function ( _formData) {
+
+      let _id = state.user.db[state.user.db.editing].selected._id;
+      let _db = state.user.db.editing;
+      let input = {
+        "title": _formData.get("title"),
+        "description": _formData.get("description")
+        // "$set": {
+        //   "tags": string2array(_formData.get("tags")) ,
+        //   "collaborators": string2array(_formData.get("tags"))
+        // }
+      }
+
+      console.log(input, "-------",_id, "-------", _db);
+
+      feathersClient.service(_db).patch(_id,input,{}).then(data => {
+          state.user.db[_db].selected = data;
+          state.user.db.editing = _db;
+          // emitter.emit(state.events.RENDER)
+          emitter.emit("db:playlists:find", {"query":{ "submittedBy": state.user.id }} )
+        }).catch(err => {
+          return err;
+        });
+    });
+
+   
+    /** ******** 
+     * PLAYLISTS
+     **********************/
+    emitter.on("db:playlists:find", function(_query){
+      feathersClient.service("playlists").find(_query).then( (selectedPlaylists) => {
+        state.user.db['playlists'].all = selectedPlaylists;
+
+        if(isEmpty(state.user.db.playlists.selected) == true){
+          state.user.db.playlists.selected = selectedPlaylists[selectedPlaylists.length - 1];
+          state.user.db.editing = state.user.db.playlists.selected.featureType
+        } else { 
+          state.user.db.playlists.selected = selectedPlaylists.filter( item => item._id == state.user.db.playlists.selected._id)[0];
+          // state.user.db.editing = state.user.db.playlists.selected.featureType
+        }
+
+        emitter.emit(state.events.RENDER);
       }).catch(err => {
-        return err;
+        console.log(err);
+        state.user.db.playlists.all = [];
+        emitter.emit(state.events.RENDER);
       })
     })
 
 
-    emitter.on("db:playlists:add", function () {
+    emitter.on("db:playlists:addJSON", function () {
       feathersClient.authenticate().then(response => {
         let newPlaylist = {
           "title": "New Playlist! Edit me!",
@@ -208,25 +204,20 @@ function store(state, emitter, app) {
             }]
           }]
         }
-        console.log("trying to post to playlists")
-
-        console.log(response)
         axios.post('https://localhost:3030/playlists/addJSON', newPlaylist, {
             "headers": {
               'Authorization': "bearer " + response.accessToken
             },
             'Content-Type': 'application/json'
           })
-          .then(function (data) {
-            console.log(data);
-
-            emitter.emit("db:playlists:find")
-            // emitter.emit(state.events.RENDER);
+          .then(function (_newData) {
+            state.user.db['playlists'].selected = _newData.data;
+            state.user.db.editing = _newData.data.featureType;
+            emitter.emit("db:playlists:find", {"query":{ "submittedBy": state.user.id }} )
           })
           .catch(function (error) {
             console.log(error);
           });
-
       }).catch(err => {
         return err;
       })
@@ -234,206 +225,379 @@ function store(state, emitter, app) {
 
 
 
-    emitter.on('db:playlists:find', function (_id) {
-      feathersClient.service("playlists").find({
-          query: {
-            submittedBy: state.user.id
-          }
-        })
-        .then((data) => {
-          if (Object.keys(state.playlists.selected).length > 0) {
-            state.playlists.selected = data.filter(playlist => playlist._id == state.playlists.selected._id)[0];
-          } else {
-            state.playlists.selected = data[data.length - 1];
-          }
-          state.playlists.all = data;
-          emitter.emit(state.events.RENDER);
-        }).catch(err => {
-          console.log(err);
-          state.playlists = [];
-          emitter.emit(state.events.RENDER);
-        })
-    })
 
-    emitter.on('db:delete', function () {
-      feathersClient.authenticate()
-        .then((response) => {
-          console.log(state.selectedItemDb)
-          console.log(state.selectedItem._id)
-          feathersClient.service(state.selectedItemDb).remove(state.selectedItem._id)
-            .then((deleteResponse) => {
-              console.log(deleteResponse);
-              // emitter.emit(state.events.RENDER);
-              emitter.emit("db:playlists:find")
-            }).catch(innerErr => {
-              return innerErr
-            })
-        }).catch(outerErr => {
-          return outerErr;
-        })
-    })
+    // emitter.on('db:AddModal:toggle', function () {
+    //   state.addModal.toggled = !state.addModal.toggled;
+    //   console.log(state.addModal.toggled);
+    //   emitter.emit(state.events.RENDER);
+    // })
+    // emitter.on('db:AddModal:currentStep', function (_currentStep) {
+    //   state.addModal.currentStep = _currentStep;
+    //   emitter.emit(state.events.RENDER);
+    // })
+    // emitter.on('db:AddModal:selectedPlaylist', function (_id) {
+    //   state.addModal.selectedPlaylist = state.playlists.all.filter(playlist => playlist._id == _id)[0];
+    //   emitter.emit(state.events.RENDER);
+    // })
+    // emitter.on('db:AddModal:selectedSection', function (_id) {
+    //   state.addModal.selectedSection = state.addModal.selectedPlaylist.sections.filter(section => section._id == _id)[0];
+    //   emitter.emit(state.events.RENDER);
+    // })
 
-    emitter.on('db:patch', function (_id, _formData) {
-      // state.playlists.selected = state.playlists.all.filter(playlist => playlist._id == _id)[0];
+    // // send the data to resources
+    // emitter.on("db:resources:create", function (resourceData) {
+    //   feathersClient.authenticate().then(response => {
+    //     feathersClient.service('resources').create(resourceData).then(data => {
+    //       console.log("Resource subcessfully submitted");
+    //       console.log(data);
+    //       state.addModal.submittedResource = data;
+    //       emitter.emit(state.events.RENDER);
+    //     }).catch(err => {
+    //       return err;
+    //     })
+    //   }).catch(err => {
+    //     return err;
+    //   })
+    // })
 
-      let formData = {
-        title: _formData.get("title"),
-        description: _formData.get("description"),
-        url: _formData.get("url")
-      }
+    // emitter.on("db:resources:patch", function (_id, resourceData) {
+    //   feathersClient.authenticate().then(response => {
+    //     feathersClient.service('resources').patch(_id, resourceData).then(data => {
+    //       console.log("Resource subcessfully submitted");
+    //       console.log(data);
+    //       state.addModal.submittedResource = data;
+    //       emitter.emit(state.events.RENDER);
+    //     }).catch(err => {
+    //       return err;
+    //     })
+    //   }).catch(err => {
+    //     return err;
+    //   })
+    // })
 
-      // TODO -- refactor: https://github.com/choojs/choo/issues/645
+    // emitter.on("db:sections:patch", function (_id, _data) {
+    //   feathersClient.authenticate().then(response => {
+    //     feathersClient.service('sections').patch(_id, _data).then(data => {
+    //       console.log("Resource subcessfully submitted");
+    //       console.log(data);
+    //       state.addModal.selectedSection = data;
+    //       emitter.emit(state.events.RENDER);
+    //     }).catch(err => {
+    //       return err;
+    //     })
+    //   }).catch(err => {
+    //     return err;
+    //   })
+    // })
 
-      feathersClient.authenticate().then((response) => {
+    // emitter.on('db:playlists:addNewSection', function (_id, _data) {
+    //   feathersClient.authenticate().then(authResponse => {
 
-        feathersClient.service(state.selectedItemDb).patch(_id, formData, {})
-          .then(data => {
-            state.selectedItem = data;
+    //     feathersClient.service('sections').create(_data).then((sectionResponse) => {
 
-            // emitter.emit(state.events.RENDER)
-            emitter.emit("db:playlists:find");
-          }).catch(err => {
-            console.log(err);
-            return err;
-          })
-      }).catch(err => {
-        console.log(err);
-        return err;
-      })
-      console.log(emitter);
-      // emitter.emit(state.events.RENDER)
-    })
+    //       let patchData = {
+    //         "$push": {
+    //           "sections": sectionResponse._id
+    //         }
+    //       }
 
-    
-
-    emitter.on('db:playlists:select', function (_id) {
-      state.playlists.selected = state.playlists.all.filter(playlist => playlist._id == _id)[0];
-      emitter.emit(state.events.RENDER)
-    })
-
-    emitter.on('db:feature:select', function (_id, _db) {
-      console.log(_id, _db);
-      feathersClient.service(_db).get(_id)
-        .then(data => {
-          state.selectedItem = data;
-          state.selectedItemDb = _db;
-          emitter.emit(state.events.RENDER)
-        }).catch(err => {
-          return err;
-        })
-    })
-
-    /***************************
-     * PLAYLISTS
-     ****************************/
-
-     /***************************
-     * SECTIONS
-     ****************************/
+    //       feathersClient.service('playlists').patch(_id, patchData).then((playlistResponse) => {
+    //         // console.log(playlistResponse);
+    //         console.log(_id, sectionResponse, playlistResponse)
+    //         state.addModal.selectedPlaylist = playlistResponse;
+    //         state.playlists.selected = state.addModal.selectedPlaylist;
+    //         state.addModal.selectedSection = sectionResponse;
+    //         console.log("update dropdown!!!")
+    //         // emitter.emit("db:playlists:find");
+    //         emitter.emit(state.events.RENDER);
+    //       }).catch(err => {
+    //         return err;
+    //       })
+    //     });
+    //   }).catch(err => {
+    //     return err;
+    //   })
+    // })
 
 
-    /***************************
-     * RESOURCES
-     ****************************/
+    // emitter.on("db:playlists:add", function () {
+    //   feathersClient.authenticate().then(response => {
+    //     let newPlaylist = {
+    //       "title": "New Playlist! Edit me!",
+    //       "description": "New Playlist description! Edit me!",
+    //       "sections": [{
+    //         "title": "Unsorted",
+    //         "description": "a section for all your unsorted links",
+    //         "resources": [{
+    //           "title": "empty resource container"
+    //         }]
+    //       }]
+    //     }
+    //     console.log("trying to post to playlists")
 
-    /***************************
-     * ROUTING
-     ****************************/    
-    emitter.on('db:users:redirect', pushState("/"))
+    //     console.log(response)
+    //     axios.post('https://localhost:3030/playlists/addJSON', newPlaylist, {
+    //         "headers": {
+    //           'Authorization': "bearer " + response.accessToken
+    //         },
+    //         'Content-Type': 'application/json'
+    //       })
+    //       .then(function (data) {
+    //         console.log(data);
 
-    /***************************
-     * AUTH
-     ****************************/
-    // SIGNUP
-    emitter.on('db:users:signup', signup(formData));
-    // LOGIN
-    emitter.on("db:users:login", login(formData));
-    // LOGOUT
-    emitter.on('db:users:logout', logout());
+    //         emitter.emit("db:playlists:find")
+    //         // emitter.emit(state.events.RENDER);
+    //       })
+    //       .catch(function (error) {
+    //         console.log(error);
+    //       });
 
-    /***************************
-     * TEST
-     ****************************/
-    emitter.on('db:test', test(_payload) )
+    //   }).catch(err => {
+    //     return err;
+    //   })
+    // })
+
+
+
+    // emitter.on('db:playlists:find', function (_id) {
+    //   feathersClient.service("playlists").find({
+    //       query: {
+    //         submittedBy: state.user.id
+    //       }
+    //     })
+    //     .then((data) => {
+    //       if (Object.keys(state.playlists.selected).length > 0) {
+    //         state.playlists.selected = data.filter(playlist => playlist._id == state.playlists.selected._id)[0];
+    //       } else {
+    //         state.playlists.selected = data[data.length - 1];
+    //       }
+    //       state.playlists.all = data;
+    //       emitter.emit(state.events.RENDER);
+    //     }).catch(err => {
+    //       console.log(err);
+    //       state.playlists = [];
+    //       emitter.emit(state.events.RENDER);
+    //     })
+    // })
+
+    // emitter.on('db:delete', function () {
+    //   feathersClient.authenticate()
+    //     .then((response) => {
+    //       console.log(state.selectedItemDb)
+    //       console.log(state.selectedItem._id)
+    //       feathersClient.service(state.selectedItemDb).remove(state.selectedItem._id)
+    //         .then((deleteResponse) => {
+    //           console.log(deleteResponse);
+    //           // emitter.emit(state.events.RENDER);
+    //           emitter.emit("db:playlists:find")
+    //         }).catch(innerErr => {
+    //           return innerErr
+    //         })
+    //     }).catch(outerErr => {
+    //       return outerErr;
+    //     })
+    // })
+
+    // emitter.on('db:patch', function (_id, _formData) {
+    //   // state.playlists.selected = state.playlists.all.filter(playlist => playlist._id == _id)[0];
+
+    //   let formData = {
+    //     title: _formData.get("title"),
+    //     description: _formData.get("description"),
+    //     url: _formData.get("url")
+    //   }
+
+    //   // TODO -- refactor: https://github.com/choojs/choo/issues/645
+
+    //   feathersClient.authenticate().then((response) => {
+
+    //     feathersClient.service(state.selectedItemDb).patch(_id, formData, {})
+    //       .then(data => {
+    //         state.selectedItem = data;
+
+    //         // emitter.emit(state.events.RENDER)
+    //         emitter.emit("db:playlists:find");
+    //       }).catch(err => {
+    //         console.log(err);
+    //         return err;
+    //       })
+    //   }).catch(err => {
+    //     console.log(err);
+    //     return err;
+    //   })
+    //   console.log(emitter);
+    //   // emitter.emit(state.events.RENDER)
+    // })
 
   }) // end DOMCONTENTLOADED
 
-  /** CHANGE THE APP ROUTE */
-  function pushState(_route){
-    emitter.emit("pushState", _route);
-  }
+} // end state
 
 
-
-  /** TEST FUNCTION */
-  function test(_payload){
-    if (!_test) {
-      console.log("testing testing testing");
-    } else {
-      console.log("testing with a payload:", _payload);
-    }
-    emitter.emit(state.events.RENDER)
-  }
-
-  /** SIGNUP FUNCTION */
-  function signup(_formData){
-    let credentials = {
-      username: _formData.get("username"),
-      email: _formData.get("email"),
-      password: _formData.get("password")
-    }
-    feathersClient.service('users').create(credentials).then( () =>{
-      console.log("sign up successful yo!")
-      emitter.emit("db:users:login", formData)
-    }).catch(err => {
-      console.log("sign up unsuccessful! something went wrong!")
-      return error;
-    });
-  }
-
-  /** LOGOUT */
-  function logout(){
-    feathersClient.logout();
-    pushState("/")
-  }
-
-  /** LOGIN FUNCTION */
-  function login(_formData) {
-    if (!_formData) {
-        feathersClient.authenticate().then( authResponse => {
-          // try to auth using JWT from local Storage
-          state.user.username = authResponse.username;
-          state.user.id = authResponse._id;
-          state.authenticated = true;
-          emitter.emit("pushState", "app")
-        }).catch(err => {
-          console.log("not auth'd friend!")
-          state.authenticated = false;
-          emitter.emit("pushState", "login")
-        });
-    } else {
-      // If we get login information, add the strategy we want to use for login
-        let credentials = {
-          username: _formData.get("username"),
-          email: _formData.get("email"),
-          password: _formData.get("password")
-        }
-        // create the payload
-        const payload = Object.assign({
-          strategy: 'local'
-        }, credentials);
-
-        feathersClient.authenticate(payload).then(authResponse => {
-          state.authenticated = true;
-          state.user.username = response.username;
-          state.user.id = response._id;
-          emitter.emit("pushState", "app")
-        }).catch(err => {
-          // Show login page (potentially with `e.message`)
-          console.error('Authentication error', error);
-          state.authenticated = false;
-          emitter.emit("pushState", "/")
-        });
-    }
-  } // end login
+// HELPER FUNCTIONS
+function isEmpty(_obj){
+  return Object.keys(_obj).length > 0 ? false:true;
 }
+function string2array(_str){
+  return _str.split(',')
+}
+
+
+
+
+// feathersClient.authenticate().then((response) => {
+      
+  //   }).then(() => {
+  //     // then get the playlists 
+  //     feathersClient.service("playlists").find({
+  //         query: {
+  //           submittedBy: state.user.id
+  //         }
+  //       })
+  //       .then((data) => {
+  //         state.playlists.selected = data[data.length - 1];
+  //         state.selectedItem = data[data.length - 1];
+  //         state.playlists.all = data;
+  //         emitter.emit(state.events.RENDER);
+  //       }).catch(err => {
+  //         console.log(err);
+  //         state.playlists = [];
+  //         emitter.emit(state.events.RENDER);
+  //       })
+  //   })
+  //   .catch(err => {
+  //     console.log("not auth'd friend!")
+  //     state.user.authenticated = false;
+  //     emitter.emit(state.events.RENDER);
+  //   });
+
+  // check auth status
+  // feathersClient.authenticate().then((response) => {
+  //     console.log("brilliant! you're auth'd!")
+  //     state.user.username = response.username;
+  //     state.user.id = response.id;
+  //     emitter.emit("pushState", "app");
+  //     state.user.authenticated = true;
+  //   }).then(() => {
+  //     // then get the playlists 
+  //     feathersClient.service("playlists").find({
+  //         query: {
+  //           submittedBy: state.user.id
+  //         }
+  //       })
+  //       .then((data) => {
+  //         state.playlists.selected = data[data.length - 1];
+  //         state.selectedItem = data[data.length - 1];
+  //         state.playlists.all = data;
+  //         emitter.emit(state.events.RENDER);
+  //       }).catch(err => {
+  //         console.log(err);
+  //         state.playlists = [];
+  //         emitter.emit(state.events.RENDER);
+  //       })
+  //   })
+  //   .catch(err => {
+  //     console.log("not auth'd friend!")
+  //     state.user.authenticated = false;
+  //     emitter.emit(state.events.RENDER);
+  //   });
+
+
+    /**
+   * PLAYLISTS
+   */
+  
+  // function Playlists(){
+  //   // GET
+  //   this.get = function(_id){
+  //     return feathersClient.service("playlists").get(_id);
+  //   };
+  //   // FIND
+  //   this.find = function(_query){
+  //     return feathersClient.service("playlists").find(_query);
+  //   };
+  //   // PATCH
+  //   this.patch = function(_id, _data, _params){
+      
+  //   };
+  //   // CREATE
+  //   this.create = function(_data){
+  //     feathersClient.authenticate().then((authResponse) => {
+  //       if(_data){
+  //         feathersClient.service("playlists").create(_data).then( (_newPlaylist) => {
+  //           return _newPlaylist;
+  //         }).catch(err => {
+  //           return err;
+  //         });
+  //       } else {
+  //         let placeholder = {"title": "new playlist", "description": "edit me!"}
+  //         feathersClient.service("playlists").create(placeholder).then( (_newPlaylist) => {
+  //           return _newPlaylist;
+  //         }).catch(err => {
+  //           return err;
+  //         });
+  //       }
+  //     }).catch( (err) =>{
+  //       return err;
+  //     });
+  //   };
+  //   // DELETE
+  //   this.delete = function(){
+
+  //   };
+  // }
+  
+  // // playlists.get("5beed37d63dbd913341f2996")
+
+  // /**
+  //  * SECTIONS
+  //  */
+  // function Sections(){
+  //   // GET
+  //   this.get = function(){
+
+  //   };
+  //   // FIND
+  //   this.find = function(){
+
+  //   };
+  //   // PATCH
+  //   this.patch = function(){
+
+  //   };
+  //   // CREATE
+  //   this.create = function(){
+
+  //   };
+  //   // DELETE
+  //   this.delete = function(){
+
+  //   };
+  // }
+
+  // /**
+  //  * RESOURCES
+  //  */
+  // function Resources(){
+  //   // GET
+  //   this.get = function(){
+
+  //   };
+  //   // FIND
+  //   this.find = function(){
+
+  //   };
+  //   // PATCH
+  //   this.patch = function(){
+
+  //   };
+  //   // CREATE
+  //   this.create = function(){
+
+  //   };
+  //   // DELETE
+  //   this.delete = function(){
+
+  //   };
+  // }
+ 
