@@ -146,6 +146,52 @@ function store(state, emitter, app) {
       })
     })
 
+    emitter.on("user:playlists:addSection", function(_id, _db){
+      let newSection = {
+        "title":"Hi! I'm a new section!",
+        "description":"Hi! describe me!"
+      }
+      // first create an empty placeholder section
+      feathersClient.service("sections").create(newSection).then( _newSection => {
+        // send it on
+        return _newSection
+      }).then(_newSection => {
+        let updateCmd = {
+          "$push":{"sections": _newSection._id}
+        }
+        return feathersClient.service("playlists").patch(_id, updateCmd,{})
+      }).then(_newPlaylist => {
+        // update the playlists with the new stuff
+        emitter.emit("user:playlists:refresh");
+      })
+      .catch(err => {
+        return err;
+      })
+    });
+
+    emitter.on("user:sections:addResource", function(_id, _db){
+      let newResource = {
+        "title":"Hi! I'm a new resource!",
+        "description":"Hi! describe me!"
+      }
+      // first create an empty placeholder section
+      feathersClient.service("resources").create(newResource).then( _newResource => {
+        // send it on
+        return _newResource
+      }).then(_newResource => {
+        let updateCmd = {
+          "$push":{"resources": _newResource._id}
+        }
+        return feathersClient.service("sections").patch(_id, updateCmd,{})
+      }).then(_newPlaylist => {
+        // update the playlists with the new stuff
+        emitter.emit("user:playlists:refresh");
+      })
+      .catch(err => {
+        return err;
+      })
+    });
+
     emitter.on("user:playlists:addJSON", function () {
       feathersClient.authenticate().then(response => {
         let newPlaylist = {

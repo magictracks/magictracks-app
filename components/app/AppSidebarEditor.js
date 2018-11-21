@@ -44,6 +44,7 @@ class AppSidebarEditor extends Component {
           <label class="">Collaborators</label><input type="text" name="collaborators" value=${"collaborators"}/>
           <label class="">URL</label> <input type="text" name="url" value=${"url"}/>
         </form>
+        ${showAddOptions(selected, this.state, this.emit)}
       </div>
       <button onclick=${this.submitInputEditor} class="pa2 ba bw2 b--near-black white bg-near-black hover-washed-blue">SAVE</button>
     </section>
@@ -69,6 +70,29 @@ class AppSidebarEditor extends Component {
 
   update () {
     return true
+  }
+}
+
+function showAddOptions(selected, state, emit){
+  function addResourceToSection(e){
+    emit("user:sections:addResource", selected._id, selected.featureType)
+  }
+  function addSectionToPlaylist(e){
+    emit("user:playlists:addSection", selected._id, selected.featureType)
+  }
+
+  if(selected.featureType == "playlists"){
+    console.log("this is a playlist")
+    return html`
+      <button class="ba bw0" onclick=${addSectionToPlaylist}>⊕ Add Section</button>
+    `
+  } else if ( selected.featureType == "sections"){
+    console.log("this is a section")
+    return html`
+      <button class="ba bw0" onclick=${addResourceToSection}>⊕ Add Resource</button>
+    `
+  } else if (selected.featureType == "resources"){
+    console.log("this is a resource")
   }
 }
 
