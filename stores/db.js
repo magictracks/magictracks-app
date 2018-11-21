@@ -129,19 +129,12 @@ function store(state, emitter, app) {
       let query = { query: { "submittedBy": state.user.id }}
       feathersClient.service("playlists").find(query).then( selectedPlaylists => {
         state.user.playlists.all = selectedPlaylists;
-
-        console.log("BEFORE 🍕🍕🍕🍕", state.user.playlists.selected)
         // set the selected playlist
         if(isEmpty(state.user.playlists.selected) === true){
           state.user.playlists.selected =  state.user.playlists.all[ state.user.playlists.all.length - 1];
         } else {
           state.user.playlists.selected =  state.user.playlists.all.filter( playlist => playlist._id == state.user.playlists.selected._id )[0];
         }
-
-        console.log("AFTER 🍕🍕🍕🍕", state.user.playlists.selected)
-        // TODO: THE ISSUE HERE IS THAT WHEN THINGS GET DEELTED, THAT PLAYLIST NO LONGER EXITS
-        // THEREFORE YOU NEED TO REMOVE THAT PLAYLIST FROM THE EXISTING SELECTED PLAYLIST IN THE 
-        // DELETE EMITTER, THEN RUN THE REFRESH!!!
         emitter.emit(state.events.RENDER);
       })
     })
