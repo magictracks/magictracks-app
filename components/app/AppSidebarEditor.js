@@ -44,34 +44,72 @@ class AppSidebarEditor extends Component {
           <label class="">Collaborators</label><input type="text" name="collaborators" value=${"collaborators"}/>
           <label class="">URL</label> <input type="text" name="url" value=${"url"}/>
         </form>
+        <label> Organize
+        ${makeSortableList(selected, this.state, this.emit)}
+        </label>
         ${showAddOptions(selected, this.state, this.emit)}
       </div>
       <button onclick=${this.submitInputEditor} class="pa2 ba bw2 b--near-black white bg-near-black hover-washed-blue">SAVE</button>
     </section>
     `
-
-    // return html`
-    //   <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between mh-440px">
-    //   <div class="w-100 tc"><small class="f7">Edit Selected | <span class="pointer hover-bg-purple" onclick=${(e) => this.emit("db:feature:delete")}>🗑 delete </delete> </small></div>
-    //   <div class="w-100 pa2 overflow-y-scroll">
-    //     <form id="inputEditor" name="inputEditor" class="w-100 flex flex-column f7">
-    //       <label class="">Title</label> <input type="text" name="title" value=${ this.state.user.db[this.state.user.db.editing].selected.title  }/>
-    //       <label class="">Description</label> <textarea form="inputEditor" name="description" class="h4">${ this.state.user.db[this.state.user.db.editing].selected.description }</textarea>
-    //       <label class="">Tags</label> <input type="text" name="tags" value="${this.state.user.db[this.state.user.db.editing].selected.tags}"/>
-    //       <label class="">Collaborators</label><input type="text" name="collaborators" value="${this.state.user.db[this.state.user.db.editing].selected.collaborators}"/>
-    //       <label class="">URL</label> <input type="text" name="url" value=${this.state.user.db[this.state.user.db.editing].selected.url }/>
-    //       ${makeSortableList(this.state, this.emit)}
-    //     </form>
-    //   </div>
-    //   <button onclick=${this.submitInputEditor} class="pa2 ba bw2 b--near-black white bg-near-black hover-washed-blue">SAVE</button>
-    // </section>
-    // `
+    
   }
 
   update () {
     return true
   }
 }
+
+
+function makeSortableList(selected, state, emit){
+  // create a new element 
+  var newUl = document.createElement("ul"); 
+  // and give it some content 
+  // var newContent = document.createTextNode("Hi there and greetings!"); 
+  console.log(selected);
+  if(selected.sections){
+    selected.sections.forEach( section => {
+      let newLi = document.createElement("li");
+      let newContent = document.createTextNode(section.title)
+      newLi.dataset.featureid = section._id;
+      newLi.dataset.parentid = selected._id;
+      newLi.dataset.parentdb = selected.featureType;
+      newLi.appendChild(newContent);
+      newUl.appendChild(newLi);  
+    })
+
+    let sortable = Sortable.create(newUl, {
+          onEnd: function(evt){
+            console.log("sortable", evt.newIndex);
+            // console.log("🌮🌮🌮",evt);
+            emit("db:selectedFeature:reorder", evt.clone.dataset.parentid, evt.clone.dataset.parentdb,  evt.clone.dataset.featureid, evt.newIndex)
+          }
+        });
+
+    return sortable.el;
+  } else if (selected.resources){
+    selected.resources.forEach( resource => {
+      let newLi = document.createElement("li");
+      let newContent = document.createTextNode(resource.title)
+      newLi.dataset.featureid = resource._id;
+      newLi.dataset.parentid = selected._id;
+      newLi.dataset.parentdb = selected.featureType;
+      newLi.appendChild( newContent);
+      newUl.appendChild(newLi);  
+    })
+    let sortable = Sortable.create(newUl, {
+          onEnd: function(evt){
+            console.log(evt.newIndex);
+            console.log("🌮🌮🌮",evt);
+            emit("db:selectedFeature:reorder", evt.clone.dataset.parentid, evt.clone.dataset.parentdb,  evt.clone.dataset.featureid, evt.newIndex)
+          }
+        });
+
+    return sortable.el;
+  }
+  
+}
+
 
 function showAddOptions(selected, state, emit){
   function addResourceToSection(e){
@@ -96,78 +134,78 @@ function showAddOptions(selected, state, emit){
   }
 }
 
-function makeSortableList(state, emit){
+// function makeSortableList(state, emit){
   
-  if( Object.keys(state.user.db.playlists.selected).length > 0  ){
-    if(state.user.db.editing == "playlists"){
-      console.log(state.user.db.playlists.selected)
-      return html`
-        <label onclick=${(e) => {enableSortable(state, emit)}}>Organize
-        <ul id="sectionsList">
-          ${state.user.db.playlists.selected.sections.map( section => {
-            return html`
-              <li data-id="${section._id}" data-db="${section.featureType}">${section.title}</li>
-            `
-          })}
-        </ul>
+//   if( Object.keys(state.user.db.playlists.selected).length > 0  ){
+//     if(state.user.db.editing == "playlists"){
+//       console.log(state.user.db.playlists.selected)
+//       return html`
+//         <label onclick=${(e) => {enableSortable(state, emit)}}>Organize
+//         <ul id="sectionsList">
+//           ${state.user.db.playlists.selected.sections.map( section => {
+//             return html`
+//               <li data-id="${section._id}" data-db="${section.featureType}">${section.title}</li>
+//             `
+//           })}
+//         </ul>
   
-        </label>
-      `
-    } else if (state.user.db.editing == "sections"){
-      return html`
-        <label>Organize
-        <ul id="resourcesList">
-          ${state.user.db.sections.selected.resources.map( resource => {
-            return html`
-              <li data-id="${resource._id}" data-db="${resource.featureType}">${resource.title}</li>
-            `
-          })}
-        </ul>
-        </label>
-      `
-    } else{
-      return html`
-        <div></div>
-      `
-    }
-  } else{
-    console.log("not loaded yet")
-  }
+//         </label>
+//       `
+//     } else if (state.user.db.editing == "sections"){
+//       return html`
+//         <label>Organize
+//         <ul id="resourcesList">
+//           ${state.user.db.sections.selected.resources.map( resource => {
+//             return html`
+//               <li data-id="${resource._id}" data-db="${resource.featureType}">${resource.title}</li>
+//             `
+//           })}
+//         </ul>
+//         </label>
+//       `
+//     } else{
+//       return html`
+//         <div></div>
+//       `
+//     }
+//   } else{
+//     console.log("not loaded yet")
+//   }
   
-}
+// }
 
-function enableSortable(state, emit){
-  if(state.user.db.editing == "playlists"){
-    makeSortableSections(state, emit);
-  }  else if (state.user.db.editing == "sections"){
-    makeSortableResources(state, emit)
-  }
-}
+// function enableSortable(state, emit){
+//   if(state.user.db.editing == "playlists"){
+//     makeSortableSections(state, emit);
+//   }  else if (state.user.db.editing == "sections"){
+//     makeSortableResources(state, emit)
+//   }
+// }
 
-function makeSortableSections(state, emit){
-  let list = document.querySelector("#sectionsList")
-  console.log(list)
-  let sortable = Sortable.create(list, {
-    onEnd: function(evt){
-      console.log(evt.newIndex);
-      console.log("🌮🌮🌮",evt);
-      emit("db:sections:reorder", evt.clone.dataset.id, evt.newIndex)
-    }
-  });
-}
+// function makeSortableSections(state, emit){
+//   let list = document.querySelector("#sectionsList")
+//   console.log(list)
+//   let sortable = Sortable.create(list, {
+//     onEnd: function(evt){
+//       console.log(evt.newIndex);
+//       console.log("🌮🌮🌮",evt);
+//       emit("db:sections:reorder", evt.clone.dataset.id, evt.newIndex)
+//     }
+//   });
+// }
 
-function makeSortableResources(state, emit){
-  let list = document.querySelector("#resourcesList")
-  console.log(list)
+// function makeSortableResources(state, emit){
+//   let list = document.querySelector("#resourcesList")
+//   console.log(list)
 
-  let sortable = Sortable.create(list, {
-    onEnd: function(evt){
-      console.log("🌮🌮🌮",evt);
-      emit("db:resources:reorder")
+//   let sortable = Sortable.create(list, {
+//     onEnd: function(evt){
+//       console.log("🌮🌮🌮",evt);
+//       emit("db:resources:reorder")
       
-    }
-  });
-}
+//     }
+//   });
+// }
 
 module.exports = AppSidebarEditor
 

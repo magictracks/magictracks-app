@@ -125,6 +125,45 @@ function store(state, emitter, app) {
     })
 
 
+    
+
+    emitter.on("db:selectedFeature:reorder", function(_parentid, _parentdb, _featureid, _newIndex){
+
+      feathersClient.service(_parentdb).get(_parentid).then( response => {
+        let list = [];
+        let updateCmd = {"$set":{}};
+        
+        if(response.featureType == "playlists"){
+          list = response.sections.map( section => String(section._id) );
+          let currentPos = list.findIndex(val => val == String(_featureid));
+          
+          moveVal(list, currentPos, _newIndex );          
+          updateCmd['$set'] = {"sections": list};
+        } 
+        else if(response.featureType == "sections"){
+
+          list = response.resources.map( resource => String(resource._id) );
+          let currentPos = list.findIndex(val => val == String(_featureid));
+          
+          moveVal(list, currentPos, _newIndex ); 
+
+          updateCmd['$set'] = {"resources": list};
+        }
+        
+        return feathersClient.service(_parentdb).patch(_parentid, updateCmd, {})
+      }).then(response => {
+        state.selected.id = response._id;
+        state.selected.db = response.featureType;
+        state.selected.data = response;
+        emitter.emit("user:playlists:refresh")
+      })
+      .catch(err => {
+        return err;
+      })
+
+    })
+
+
     emitter.on("user:playlists:refresh", function(){
       let query = { query: { "submittedBy": state.user.id }}
       feathersClient.service("playlists").find(query).then( selectedPlaylists => {
@@ -155,6 +194,9 @@ function store(state, emitter, app) {
         return feathersClient.service("playlists").patch(_id, updateCmd,{})
       }).then(_newPlaylist => {
         // update the playlists with the new stuff
+        state.selected.id = _newPlaylist._id;
+        state.selected.db = _newPlaylist.featureType;
+        state.selected.data = _newPlaylist;
         emitter.emit("user:playlists:refresh");
       })
       .catch(err => {
@@ -176,8 +218,11 @@ function store(state, emitter, app) {
           "$push":{"resources": _newResource._id}
         }
         return feathersClient.service("sections").patch(_id, updateCmd,{})
-      }).then(_newPlaylist => {
+      }).then(_newSection => {
         // update the playlists with the new stuff
+        state.selected.id = _newSection._id;
+        state.selected.db = _newSection.featureType;
+        state.selected.data = _newSection;
         emitter.emit("user:playlists:refresh");
       })
       .catch(err => {
@@ -232,3 +277,6 @@ function isEmpty(_obj){
 function string2array(_str){
   return _str.split(',')
 }
+function moveVal(arr, from, to) {
+  arr.splice(to, 0, arr.splice(from, 1)[0]);
+};
