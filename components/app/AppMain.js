@@ -34,12 +34,14 @@ class AppMain extends Component {
   
 
   createElement () {
+    // <!-- TOPTOOLBAR -->
+    // ${this.state.cache(AppTopToolbar, "AppTopToolbar", this.state, this.emit).render() }
     return html`
     <section class="main w-100 flex flex-column ml2-ns">
       <!-- TOPTOOLBAR -->
-      ${this.state.cache(AppTopToolbar, "AppTopToolbar", this.state, this.emit).render() }
+      
       <!-- PRIMARY AREA -->
-      <section class="w-100 flex-1 ba bw2 mt2 bg-near-white">
+      <section class="w-100 flex-1 ba bw2 bg-near-white h-100 overflow-auto">
         <!-- NAV -->
         <nav class="w-100 b--near-black bg-near-black h2 flex flex-row items-center">
           <ul class="list flex flex-row ma0 pa0 h-100 z-max">
@@ -64,7 +66,7 @@ class AppMain extends Component {
           </ul>
         </nav>
         <!-- main -->
-        <section id="mainContent" class="w-100 h-auto overflow-y-scroll flex flex-column pa2 mt2 mh-500px">
+        <section id="mainContent" class="w-100 h-auto overflow-y-scroll flex flex-column pa2 mt2">
           ${editView(this.state, this.emit)}
         </section> <!-- end main edit/export/browse -->
       </section> <!-- end main container -->
