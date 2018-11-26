@@ -73,8 +73,8 @@ function store (state, emitter) {
 
         feathersClient.authenticate(payload).then(authResponse => {
           state.user.authenticated = true;
-          state.user.username = response.username;
-          state.user.id = response._id;
+          state.user.username = authResponse.username;
+          state.user.id = authResponse._id;
           emitter.emit("pushState", "app")
         }).catch(err => {
           // Show login page (potentially with `e.message`)
