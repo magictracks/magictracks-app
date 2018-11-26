@@ -269,13 +269,12 @@ class AddModal extends Component {
     <fieldset class="ba bw2 b--green mt2">
     <legend class="pl2 pr2">New Playlist & Section</legend>
     <div>
-        <form id="addToNewForm">
-        <label> add to new playlist
+        <form id="addToNewForm" class="flex flex-column">
+        <label> add to new playlist</label>
         <input type="text" name="newPlaylistTitle"/>
-        </label>
-          <label> add to new section
+
+          <label> add to new section</label>
         <input type="text" name="newSectionTitle"/>
-        </label>
         </form>
     </div>
   </fieldset>
