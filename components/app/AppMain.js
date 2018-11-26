@@ -130,9 +130,10 @@ function editView(state, emit) {
 
       <!-- Sections & Resources --> 
       ${makeSections(state, emit)}
-      
+
       <!-- Add Modal button --> 
       <div onclick=${toggleAddModal} class="pointer grow z-max absolute bottom-1 right-1 bw2 h3 w3 tc br-100 ba b--mid-gray shadow-5 bg-washed-green flex flex-column justify-center align-center"> <p>+</p> </div>
+      
     </section>
     
   `

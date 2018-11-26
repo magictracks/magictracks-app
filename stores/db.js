@@ -94,7 +94,8 @@ function store(state, emitter, app) {
       // TODO: add in handling array features
       let submittedChanges = {
         title: _formData.get("title"),
-        description: _formData.get("description")
+        description: _formData.get("description"),
+        url: _formData.get("url")
       }
 
       feathersClient.service(_db).patch(_id, submittedChanges,{}).then( feature => {
