@@ -173,6 +173,7 @@ function store(state, emitter, app) {
           state.user.playlists.selected =  state.user.playlists.all[ state.user.playlists.all.length - 1];
         } else {
           state.user.playlists.selected =  state.user.playlists.all.filter( playlist => playlist._id == state.user.playlists.selected._id )[0];
+          state.addModal.selectedPlaylist = state.user.playlists.selected;
         }
         emitter.emit(state.events.RENDER);
       })

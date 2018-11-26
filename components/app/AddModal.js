@@ -108,7 +108,7 @@ class AddModal extends Component {
     let form = new FormData(e.target.form);
     let selectedPlaylist = form.get("playlistSelect")
     if (selectedPlaylist !== "") {
-      this.emit("db:AddModal:selectedPlaylist", selectedPlaylist)
+      this.emit("addModal:selectedPlaylist", selectedPlaylist)
     }
   }
 
@@ -117,7 +117,7 @@ class AddModal extends Component {
     let form = new FormData(e.target.form);
     let selectedSection = form.get("sectionSelect")
     if (selectedSection !== "") {
-      this.emit("db:AddModal:selectedSection", selectedSection)
+      this.emit("addModal:selectedSection", selectedSection)
     }
   }
 
@@ -170,7 +170,7 @@ class AddModal extends Component {
         "$push": {"resources": this.state.addModal.submittedResource._id}
       }
 
-      this.emit("db:sections:patch", selectedSectionId, data)
+      this.emit("addModal:submitOrganize", selectedSectionId, data)
       
     }
 
@@ -298,7 +298,7 @@ class AddModal extends Component {
       "title": sectionTitle
     }
 
-    this.emit("db:playlists:addNewSection",selectedPlaylistId,  data)
+    this.emit("addModal:addSectionToPlaylist",selectedPlaylistId, data)
   }
   
 
