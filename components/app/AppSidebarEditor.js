@@ -42,7 +42,7 @@ class AppSidebarEditor extends Component {
           <label class="">Description</label> <textarea form="inputEditor" name="description" class="h4">${ selected.description ||"description"}</textarea>
           <label class="">Tags</label> <input type="text" name="tags" value=${"tags"}/>
           <label class="">Collaborators</label><input type="text" name="collaborators" value=${"collaborators"}/>
-          <label class="">URL</label> <input type="text" name="url" value=${"url"}/>
+          <label class="">URL</label> <input type="text" name="url" value=${selected.url || "url"}/>
         </form>
         <label class="mt2 f7"> Order 
         ${makeSortableList(selected, this.state, this.emit)}

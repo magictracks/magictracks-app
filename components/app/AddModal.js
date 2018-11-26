@@ -154,16 +154,20 @@ class AddModal extends Component {
 
   submitOrganize(){
     let form = document.querySelector("#addModalEditor");
+    let addToNewForm = document.querySelector("#addToNewForm");
+    let addToNewFormData = new FormData(addToNewForm);
     let formData = new FormData(form);
     // get the id of the playlist
 
     // get the id of the section
     let selectedPlaylistId = formData.get("playlistSelect");
     let selectedSectionId = formData.get("sectionSelect");
-    let newSectionTitle = formData.get("newSectionTitle");
 
-    console.log(selectedPlaylistId, selectedSectionId)
+    let newSectionTitle = addToNewFormData.get("newSectionTitle");
+    let newPlaylistTitle = addToNewFormData.get("newSectionTitle");
 
+
+    // if the dropdown selections are not empty... use that info
     if(selectedPlaylistId !== "" && selectedSectionId !== ""){
 
       let data = {
@@ -172,6 +176,13 @@ class AddModal extends Component {
 
       this.emit("addModal:submitOrganize", selectedSectionId, data)
       
+      // if the dropdown selections are empty, check if newSectionTitle & newPlaylistTitle are filled in
+    } else {
+      if(newSectionTitle !== "" && newPlaylistTitle !== ""){
+        console.log(newSectionTitle, newPlaylistTitle);
+        this.emit("addModal:addToNewPlaylist", newSectionTitle, newPlaylistTitle)
+        
+      }
     }
 
     // TODO add ability to add to new section for selected playlist
@@ -254,18 +265,17 @@ class AddModal extends Component {
         ${this.showSectionsSelect()}
       </form>
     </fieldset>
+    <h2>OR</h2>
     <fieldset class="ba bw2 b--green mt2">
     <legend class="pl2 pr2">New Playlist & Section</legend>
     <div>
-        <label> add to new playlist</label>
-        <form name="newPlaylistForm">
-          <input type="text" name="newTitle"/>
-        </form>
-      </div>
-    <div>
-      <label> add to new section</label>
-        <form name="newSectionForm">
-        <input type="text" name="newTitle"/>
+        <form id="addToNewForm">
+        <label> add to new playlist
+        <input type="text" name="newPlaylistTitle"/>
+        </label>
+          <label> add to new section
+        <input type="text" name="newSectionTitle"/>
+        </label>
         </form>
     </div>
   </fieldset>

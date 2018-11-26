@@ -79,22 +79,35 @@ function store (state, emitter) {
       }).catch(err => {
         return err;
       })
+    });
 
-    })
+
+    emitter.on('addModal:addToNewPlaylist', function(_sectionTitle, _playlistTitle){
+      let newSection = {
+        title: _sectionTitle,
+        resources: []
+      }
+      newSection.resources.push(state.addModal.submittedResource._id);
+
+      let newPlaylist = {
+        title: _playlistTitle,
+        sections:[]
+      }
+      
+      feathersClient.service('sections').create(newSection).then(_newSection => {
+        newPlaylist.sections.push(_newSection._id);
+        return feathersClient.service('playlists').create(newPlaylist);
+      }).then(_newPlaylist => {
+        console.log(_newPlaylist)
+        emitter.emit("user:playlists:refresh");
+      }).catch(err => {
+        return err;
+      });
+
+    });
+
 
 
   })
 }
 
-
-
-      
-  // emitter.on('db:AddModal:selectedPlaylist', function (_id) {
-  //   state.addModal.selectedPlaylist = state.playlists.all.filter(playlist => playlist._id == _id)[0];
-  //   emitter.emit(state.events.RENDER);
-  // })
-
-  // emitter.on('db:AddModal:selectedSection', function (_id) {
-  //   state.addModal.selectedSection = state.addModal.selectedPlaylist.sections.filter(section => section._id == _id)[0];
-  //   emitter.emit(state.events.RENDER);
-  // })
