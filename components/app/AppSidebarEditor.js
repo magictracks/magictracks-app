@@ -36,7 +36,7 @@ class AppSidebarEditor extends Component {
     return html`
       <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between mh-440px">
       <div class="w-100 tc"><small class="f7">Edit Selected | <span class="pointer hover-bg-purple" onclick=${this.deleteSelected}>🗑 delete </delete> </small></div>
-      <div class="w-100 pa2 overflow-y-scroll">
+      <div class="w-100 pa2 overflow-y-scroll mb2">
         <form id="inputEditor" name="inputEditor" class="w-100 flex flex-column f7">
           <label class="">Title</label> <input type="text" name="title" value=${selected.title || "title"}/>
           <label class="">Description</label> <textarea form="inputEditor" name="description" class="h4">${ selected.description ||"description"}</textarea>
@@ -44,7 +44,7 @@ class AppSidebarEditor extends Component {
           <label class="">Collaborators</label><input type="text" name="collaborators" value=${"collaborators"}/>
           <label class="">URL</label> <input type="text" name="url" value=${"url"}/>
         </form>
-        <label> Organize
+        <label class="mt2 f7"> Order 
         ${makeSortableList(selected, this.state, this.emit)}
         </label>
         ${showAddOptions(selected, this.state, this.emit)}
@@ -63,14 +63,15 @@ class AppSidebarEditor extends Component {
 
 function makeSortableList(selected, state, emit){
   // create a new element 
-  var newUl = document.createElement("ul"); 
+  var newUl = document.createElement("ol"); 
   // and give it some content 
   // var newContent = document.createTextNode("Hi there and greetings!"); 
   console.log(selected);
   if(selected.sections){
     selected.sections.forEach( section => {
       let newLi = document.createElement("li");
-      let newContent = document.createTextNode(section.title)
+      newLi.className += " pointer "
+      let newContent = document.createTextNode(`${section.title}`)
       newLi.dataset.featureid = section._id;
       newLi.dataset.parentid = selected._id;
       newLi.dataset.parentdb = selected.featureType;
@@ -90,6 +91,7 @@ function makeSortableList(selected, state, emit){
   } else if (selected.resources){
     selected.resources.forEach( resource => {
       let newLi = document.createElement("li");
+      newLi.className += " pointer ";
       let newContent = document.createTextNode(resource.title)
       newLi.dataset.featureid = resource._id;
       newLi.dataset.parentid = selected._id;
@@ -122,12 +124,12 @@ function showAddOptions(selected, state, emit){
   if(selected.featureType == "playlists"){
     console.log("this is a playlist")
     return html`
-      <button class="ba bw0" onclick=${addSectionToPlaylist}>⊕ Add Section</button>
+      <button class="ba bw0 f7" onclick=${addSectionToPlaylist}>⊕ Add Section to Playlist</button>
     `
   } else if ( selected.featureType == "sections"){
     console.log("this is a section")
     return html`
-      <button class="ba bw0" onclick=${addResourceToSection}>⊕ Add Resource</button>
+      <button class="ba bw0 f7" onclick=${addResourceToSection}>⊕ Add Resource to Section</button>
     `
   } else if (selected.featureType == "resources"){
     console.log("this is a resource")

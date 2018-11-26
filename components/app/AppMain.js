@@ -70,6 +70,7 @@ class AppMain extends Component {
           ${editView(this.state, this.emit)}
         </section> <!-- end main edit/export/browse -->
       </section> <!-- end main container -->
+      
     </section>
     `
   }
@@ -121,6 +122,9 @@ function editView(state, emit){
 
       <!-- Sections & Resources --> 
       ${makeSections(state, emit)}
+
+      <!-- add resources button -->
+      <div onclick=${(e) => {console.log("add button clicked!")}} class="pointer grow z-max absolute bottom-1 right-1 bw2 h3 w3 tc br-100 ba b--mid-gray shadow-5 bg-washed-green flex flex-column justify-center align-center"> <p>+</p> </div>
     </section>
     
   `
