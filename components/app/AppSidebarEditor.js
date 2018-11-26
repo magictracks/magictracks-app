@@ -61,6 +61,7 @@ class AppSidebarEditor extends Component {
 }
 
 
+// TODO: add in toggle visibility - need to add into DB prop for show or hide 
 function makeSortableList(selected, state, emit){
   // create a new element 
   var newUl = document.createElement("ol"); 

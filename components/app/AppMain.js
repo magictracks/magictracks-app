@@ -1,9 +1,10 @@
 var Component = require('choo/component')
 var html = require('choo/html')
 const AppTopToolbar = require('./AppTopToolbar')
+const AddModal = require('./AddModal')
 
 class AppMain extends Component {
-  constructor (id, state, emit) {
+  constructor(id, state, emit) {
     super(id)
     this.id = id;
     this.state = state;
@@ -14,6 +15,7 @@ class AppMain extends Component {
 
     this.toggleSelectedTab = this.toggleSelectedTab.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
+    // this.toggleAddModal = this.toggleAddModal.bind(this);
   }
 
   toggleSelectedTab(e) {
@@ -31,15 +33,19 @@ class AppMain extends Component {
   toggleDropdown(e) {
     e.target.nextElementSibling.classList.toggle('dn');
   }
-  
 
-  createElement () {
+
+  // toggleAddModal(e){
+  //   e.preventDefault();
+  //   this.emit("addModal:toggle");
+  // }
+  createElement() {
     // <!-- TOPTOOLBAR -->
     // ${this.state.cache(AppTopToolbar, "AppTopToolbar", this.state, this.emit).render() }
-    return html`
-    <section class="main w-100 flex flex-column ml2-ns">
-      <!-- TOPTOOLBAR -->
-      
+
+
+    return html `
+    <section class="main w-100 flex flex-column ml2-ns">      
       <!-- PRIMARY AREA -->
       <section class="w-100 flex-1 ba bw2 bg-near-white h-100 overflow-auto">
         <!-- NAV -->
@@ -70,33 +76,35 @@ class AppMain extends Component {
           ${editView(this.state, this.emit)}
         </section> <!-- end main edit/export/browse -->
       </section> <!-- end main container -->
-      
     </section>
     `
   }
+  // ${this.state.cache(AddModal, "AddModal", this.state, this.emit)}
 
-  update () {
+  update() {
     return true
   }
 }
 
 
-function toggleMainView(){
-
-}
 
 
 
-function editView(state, emit){
-  
-  function setSelected(e){
+function editView(state, emit) {
+
+  function toggleAddModal(e) {
+    e.preventDefault();
+    emit("addModal:toggle");
+  }
+
+  function setSelected(e) {
     e.preventDefault();
     let id = e.currentTarget.dataset.id;
     let db = e.currentTarget.dataset.db;
     emit("db:getSelectedFeature", id, db);
   }
 
-  return html`
+  return html `
     
     <section class="w-100 h-auto flex flex-column pa2">
       
@@ -122,24 +130,23 @@ function editView(state, emit){
 
       <!-- Sections & Resources --> 
       ${makeSections(state, emit)}
-
-      <!-- add resources button -->
-      <div onclick=${(e) => {console.log("add button clicked!")}} class="pointer grow z-max absolute bottom-1 right-1 bw2 h3 w3 tc br-100 ba b--mid-gray shadow-5 bg-washed-green flex flex-column justify-center align-center"> <p>+</p> </div>
+      
+      <!-- Add Modal button --> 
+      <div onclick=${toggleAddModal} class="pointer grow z-max absolute bottom-1 right-1 bw2 h3 w3 tc br-100 ba b--mid-gray shadow-5 bg-washed-green flex flex-column justify-center align-center"> <p>+</p> </div>
     </section>
     
   `
 }
 
-// ${makeSections(state, emit)}
 
-function exportView(state, emit){
-  return html`
+function exportView(state, emit) {
+  return html `
   <div> Export view! </div>
   `
 }
 
-function browseView(state, emit){
-  return html`
+function browseView(state, emit) {
+  return html `
   <section class="w-100 h-auto flex flex-row pa2">
     <div id="paginator" class="w-100 pa2 tc"> back | 1, 2, 3, ... | next</div>
   </section>
@@ -148,18 +155,18 @@ function browseView(state, emit){
 
 
 
-function makeSections(state, emit){
-  
-  function setSelected(e){
+function makeSections(state, emit) {
+
+  function setSelected(e) {
     e.preventDefault();
     let id = e.currentTarget.dataset.id;
     let db = e.currentTarget.dataset.db;
     emit("db:getSelectedFeature", id, db);
   }
 
-  
-  if(state.user.playlists.selected.sections !== undefined){
-    return html`
+
+  if (state.user.playlists.selected.sections !== undefined) {
+    return html `
       <section class="w-100 h-auto mt4">
       ${ 
         state.user.playlists.selected.sections.map( (section, sectionIndex) => {
@@ -191,28 +198,28 @@ function makeSections(state, emit){
       }
     </section>
     `
-    } else{
-      return html`
+  } else {
+    return html `
         <div>nothing yet</div>
       `
-    }
+  }
+}
+
+
+const toggleResourceDetails = function (e) {
+  this.parentNode.querySelector('.hiddenDetails').classList.toggle('dn');
+}
+
+function makeResources(section, state, emit) {
+  function setSelected(e) {
+    e.preventDefault();
+    let id = e.currentTarget.dataset.id;
+    let db = e.currentTarget.dataset.db;
+    emit("db:getSelectedFeature", id, db);
   }
 
-
-  const toggleResourceDetails = function(e){
-    this.parentNode.querySelector('.hiddenDetails').classList.toggle('dn');
-  }
-
-  function makeResources(section, state, emit){
-    function setSelected(e){
-      e.preventDefault();
-      let id = e.currentTarget.dataset.id;
-      let db = e.currentTarget.dataset.db;
-      emit("db:getSelectedFeature", id, db);
-    }
-
-    if(section.resources !== undefined){
-      return html`
+  if (section.resources !== undefined) {
+    return html `
         <div class="overflow-auto">
           <table class="f6 w-100 center" cellspacing="0">
             <thead>
@@ -246,9 +253,9 @@ function makeSections(state, emit){
           </table>
         </div>
       `
-    } else{
-      return html`<div>no resources yet!</div>`
-    }
+  } else {
+    return html `<div>no resources yet!</div>`
   }
+}
 
 module.exports = AppMain

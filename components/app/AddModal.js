@@ -32,6 +32,7 @@ class AddModal extends Component {
     this.submitEditDetails = this.submitEditDetails.bind(this);
 
     this.createSection = this.createSection.bind(this);
+
   }
 
 
@@ -45,9 +46,9 @@ class AddModal extends Component {
 
   toggleModal(e) {
     e.preventDefault();
-    this.emit("db:AddModal:toggle");
+    this.emit("addModal:toggle");
     this.local.currentStep = 0;
-    this.emit("db:AddModal:currentStep", this.local.currentStep);
+    this.emit("addModal:currentStep", this.local.currentStep);
   }
 
   stepForward(e) {
@@ -70,11 +71,11 @@ class AddModal extends Component {
     }
 
     if(this.local.currentStep == 4){
-      this.emit("db:AddModal:toggle");
-      this.emit("db:playlists:find");
+      this.emit("addModal:toggle");
+      // this.emit("db:playlists:find");
     }
 
-    this.emit("db:AddModal:currentStep", this.local.currentStep);
+    this.emit("addModal:currentStep", this.local.currentStep);
   }
 
   stepBackward(e) {
@@ -86,7 +87,7 @@ class AddModal extends Component {
       this.local.currentStep--;
     }
 
-    this.emit("db:AddModal:currentStep", this.local.currentStep);
+    this.emit("addModal:currentStep", this.local.currentStep);
   }
 
   showCurrentStep(step) {
@@ -106,9 +107,9 @@ class AddModal extends Component {
     e.preventDefault();
     let form = new FormData(e.target.form);
     let selectedPlaylist = form.get("playlistSelect")
-    if (selectedPlaylist !== "") {
-      this.emit("db:AddModal:selectedPlaylist", selectedPlaylist)
-    }
+    // if (selectedPlaylist !== "") {
+    //   this.emit("db:AddModal:selectedPlaylist", selectedPlaylist)
+    // }
   }
 
   handleSectionChange(e) {
@@ -128,7 +129,7 @@ class AddModal extends Component {
       url: formData.get("url")
     }
     this.emit("db:resources:create", resourceData);
-    this.emit("db:AddModal:toggle");
+    this.emit("addModal:toggle");
   }
 
   submitAddURL(){
@@ -342,34 +343,33 @@ class AddModal extends Component {
 
   createElement() {
     return html `
-<div class="${this.isToggled()} w-100 h-100 pa2 fixed z-max">
-  <div class="w-100 h-100 flex flex-column justify-center items-center ba bw2 bg-white">
-    <div class="w-100 mw6 h-auto flex flex-column ba bw2 pa2">
-      <!-- Close button -->
-      <div class="flex flex-row justify-end">
-        <button class="pa2 ba bw2" onclick=${this.toggleModal}>✕</button>
-      </div>
-
-      <!-- FORM Editing -->
-      <div>
-      ${this.showCurrentStep(this.local.currentStep)}
-      </div>
-
-      <!-- Bottom buttons -->
-      <div class="flex flex-row justify-between">
-        <div>
-          <button class="pa2 ba bw2" onclick=${this.quickSave}>Quick Save</button>
+    <div class="${this.isToggled()} w-100 h-100 pa2 fixed z-max">
+    <div class="w-100 h-100 flex flex-column justify-center items-center ba bw2 bg-white">
+      <div class="w-100 mw6 h-auto flex flex-column ba bw2 pa2">
+        <!-- Close button -->
+        <div class="flex flex-row justify-end">
+          <button class="pa2 ba bw2" onclick=${this.toggleModal}>✕</button>
         </div>
+  
+        <!-- FORM Editing -->
         <div>
-          <button class="pa2 ba bw2" onclick=${this.stepBackward}>Back</button>
-          <button class="pa2 ba bw2" onclick=${this.stepForward}>${ (this.local.currentStep == 3) ? "Close" : "Next"  }</button>
+        ${this.showCurrentStep(this.local.currentStep)}
+        </div>
+  
+        <!-- Bottom buttons -->
+        <div class="flex flex-row justify-between">
+          <div>
+            <button class="pa2 ba bw2" onclick=${this.quickSave}>Quick Save</button>
+          </div>
+          <div>
+            <button class="pa2 ba bw2" onclick=${this.stepBackward}>Back</button>
+            <button class="pa2 ba bw2" onclick=${this.stepForward}>${ (this.local.currentStep == 3) ? "Close" : "Next"  }</button>
+          </div>
         </div>
       </div>
     </div>
-
   </div>
-</div>
-`
+    `
   }
 
   update() {

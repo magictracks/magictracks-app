@@ -30,7 +30,8 @@ function view(state, emit) {
         ${state.cache(AppMain, "AppMain", state, emit).render() }
         
       </section>
-
+      <!-- ADD RESOURCES MODAL -->
+      ${state.cache(AddModal, "AddModal", state, emit).render()}
     </body> 
   `;
   } else {
@@ -46,8 +47,3 @@ function view(state, emit) {
 }
 
 
-/**
- * 
- * <!-- ADD RESOURCES MODAL -->
-      ${state.cache(AddModal, "AddModal", state, emit).render()}
- */
