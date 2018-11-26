@@ -107,9 +107,9 @@ class AddModal extends Component {
     e.preventDefault();
     let form = new FormData(e.target.form);
     let selectedPlaylist = form.get("playlistSelect")
-    // if (selectedPlaylist !== "") {
-    //   this.emit("db:AddModal:selectedPlaylist", selectedPlaylist)
-    // }
+    if (selectedPlaylist !== "") {
+      this.emit("db:AddModal:selectedPlaylist", selectedPlaylist)
+    }
   }
 
   handleSectionChange(e) {
@@ -138,7 +138,7 @@ class AddModal extends Component {
     let resourceData = {
       url: formData.get("url")
     }
-    this.emit("db:resources:create", resourceData);
+    this.emit("addModal:createResource", resourceData);
   }
 
   submitEditDetails(){
@@ -149,7 +149,7 @@ class AddModal extends Component {
       description: formData.get("description")
     }
 
-    this.emit("db:resources:patch", this.state.addModal.submittedResource._id, resourceData);
+    this.emit("addModal:editResource", resourceData);
   }
 
   submitOrganize(){
@@ -226,6 +226,7 @@ class AddModal extends Component {
     `
   }
 
+  // TODO: get playlists from db
   organize() {
     console.log("organize")
     return html `
@@ -241,7 +242,7 @@ class AddModal extends Component {
         <label class="f7">Add to Existing Playlist</label>
         <select class="w-100 pa2" onchange=${this.handleChange} name="playlistSelect">
           <option value=""></option>
-          ${this.state.playlists.all.map(playlist => {
+          ${this.state.user.playlists.all.map(playlist => {
             return html`
               <option value="${playlist._id}" data-id=${playlist._id} data-db="playlists" 
               selected=${this.markSelected(playlist, this.state.addModal.selectedPlaylist)}>${playlist.title}</option>  
