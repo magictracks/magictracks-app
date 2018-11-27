@@ -2,6 +2,7 @@ var Component = require('choo/component')
 var html = require('choo/html')
 const AppTopToolbar = require('./AppTopToolbar')
 const AddModal = require('./AddModal')
+const MainNav = require('../MainNav')
 
 class AppMain extends Component {
   constructor(id, state, emit) {
@@ -49,28 +50,7 @@ class AppMain extends Component {
       <!-- PRIMARY AREA -->
       <section class="w-100 flex-1 ba bw2 bg-near-white h-100 overflow-auto">
         <!-- NAV -->
-        <nav class="w-100 b--near-black bg-near-black h2 flex flex-row items-center">
-          <ul class="list flex flex-row ma0 pa0 h-100 z-max">
-            <li class="mainNavTab h-100 bg-near-white near-black pr2 pl2">
-              <span onclick=${this.toggleSelectedTab}>Edit</span> <span onclick=${this.toggleDropdown}>▾</span>
-              <ul class="dn ba bw1 pa2 bg-pink list black">
-                <li>new playlist</li>
-                <li>new section</li>
-                <li>new resource</li>
-              </ul>
-            </li>
-            <li onclick=${this.toggleSelectedTab} class="mainNavTab h-100 bg-near-black near-white pr2 pl2">
-                <span onclick=${this.toggleSelectedTab}>Export</span> <span onclick=${this.toggleDropdown}>▾</span>
-              <ul class="dn ba bw1 pa2 bg-pink list black">
-                <li>as HTML</li>
-                <li>as Markdown</li>
-                <li>as PDF</li>
-              </ul>
-            </li>
-            <li class="mainNavTab h-100 bg-near-black near-white pr2 pl2"><span onclick=${this.toggleSelectedTab}>Browse</span></li>
-            <li class="mainNavTab h-100 bg-near-black near-white pr2 pl2"><span onclick=${this.toggleSelectedTab}><input class="bn" type="text" placeholder="🔎 search"></span></li>
-          </ul>
-        </nav>
+        ${MainNav("MainNav", this.state, this.emit)}
         <!-- main -->
         <section id="mainContent" class="w-100 h-auto overflow-y-scroll flex flex-column pa2 mt2">
           ${editView(this.state, this.emit)}

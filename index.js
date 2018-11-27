@@ -15,12 +15,18 @@ if (process.env.NODE_ENV !== 'production') {
 app.use(require('./stores/auth'));
 app.use(require('./stores/db'));
 app.use(require('./stores/addmodal'));
+app.use(require('./stores/edit'));
+app.use(require('./stores/export'));
+app.use(require('./stores/browse'));
 
 
 app.route('/', require('./views/main'))
 app.route('/app', require('./views/app'))
 app.route('/login', require('./views/login'))
 app.route('/signup', require('./views/signup'))
+app.route('/browse', require('./views/browse'))
+app.route('/edit', require('./views/edit'))
+app.route('/export', require('./views/export'))
 app.route('/*', require('./views/404'))
 
 

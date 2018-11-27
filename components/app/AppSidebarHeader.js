@@ -20,10 +20,7 @@ class AppSidebarHeader extends Component {
     return html`
     <section class="flex flex-column ba bw2 w5-ns w-100 items-center justify-center pa2 h4">
     <div class="ma0">
-      <img src="assets/magic-tracks-logo-nobg.png" id="logo" />
-    </div>
-    <div>
-      <p class="ma0 f7">Magic Tracks ✨</p>
+      <img class="mw4" src="assets/magic-tracks-logo.png" />
     </div>
     <div>
       <p class="ma0 f7 w-100">Hi @${this.state.user.username}! | <span class="cursor hover-bg-purple hover-white" onclick=${this.toggleDropdown}>Account ▾</span>  

@@ -34,7 +34,7 @@ function store(state, emitter, app) {
         state.user.username = authResponse.username;
         state.user.id = authResponse.id;
         state.user.authenticated = true;
-        emitter.emit("pushState", "app");
+        // emitter.emit("pushState", "app");
         return authResponse;
     }).then( (authResponse) => {
       // GET the playlists owned by the user

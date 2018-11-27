@@ -25,9 +25,11 @@ function view(state, emit) {
       <ul class="flex flex-row list pl0 justify-start h-100 ma0 items-center">
         <li><img id="logo" class="pr2" src="../assets/magic-tracks-logo-nobg.png" alt="magic tracks logo"></li>
         <li> ✨ Magic Tracks ✨</li>
+
       </ul>
       <ul class="flex flex-row list pl0 justify-end ma0 h-100 items-center">
         <li class="pa2" onclick=${triggerLogin}>Log In</li>
+        <li> <a class="link black" href="/browse">browse</a> </li>
       </ul>
     </nav>
   </header>
