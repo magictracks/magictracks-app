@@ -44,7 +44,7 @@ class AppSidebarEditor extends Component {
           <label class="">Collaborators</label><input type="text" name="collaborators" value=${"collaborators"}/>
           <label class="">URL</label> <input type="text" name="url" value=${selected.url || "url"}/>
         </form>
-        <label class="mt2 f7"> Order 
+        <label class="mt2 f7"> Drag to Reorder 
         ${makeSortableList(selected, this.state, this.emit)}
         </label>
         ${showAddOptions(selected, this.state, this.emit)}

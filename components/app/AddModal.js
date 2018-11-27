@@ -185,10 +185,6 @@ class AddModal extends Component {
       }
     }
 
-    // TODO add ability to add to new section for selected playlist
-
-    // TODO add ability add to new playlist and new section
-
   }
 
 

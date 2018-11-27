@@ -1,9 +1,6 @@
 var html = require('choo/html')
 var css = require('sheetify');
 var SignupForm = require('../components/SignupForm')
-// var LoginForm = require('../components/LoginForm')
-
-
 
 var TITLE = 'app - main'
 
