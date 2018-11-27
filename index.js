@@ -11,8 +11,6 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(require('choo-service-worker')())
 }
 
-// app.use(cors());
-
 // app.use(require('./stores/clicks'))
 app.use(require('./stores/auth'));
 app.use(require('./stores/db'));
