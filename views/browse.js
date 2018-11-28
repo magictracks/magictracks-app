@@ -1,6 +1,7 @@
 const html = require('choo/html');
 const css = require('sheetify');
 
+const Playlist = require('../components/Playlist');
 const SidebarHeader = require('../components/SidebarHeader');
 const MainNav = require('../components/MainNav');
 
@@ -170,25 +171,18 @@ function MainContent(id, state, emit){
   }
 
   function RenderSelectedItem(item){
-    return html`
-      <div>
-        <div>
-          <h3 class="f3 mt0 mb2">${item.title}</h3>
-        </div>
-        <div class="flex flex-row w-100">
-          <div class="w-40 pr2 f7 flex flex-column">
-            <p class="ma0">created by: ${item.submittedBy}</p>
-            <p class="ma0">tags:</p>
-            <p class="ma0">comments:</p>
-            <p class="ma0">images:</p>
-          </div>
-          <div class="w-60 pl2 f7">
-            ${item.description}
-          </div>
-        </div>
-      </div>
-    `
+    console.log(item);
+    if(item.featureType == "playlists"){
+        return Playlist(item, state, emit)
+    } else{
+      return html`
+        <div>not implemented yet!</div>
+      `
+    }
+    
   }
+
+  
 
   
 
