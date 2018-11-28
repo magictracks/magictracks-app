@@ -247,9 +247,24 @@ function MainContent(id, state, emit){
       emit("browse:select");
     }
 
+    function checkDb(){
+      switch(item.featureType){
+        case "playlists":
+          return " bg-washed-red "
+          break;
+        case "sections":
+          return " bg-washed-yellow ";
+          break;
+        case "resources":
+          return " bg-washed-blue "
+        default:
+          return " bg-near-white "
+      }
+    }
+
     return html`
 
-      <div class="w5 h5 ba b--near-white bw2 bg-washed-red pa2 f7 ma1 shadow-strong" data-id="${item._id}" data-db="${item.featureType}" onclick=${changeRoute}>
+      <div class="w5 h5 ba b--near-white bw2 ${checkDb()} pa2 f7 ma1 shadow-strong" data-id="${item._id}" data-db="${item.featureType}" onclick=${changeRoute}>
         
         <p class="ma0 b f6">${item.title}</p>
         <p class="ma0 f7 truncate mt2">${item.description}</p>
