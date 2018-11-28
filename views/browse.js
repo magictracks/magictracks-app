@@ -273,11 +273,12 @@ function MainContent(id, state, emit){
 
     return html`
 
-      <div class="w5 h5 ba b--near-white bw2 ${checkDb()} pa2 f7 ma1 shadow-strong" data-id="${item._id}" data-db="${item.featureType}" onclick=${changeRoute}>
+      <div class=" overflow-auto w-100 w-50-m w-33-l h5 ba b--near-white bw1 pa2 f7 ${checkDb()}" data-id="${item._id}" data-db="${item.featureType}" onclick=${changeRoute} >
         
-        <p class="ma0 b f4 b">${item.title}</p>
-        <p class="ma0 f7 mt2">${item.description}</p>
-        <p class="ma0 f7 truncate mt2">By: ${item.submittedBy}</p>
+      <p class="ma0 f4 b">${item.title}</p>
+      <p class="ma0 f7 mt2">${item.description}</p>
+      <p class="ma0 f7 mt2">By: ${item.submittedBy}</p>
+      
         
       </div>
     `

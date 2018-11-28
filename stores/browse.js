@@ -16,8 +16,6 @@ function store (state, emitter) {
   }
 
 
-
-
   feathersClient.service("playlists").find({}).then(res => {
     state.community.playlists = res;
     if(Object.keys(state.params).length > 0 ){
