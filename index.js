@@ -25,6 +25,8 @@ app.route('/app', require('./views/app'))
 app.route('/login', require('./views/login'))
 app.route('/signup', require('./views/signup'))
 app.route('/browse', require('./views/browse'))
+app.route('/browse/:db/:id', require('./views/browse'))
+
 app.route('/edit', require('./views/edit'))
 app.route('/export', require('./views/export'))
 app.route('/*', require('./views/404'))

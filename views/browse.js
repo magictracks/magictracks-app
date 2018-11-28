@@ -162,12 +162,20 @@ function MainContent(id, state, emit){
       }
     `
 
+    function changeRoute(e){
+      emit("pushState", `browse/${item.featureType}/${item._id}`)
+    }
+
     return html`
-      <div class="w5 h5 ba b--near-white bw2 bg-washed-red pa2 f7 ma1 shadow-strong">
+      
+      <div class="w5 h5 ba b--near-white bw2 bg-washed-red pa2 f7 ma1 shadow-strong" data-id="${item._id}" data-db="${item.featureType}" onclick=${changeRoute}>
+        
         <p class="ma0 b f6">${item.title}</p>
         <p class="ma0 f7 truncate mt2">${item.description}</p>
         <p class="ma0 f7 truncate mt2">By: ${item.submittedBy}</p>
+        
       </div>
+      
     `
   }
 
