@@ -119,7 +119,70 @@ function BrowseMain(id, state, emit){
       <!-- PRIMARY AREA -->
       <section class="w-100 flex-1 ba b--black bw2 bg-near-white h-100 overflow-auto">    
         ${MainNav("MainNav", state, emit)}
+        <!-- main -->
+        ${MainContent("MainContent", state, emit)}
       </section>
+  </section>
+  `
+}
+
+
+function MainContent(id, state, emit){
+
+  function FilterMenu(){
+    return html`
+      <menu class="w-100 pa0 ma0">
+        <fieldset>
+        <legend class="f7">Browse by </legend>
+        <ul class="w-100 flex flex-row-ns flex-column list pl0 f6 justify-between">
+          <li class="mr2">Playlists</li>
+          <li class="mr2">Sections</li>
+          <li class="mr2">Resources</li>
+          <li class="mr2">Contributors</li>
+          <li class="mr2">Tags</li>
+          <li class="mr2">Surprise Me 🎊</li>
+        </ul>
+        </fieldset>
+      </menu>
+    `
+  }
+
+  function BrowseItems(){
+
+    
+  }
+
+  
+
+  function BrowseItem(item){
+
+    css`
+      .shadow-strong{
+        box-shadow: 2px 2px black;
+      }
+    `
+
+    return html`
+      <div class="w5 h5 ba b--near-white bw2 bg-washed-red pa2 f7 ma1 shadow-strong">
+        <p class="ma0 b f6">${item.title}</p>
+        <p class="ma0 f7 truncate mt2">${item.description}</p>
+        <p class="ma0 f7 truncate mt2">By: ${item.submittedBy}</p>
+      </div>
+    `
+  }
+
+
+  return html`
+  <section class="w-100 h-auto overflow-y-scroll flex flex-column pa2 mt2">
+    <!-- FILTER MENU -->
+    ${FilterMenu()}
+
+    <!-- SELECTED ITEMS TO BROWSE --> 
+    <section class="w-100 flex flex-row flex-wrap mt4">
+    ${state.community.playlists.map( playlist => {
+         return BrowseItem(playlist)
+    })}
+    </section>
   </section>
   `
 }
