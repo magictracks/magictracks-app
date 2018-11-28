@@ -147,9 +147,47 @@ function MainContent(id, state, emit){
     `
   }
 
-  function BrowseItems(){
+  function RenderItems(){
 
+    if(state.params && Object.keys(state.params).length > 0){
+      console.log("yes params")
+      return html`
+      <section class="w-100 flex flex-column mt4">
+        ${RenderSelectedItem(state.community.selected)}
+      </section>
+      `
+    } else{
+      console.log("No params")
+      return html`
+      <section class="w-100 flex flex-row flex-wrap mt4">
+      ${state.community.playlists.map( playlist => {
+           return BrowseItem(playlist)
+      })}
+      </section>
+      `
+    }
     
+  }
+
+  function RenderSelectedItem(item){
+    return html`
+      <div>
+        <div>
+          <h3 class="f3 mt0 mb2">${item.title}</h3>
+        </div>
+        <div class="flex flex-row w-100">
+          <div class="w-40 pr2 f7 flex flex-column">
+            <p class="ma0">created by: ${item.submittedBy}</p>
+            <p class="ma0">tags:</p>
+            <p class="ma0">comments:</p>
+            <p class="ma0">images:</p>
+          </div>
+          <div class="w-60 pl2 f7">
+            ${item.description}
+          </div>
+        </div>
+      </div>
+    `
   }
 
   
@@ -164,10 +202,11 @@ function MainContent(id, state, emit){
 
     function changeRoute(e){
       emit("pushState", `browse/${item.featureType}/${item._id}`)
+      emit("browse:select");
     }
 
     return html`
-      
+
       <div class="w5 h5 ba b--near-white bw2 bg-washed-red pa2 f7 ma1 shadow-strong" data-id="${item._id}" data-db="${item.featureType}" onclick=${changeRoute}>
         
         <p class="ma0 b f6">${item.title}</p>
@@ -175,7 +214,6 @@ function MainContent(id, state, emit){
         <p class="ma0 f7 truncate mt2">By: ${item.submittedBy}</p>
         
       </div>
-      
     `
   }
 
@@ -186,11 +224,7 @@ function MainContent(id, state, emit){
     ${FilterMenu()}
 
     <!-- SELECTED ITEMS TO BROWSE --> 
-    <section class="w-100 flex flex-row flex-wrap mt4">
-    ${state.community.playlists.map( playlist => {
-         return BrowseItem(playlist)
-    })}
-    </section>
+    ${RenderItems()}
   </section>
   `
 }

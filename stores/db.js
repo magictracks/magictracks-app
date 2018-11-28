@@ -8,10 +8,7 @@ module.exports = store
 
 
 function store(state, emitter, app) {
-  // The single source of Truth!
-  state.community = {
-    playlists:[]
-  }
+  
 
   // The single source of Truth!
   state.user.playlists = {
