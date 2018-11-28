@@ -144,7 +144,7 @@ function MainContent(id, state, emit){
     if(state.params.db == _db){
       return " bg-purple white "
     } else{
-      return " bg-washed-blue black "
+      return " bg-near-white black "
     }
   }
 
@@ -159,7 +159,7 @@ function MainContent(id, state, emit){
           <li class="mr2 pointer pa2 ${highlightSelected('resources')}" onclick=${changeFilter} data-db="resources">Resources</li>
           <li class="mr2 pointer pa2 ${highlightSelected('users')}" onclick=${changeFilter} data-db="users">Contributors</li>
           <li class="mr2 pointer pa2 ${highlightSelected('tags')}" onclick=${changeFilter} data-db="tags">Tags</li>
-          <li class="mr2">Surprise Me 🎊</li>
+          <li class="mr2 pointer pa2 ${highlightSelected('')}" onclick=${changeFilter} data-db="">Surprise me 🎊 </li>
         </ul>
         </fieldset>
       </menu>
@@ -275,8 +275,8 @@ function MainContent(id, state, emit){
 
       <div class="w5 h5 ba b--near-white bw2 ${checkDb()} pa2 f7 ma1 shadow-strong" data-id="${item._id}" data-db="${item.featureType}" onclick=${changeRoute}>
         
-        <p class="ma0 b f6">${item.title}</p>
-        <p class="ma0 f7 truncate mt2">${item.description}</p>
+        <p class="ma0 b f4 b">${item.title}</p>
+        <p class="ma0 f7 mt2">${item.description}</p>
         <p class="ma0 f7 truncate mt2">By: ${item.submittedBy}</p>
         
       </div>

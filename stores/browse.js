@@ -16,23 +16,39 @@ function store (state, emitter) {
   }
 
 
+
+
   feathersClient.service("playlists").find({}).then(res => {
     state.community.playlists = res;
     if(Object.keys(state.params).length > 0 ){
       let itemId = state.params.id;
       let itemDb = state.params.db;
-      return feathersClient.service(itemDb).get(itemId);  
-    } else{
+      if(itemId){
+        return feathersClient.service(itemDb).get(itemId)
+      } else{
+        return feathersClient.service(itemDb).find({})
+      }
+      
+    } else {
       return res[0];
     }
-    
   }).then( res => {
+    console.log("1")
     state.community.selected = res
+    return feathersClient.service("sections").find({})
+  }).then(res => {
+    console.log("2")
+    state.community.sections = res;
+    return feathersClient.service("resources").find({})
+  }).then(res => {
+    console.log("3")
+    state.community.resources = res;
     emitter.emit(state.events.RENDER);
   }).catch(err => {
     return err;
   })
 
+  
 
   emitter.on('DOMContentLoaded', function () {
 

@@ -19,7 +19,7 @@ function MainNav(id, state, emit){
     <!-- NAV -->
     <ul class="list flex flex-row ma0 pa0 h-100 z-max">
       <li class="mainNavTab h-100 ${checkRoute("edit")} pr2 pl2">
-        <span onclick=${test}> <a class="link ${checkRoute("edit")}" href="/edit">edit</a> </span> <span onclick=${test}>▾</span>
+        <span onclick=${test}> <a class="link ${checkRoute("edit")}" href="/edit">Edit</a> </span> <span onclick=${test}>▾</span>
         <ul class="dn ba bw1 pa2 bg-pink list black">
           <li>new playlist</li>
           <li>new section</li>
