@@ -130,17 +130,24 @@ function BrowseMain(id, state, emit){
 
 function MainContent(id, state, emit){
 
+  function changeFilter(e){
+    let db = e.currentTarget.dataset.db;
+    console.log(db);
+    emit("pushState", `/browse/${db}`)
+    emit("browse:filter");
+  }
+
   function FilterMenu(){
     return html`
       <menu class="w-100 pa0 ma0">
         <fieldset>
         <legend class="f7">Browse by </legend>
         <ul class="w-100 flex flex-row-ns flex-column list pl0 f6 justify-between">
-          <li class="mr2">Playlists</li>
-          <li class="mr2">Sections</li>
-          <li class="mr2">Resources</li>
-          <li class="mr2">Contributors</li>
-          <li class="mr2">Tags</li>
+          <li class="mr2 pointer" onclick=${changeFilter} data-db="playlists">Playlists</li>
+          <li class="mr2 pointer" onclick=${changeFilter} data-db="sections">Sections</li>
+          <li class="mr2 pointer" onclick=${changeFilter} data-db="resources">Resources</li>
+          <li class="mr2 pointer" onclick=${changeFilter} data-db="users">Contributors</li>
+          <li class="mr2 pointer" onclick=${changeFilter} data-db="tags">Tags</li>
           <li class="mr2">Surprise Me 🎊</li>
         </ul>
         </fieldset>
@@ -150,15 +157,42 @@ function MainContent(id, state, emit){
 
   function RenderItems(){
 
-    if(state.params && Object.keys(state.params).length > 0){
-      console.log("yes params")
-      return html`
-      <section class="w-100 flex flex-column mt4">
-        ${RenderSelectedItem(state.community.selected)}
-      </section>
-      `
-    } else{
-      console.log("No params")
+    if(state.params && Object.keys(state.params).length > 0 ){
+
+      if(state.params.hasOwnProperty('id')){
+        console.log("yes params")
+        return html`
+        <section class="w-100 flex flex-column mt4">
+          ${RenderSelectedItem(state.community.selected)}
+        </section>
+        `
+      } else if ( state.params.db == "playlists"){
+        return html`
+        <section class="w-100 flex flex-row flex-wrap mt4">
+        ${state.community.playlists.map( playlist => {
+             return BrowseItem(playlist)
+        })}
+        </section>
+        `
+      } else if ( state.params.db == "sections"){
+        return html`
+        <section class="w-100 flex flex-row flex-wrap mt4">
+        ${state.community.sections.map( section => {
+             return BrowseItem(section)
+        })}
+        </section>
+        `
+      } else if ( state.params.db == "resources"){
+        return html`
+        <section class="w-100 flex flex-row flex-wrap mt4">
+        ${state.community.resources.map( resource => {
+             return BrowseItem(resource)
+        })}
+        </section>
+        `
+      } 
+      
+    } else {
       return html`
       <section class="w-100 flex flex-row flex-wrap mt4">
       ${state.community.playlists.map( playlist => {
@@ -174,7 +208,7 @@ function MainContent(id, state, emit){
     console.log(item);
     if(item.featureType == "playlists"){
         return Playlist(item, state, emit)
-    } else{
+    } else {
       return html`
         <div>not implemented yet!</div>
       `
@@ -195,7 +229,7 @@ function MainContent(id, state, emit){
     `
 
     function changeRoute(e){
-      emit("pushState", `browse/${item.featureType}/${item._id}`)
+      emit("pushState", `/browse/${item.featureType}/${item._id}`)
       emit("browse:select");
     }
 

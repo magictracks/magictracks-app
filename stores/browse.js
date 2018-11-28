@@ -36,9 +36,24 @@ function store (state, emitter) {
 
   emitter.on('DOMContentLoaded', function () {
 
+    emitter.on("browse:filter", function(){
+      let itemDb = state.params.db;
+      
+      console.log("stores:browse ", itemDb);
+
+      feathersClient.service( itemDb ).find({}).then(res => {
+        console.log(res);
+        state.community[itemDb] = res;
+        
+        // emitter.emit("pushState", `browse/${itemDb}`)
+        emitter.emit(state.events.RENDER)
+      });
+    })  
+
     emitter.on("browse:select", function(){
       let itemId = state.params.id;
       let itemDb = state.params.db;
+      console.log(itemId, itemDb)
       feathersClient.service(itemDb).get(itemId).then(res => {
         state.community.selected = res;
         emitter.emit(state.events.RENDER);
