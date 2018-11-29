@@ -42,17 +42,27 @@ function Sidebar(id, state, emit){
 }
 
 function SidebarEdit(id, state, emit){
+
+    function getSelectedTitle(){
+      let selected = state.community.selected;
+
+      if(Object.keys(selected).length > 0 ){
+        return selected.title;
+      } else {
+        return "nothing selected yet"
+      }
+    }
     
     return html`
     <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between mh-440px">
       <!-- SIDEBAR EDIT AREA --> 
-      <div class="tc w-100 tc f7 mt2">Selected</div>
+      <div class="tc w-100 tc f7 mt2">Selected:  <span class="f7">${getSelectedTitle()}</span></div>
         <!-- MAIN AREA -->
         <div class="w-100 pa2 overflow-y-scroll mb2 ma0 f7">
             <!-- SUGGEST -->
             <fieldset>
               <legend class="pl2 pr2">Suggest a link</legend>
-              <form class="w-100 flex flex-column">
+              <form class="w-100 flex flex-column" >
                 <label>URL</label>
                 <input type="text" name="url">
                 <label>Note</label>
