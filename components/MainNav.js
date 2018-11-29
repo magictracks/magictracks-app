@@ -7,7 +7,7 @@ function test(e){
 function MainNav(id, state, emit){
   
   function checkRoute(_route){
-    if(state.route == _route){
+    if(state.route == _route || state.route.split('/')[0] === _route  ){
       return " bg-near-white near-black"
     } else {
       return " near-white bg-near-black "

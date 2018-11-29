@@ -167,6 +167,10 @@ function MainContent(id, state, emit){
   }
 
   function RenderItems(){
+    function goBack(e){
+      let db = e.currentTarget.dataset.db;
+      emit("pushState", `/browse/${db}`);
+    }
 
     if(state.params && Object.keys(state.params).length > 0 ){
 
@@ -174,6 +178,7 @@ function MainContent(id, state, emit){
         console.log("yes params")
         return html`
         <section class="w-100 flex flex-column mt4">
+          <div class="w-100 mb4 pl2" onclick=${goBack} data-db="${state.community.selected.featureType}"><p class="ma0 underline pointer">Go Back ↩ </p></div>
           ${RenderSelectedItem(state.community.selected)}
         </section>
         `
