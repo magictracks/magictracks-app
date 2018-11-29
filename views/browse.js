@@ -229,7 +229,7 @@ function MainContent(id, state, emit){
       else if ( state.params.db == "users"){
         return html`
         <section class="w-100 flex flex-row flex-wrap mt4">
-        ${state.community.users.map( user => {
+        ${state.community.users.data.map( user => {
              return html`
              <div class="pa4 tc">
                 <img src="http://tachyons.io/img/logo.jpg" class="br4 h3 w3 dib" alt="avatar">

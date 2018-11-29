@@ -75,7 +75,7 @@ function store (state, emitter) {
           state.user.authenticated = true;
           state.user.username = authResponse.username;
           state.user.id = authResponse._id;
-          emitter.emit("pushState", "app")
+          emitter.emit("pushState", "edit")
         }).catch(err => {
           // Show login page (potentially with `e.message`)
           console.log('Authentication error', err);

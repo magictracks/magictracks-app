@@ -57,13 +57,13 @@ function store (state, emitter) {
 
     emitter.on("browse:filter", function(){
       let itemDb = state.params.db;
-      
-      console.log("stores:browse ", itemDb);
 
-      feathersClient.service( itemDb ).find({}).then(res => {
-        console.log(res);
+      feathersClient.service( itemDb ).find({
+        query: {
+          $limit:100
+        }
+      }).then(res => {
         state.community[itemDb] = res;
-        
         // emitter.emit("pushState", `browse/${itemDb}`)
         emitter.emit(state.events.RENDER)
       });
