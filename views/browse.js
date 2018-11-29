@@ -52,6 +52,13 @@ function SidebarEdit(id, state, emit){
         return "nothing selected yet"
       }
     }
+
+    function addToLibrary(e){
+      let selected = state.community.selected;
+      console.log("add to Library", selected);
+      // TODO: trigger workflow to add resource to your library
+      // emit("browse:addToLibrary", selected)
+    }
     
     return html`
     <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between mh-440px">
@@ -87,11 +94,13 @@ function SidebarEdit(id, state, emit){
               <button class="w-100 ba b--purple b--black bg-washed-green pa2">🌈 This is Awesome ❤️</button>
             </fieldset>
         </div>
-        <button onclick=${()=>{console.log("clicked!")}} class="pa2 ba f6 bw2 b--near-black white bg-near-black hover-washed-blue">COPY TO YOUR LIBRARY</button>
+        <button onclick=${addToLibrary} class="pa2 ba f6 bw2 b--near-black white bg-near-black hover-washed-blue">COPY TO YOUR LIBRARY</button>
     </section>
     `
 
 }
+
+
 
 function SidebarNav(id, state, emit){
   return html`
