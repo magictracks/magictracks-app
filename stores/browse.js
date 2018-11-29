@@ -12,6 +12,7 @@ function store (state, emitter) {
     playlists:[],
     sections:[],
     resources:[],
+    users:[],
     selected:{}
   }
 
@@ -41,10 +42,14 @@ function store (state, emitter) {
   }).then(res => {
     console.log("3")
     state.community.resources = res;
+    return feathersClient.service("users").find({})
+  }).then(res => {
+    console.log("4")
+    state.community.users = res;
     emitter.emit(state.events.RENDER);
   }).catch(err => {
     return err;
-  })
+  });
 
   
 

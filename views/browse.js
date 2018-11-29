@@ -226,6 +226,21 @@ function MainContent(id, state, emit){
         </section>
         `
       } 
+      else if ( state.params.db == "users"){
+        return html`
+        <section class="w-100 flex flex-row flex-wrap mt4">
+        ${state.community.users.map( user => {
+             return html`
+             <div class="pa4 tc">
+                <img src="http://tachyons.io/img/logo.jpg" class="br4 h3 w3 dib" alt="avatar">
+                <p class="ma0 f4 b">${user.username || "no name"}</p>
+              </div>
+                
+             `
+        })}
+        </section>
+        `
+      } 
       
     } else {
       return html`
