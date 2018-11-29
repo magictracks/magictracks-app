@@ -26,14 +26,6 @@ function MainNav(id, state, emit){
           <li>new resource</li>
         </ul>
       </li>
-      <li onclick=${test} class="mainNavTab h-100 ${checkRoute("export")} pr2 pl2">
-          <span onclick=${test}> <a class="link ${checkRoute("export")}" href="/export">Export</a></span> <span onclick=${test}>▾</span>
-        <ul class="dn ba bw1 pa2 bg-pink list black">
-          <li>as HTML</li>
-          <li>as Markdown</li>
-          <li>as PDF</li>
-        </ul>
-      </li>
       <li class="mainNavTab h-100 ${checkRoute("browse")} pr2 pl2"><span onclick=${test}> <a class="link ${checkRoute("browse")}" href="/browse">Browse</a> </span></li>
       <li class="mainNavTab h-100 bg-near-black near-white pr2 pl2"><span onclick=${test}><input class="bn" type="text" placeholder="🔎 search"></span></li>
     </ul>
@@ -41,3 +33,14 @@ function MainNav(id, state, emit){
   `
 }
 module.exports = MainNav
+
+/** 
+ <li onclick=${test} class="mainNavTab h-100 ${checkRoute("export")} pr2 pl2">
+          <span onclick=${test}> <a class="link ${checkRoute("export")}" href="/export">Export</a></span> <span onclick=${test}>▾</span>
+        <ul class="dn ba bw1 pa2 bg-pink list black">
+          <li>as HTML</li>
+          <li>as Markdown</li>
+          <li>as PDF</li>
+        </ul>
+      </li>
+*/
