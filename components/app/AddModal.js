@@ -1,5 +1,6 @@
 var Component = require('choo/component')
 var html = require('choo/html')
+const css = require('sheetify');
 
 class AddModal extends Component {
   constructor(id, state, emit) {
@@ -236,8 +237,13 @@ class AddModal extends Component {
   // TODO: get playlists from db
   organize() {
     console.log("organize")
+    css`
+      .mh-500px{
+        max-height:500px;
+      }
+    `
     return html `
-    <section class="flex flex-column flex-1 w-100 pa4">
+    <section class="flex flex-column flex-1 w-100 pa4 overflow-auto  mh-500px">
     <!-- FORM Editing: Step 3 
         Add it to any of the playlists or sections of interest
         -->

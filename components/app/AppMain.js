@@ -89,7 +89,7 @@ function editView(state, emit) {
     <section class="w-100 h-auto flex flex-column pa2">
       
     <!-- HEADER AREA -->  
-      <div data-id=${state.user.playlists.selected._id} 
+      <div class="dim" data-id=${state.user.playlists.selected._id} 
       data-db="${state.user.playlists.selected.featureType}" 
       onclick=${setSelected }>
       <div>
@@ -154,7 +154,7 @@ function makeSections(state, emit) {
           return html`
             <section class="w-100 ba bw1 mt2" data-id=${section._id} data-db="sections">
               <!-- SECTION HEADER -->
-              <section class="w-100 pa2 bg-near-black white flex flex-column" 
+              <section class="w-100 pa2 bg-near-black white flex flex-column dim" 
               data-id=${section._id} data-db="sections" 
               onclick=${setSelected}>
                 <h4 class="f4 mt0 mb2">${section.title}</h4>
@@ -215,7 +215,7 @@ function makeResources(section, state, emit) {
             <tbody class="lh-copy">
               ${section.resources.map( (resource, resourceIndex) => {
                 return html`
-                <tr class="stripe-dark" 
+                <tr class="stripe-dark dim" 
                 data-id=${resource._id} 
                 data-db="resources" 
                 onclick=${ (e) => { if(!e.target.classList.contains("dropdown")) setSelected(e) }}>

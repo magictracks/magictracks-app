@@ -53,7 +53,7 @@ function store (state, emitter) {
           state.user.username = authResponse.username;
           state.user.id = authResponse._id;
           state.user.authenticated = true;
-          emitter.emit("pushState", "app")
+          emitter.emit("pushState", "edit")
         }).catch(err => {
           console.log("not auth'd friend!")
           state.user.authenticated = false;

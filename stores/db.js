@@ -38,7 +38,7 @@ function store(state, emitter, app) {
       let query = { query: { "submittedBy": state.user.id }}
       return feathersClient.service("playlists").find(query)
     }).then(selectedPlaylists => {
-      state.user.playlists.all = selectedPlaylists;
+      state.user.playlists.all = selectedPlaylists.data;
 
       // set the selected playlist
       if(isEmpty(state.user.playlists.selected) === true){
@@ -165,7 +165,7 @@ function store(state, emitter, app) {
     emitter.on("user:playlists:refresh", function(){
       let query = { query: { "submittedBy": state.user.id }}
       feathersClient.service("playlists").find(query).then( selectedPlaylists => {
-        state.user.playlists.all = selectedPlaylists;
+        state.user.playlists.all = selectedPlaylists.data;
         // set the selected playlist
         if(isEmpty(state.user.playlists.selected) === true){
           state.user.playlists.selected =  state.user.playlists.all[ state.user.playlists.all.length - 1];
