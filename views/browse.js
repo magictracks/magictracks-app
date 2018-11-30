@@ -14,11 +14,14 @@ function view(state, emit) {
   return html `
     <body class="w-100 h-100 code lh-copy bg-washed-blue ma0 flex flex-column items-center">
       <section class="mw8 w-100 h-100 pa2 flex flex-row">
+        
         <!-- SIDEBAR -->
+
         ${Sidebar("Sidebar", state, emit)}
 
         <!-- BROWSE AREA -->
         ${BrowseMain("BrowseMain", state, emit)}
+
       </section>
     </body>
     `
@@ -138,10 +141,11 @@ function test(e) {
 function BrowseMain(id, state, emit) {
   return html `
     <section class="main w-100 flex flex-column ml2-ns">
-      <!-- PRIMARY AREA -->
       <section class="w-100 flex-1 ba b--black bw2 bg-near-white h-100 overflow-auto">
+        <!-- MAIN NAV -->
         ${MainNav("MainNav", state, emit)}
-        <!-- main -->
+
+        <!-- MAIN -->
         ${MainContent("MainContent", state, emit)}
       </section>
     </section>
