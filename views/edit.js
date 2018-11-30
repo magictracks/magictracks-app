@@ -96,10 +96,10 @@ function MainContent(id, state, emit) {
   }
 
   function RenderItems() {
-    function goBack(e) {
-      let db = e.currentTarget.dataset.db;
-      emit("pushState", `/edit/${db}`);
-    }
+    // function goBack(e) {
+    //   let db = e.currentTarget.dataset.db;
+    //   emit("pushState", `/edit/${db}`);
+    // }
 
     function addPlaylist(e){
       e.preventDefault();
@@ -126,9 +126,6 @@ function MainContent(id, state, emit) {
         console.log("yes params")
         return html `
           <section class="w-100 flex flex-column mt4">
-            <div class="w-100 mb4 pl2" onclick=${goBack} data-db="${state.edit.selected.featureType}">
-              <p class="ma0 underline pointer">Go Back ↩ </p>
-            </div>
             ${RenderSelectedItem(state.edit.selected)}
           </section>
           `

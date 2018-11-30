@@ -27,10 +27,15 @@ function MainNav(id, state, emit){
 
   function navBack(e){
     console.log("navBack")
+    // console.log(state.route);
+    window.history.back();
+    emit(state.events.RENDER)
   }
 
   function navForward(e){
     console.log("navForward")
+    window.history.forward();
+    emit(state.events.RENDER)
   }
 
   return html`

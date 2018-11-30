@@ -46,7 +46,7 @@ function Sidebar(id, state, emit) {
 function SidebarEdit(id, state, emit) {
 
   function getSelectedTitle() {
-    let selected = state.community.selected;
+    let selected = state.browse.selected;
 
     if (Object.keys(selected).length > 0) {
       return selected.title;
@@ -56,7 +56,7 @@ function SidebarEdit(id, state, emit) {
   }
 
   function addToLibrary(e) {
-    let selected = state.community.selected;
+    let selected = state.browse.selected;
     console.log("add to Library", selected);
     // TODO: trigger workflow to add resource to your library
     // emit("browse:addToLibrary", selected)
@@ -190,10 +190,10 @@ function MainContent(id, state, emit) {
   }
 
   function RenderItems() {
-    function goBack(e) {
-      let db = e.currentTarget.dataset.db;
-      emit("pushState", `/browse/${db}`);
-    }
+    // function goBack(e) {
+    //   let db = e.currentTarget.dataset.db;
+    //   emit("pushState", `/browse/${db}`);
+    // }
 
     if (state.params && Object.keys(state.params).length > 0) {
 
@@ -201,16 +201,13 @@ function MainContent(id, state, emit) {
         console.log("yes params")
         return html `
           <section class="w-100 flex flex-column mt4">
-            <div class="w-100 mb4 pl2" onclick=${goBack} data-db="${state.community.selected.featureType}">
-              <p class="ma0 underline pointer">Go Back ↩ </p>
-            </div>
-            ${RenderSelectedItem(state.community.selected)}
+            ${RenderSelectedItem(state.browse.selected)}
           </section>
           `
       } else if (state.params.db == "playlists") {
         return html `
           <section class="w-100 flex flex-row flex-wrap mt4">
-            ${state.community.playlists.map( playlist => {
+            ${state.browse.playlists.map( playlist => {
             return BrowseItem(playlist)
             })}
           </section>
@@ -218,7 +215,7 @@ function MainContent(id, state, emit) {
       } else if (state.params.db == "sections") {
         return html `
         <section class="w-100 flex flex-row flex-wrap mt4">
-          ${state.community.sections.map( section => {
+          ${state.browse.sections.map( section => {
           return BrowseItem(section)
           })}
         </section>
@@ -226,7 +223,7 @@ function MainContent(id, state, emit) {
       } else if (state.params.db == "resources") {
         return html `
           <section class="w-100 flex flex-row flex-wrap mt4">
-            ${state.community.resources.map( resource => {
+            ${state.browse.resources.map( resource => {
             return BrowseItem(resource)
             })}
           </section>
@@ -234,7 +231,7 @@ function MainContent(id, state, emit) {
       } else if (state.params.db == "users") {
         return html `
           <section class="w-100 flex flex-row flex-wrap mt4">
-            ${state.community.users.map( user => {
+            ${state.browse.users.map( user => {
             return html`
             <div class="pa4 tc">
               <img src="http://tachyons.io/img/logo.jpg" class="br4 h3 w3 dib" alt="avatar">
@@ -250,7 +247,7 @@ function MainContent(id, state, emit) {
     } else {
       return html `
       <section class="w-100 flex flex-row flex-wrap mt4">
-        ${state.community.playlists.map( playlist => {
+        ${state.browse.playlists.map( playlist => {
         return BrowseItem(playlist)
         })}
       </section>
