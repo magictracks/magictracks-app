@@ -42,6 +42,15 @@ app.route('/*', require('./views/404'))
 app.use((state, emitter) => {                  // 1.
   emitter.on('navigate', () => {               // 2.
     console.log(`Navigated to ${state.route}`) // 3.
+
+    // TEMP: route the edit to default on playlists
+    if(state.route == "edit"){
+      emitter.emit("replaceState", "/edit/playlists")
+    }
+    // TEMP: route the browse to default on playlists
+    if(state.route == "browse"){
+      emitter.emit("replaceState", "/browse/playlists")
+    }
   })
 })
 

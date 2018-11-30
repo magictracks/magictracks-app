@@ -23,7 +23,6 @@ function view(state, emit) {
   <header class="flex h-60px flex-column justify-center pa2">
     <nav class="w-100 h-100 ma0 flex flex-row justify-between">
       <ul class="flex flex-row list pl0 justify-start h-100 ma0 items-center">
-        <li><img id="logo" class="pr2" src="../assets/magic-tracks-logo-nobg.png" alt="magic tracks logo"></li>
         <li> ✨ Magic Tracks ✨</li>
 
       </ul>

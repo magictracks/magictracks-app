@@ -38,10 +38,12 @@ function Sidebar(id, state, emit) {
       ${SidebarEdit("SidebarEdit", state, emit)}
 
       <!-- USER NAV -->
-      ${SidebarNav("SidebarNav", state, emit)}
+      
     </section>
     `
 }
+
+//${SidebarNav("SidebarNav", state, emit)}
 
 function SidebarEdit(id, state, emit) {
 
@@ -63,7 +65,7 @@ function SidebarEdit(id, state, emit) {
   }
 
   return html `
-    <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between mh-440px">
+    <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between">
       <!-- SIDEBAR EDIT AREA -->
       <div class="tc w-100 tc f7 mt2">Selected: <span class="f7">${getSelectedTitle()}</span></div>
       <!-- MAIN AREA -->
@@ -176,7 +178,7 @@ function MainContent(id, state, emit) {
       <menu class="w-100 pa0 ma0">
         <fieldset>
           <legend class="f7">Browse by </legend>
-          <ul class="w-100 flex flex-row-ns flex-column list pl0 f6 justify-between">
+          <ul class="w-100 flex flex-row-ns flex-column list pl0 f6 justify-start">
             <li class="mr2 pointer pa2 ${highlightSelected('playlists')}" onclick=${changeFilter} data-db="playlists">Playlists</li>
             <li class="mr2 pointer pa2 ${highlightSelected('sections')}" onclick=${changeFilter} data-db="sections">Sections</li>
             <li class="mr2 pointer pa2 ${highlightSelected('resources')}" onclick=${changeFilter} data-db="resources">Resources</li>

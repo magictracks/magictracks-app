@@ -10,7 +10,7 @@ module.exports = function(id, state, emit){
   <section class="flex flex-column ba bw2 w5-ns w-100 items-center justify-center pa2 h4">
   <div class="ma0">
     <a class="link" href="/">
-    <img class="mw4" src="assets/magic-tracks-logo.png" />
+    <img class="mw4" src="/assets/magic-tracks-logo.png" />
     </a>
   </div>
   <div>
