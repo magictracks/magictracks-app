@@ -88,6 +88,7 @@ function store (state, emitter) {
     // LOGOUT
     this.logout = function(){
       feathersClient.logout();
+      // TODO: clear the state of data, etc
       emitter.emit('pushState',  "/");
     };
 
