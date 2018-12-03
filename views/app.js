@@ -55,7 +55,7 @@ function MainView(id, state, emit){
     <section class="w-100 flex-1 ba b--black bw2 bg-near-white h-100 overflow-auto">    
       ${MainNav("MainNav", state, emit)}
       <!-- main -->
-      howdy!
+      
     </section>
   </section>
   `

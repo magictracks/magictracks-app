@@ -8,12 +8,13 @@ module.exports = function(section, sectionIndex, state, emit){
         let id = e.currentTarget.dataset.id;
         let db = e.currentTarget.dataset.db;
         // emit("db:getSelectedFeature", id, db);
+        emit("edit:selectAndEdit", id, db)
       }
 
     return html`
-        <section class="w-100 ba bw1 mt2" data-id=${section._id} data-db="sections">
+        <section class="w-100 ba bw1 b--near-black mt2" data-id=${section._id} data-db="sections">
             <!-- SECTION HEADER -->
-            <section class="w-100 pa2 bg-near-black white flex flex-column" 
+            <section class="w-100 pa2 bg-near-black white flex flex-column bg-animate hover-bg-washed-green hover-near-black" 
             data-id=${section._id} data-db="sections" 
             onclick=${setSelected}>
             <h4 class="f4 mt0 mb2">${section.title}</h4>

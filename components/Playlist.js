@@ -1,12 +1,20 @@
 const html = require("choo/html");
 const Sections = require("./Sections");
+const css = require('sheetify');
 
 module.exports = function(playlist, state, emit){
 
+    function editSelected(e){
+      
+      let id = e.currentTarget.dataset.id;
+      let db = e.currentTarget.dataset.db;
+      emit("edit:selectAndEdit", id, db)
+    }
+
     return html`
-    <section>
+    <section class="shadow-1">
       <!-- HEADER AREA -->
-      <div>
+      <div class="pa3 bg-animate hover-bg-washed-green" data-id="${playlist._id}" data-db="${playlist.featureType}" onclick=${editSelected}>
         <div>
           <h3 class="f3 mt0 mb2">${playlist.title}</h3>
         </div>
@@ -23,7 +31,9 @@ module.exports = function(playlist, state, emit){
         </div>
       </div>
       <!-- SECTIONS & RESOURCES -->
+        <section class="pa2">
         ${Sections(playlist.sections, state, emit)}
+        </section>
       </section>
     `
 }

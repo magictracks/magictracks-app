@@ -104,7 +104,7 @@ function MainContent(id, state, emit) {
     function addPlaylist(e){
       e.preventDefault();
       console.log("addPlaylist");
-      emit("user:playlists:addJSON");
+      emit("edit:addPlaylist");
     }
 
     function addSection(e){
@@ -123,7 +123,6 @@ function MainContent(id, state, emit) {
     if (state.params && Object.keys(state.params).length > 0) {
 
       if (state.params.hasOwnProperty('id')) {
-        console.log("yes params")
         return html `
           <section class="w-100 flex flex-column mt4">
             ${RenderSelectedItem(state.edit.selected)}
@@ -287,7 +286,7 @@ function Sidebar(id, state, emit){
 
 function SidebarEdit(id, state, emit){
     
-    let selected = state.selected.data;
+    let selected = state.edit.selected;
 
     function submitInputEditor(e){
       e.preventDefault();
@@ -311,7 +310,6 @@ function SidebarEdit(id, state, emit){
       var newUl = document.createElement("ol"); 
       // and give it some content 
       // var newContent = document.createTextNode("Hi there and greetings!"); 
-      console.log(selected);
       if(selected.sections){
         selected.sections.forEach( section => {
           let newLi = document.createElement("li");
