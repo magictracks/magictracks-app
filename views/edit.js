@@ -1,6 +1,10 @@
 const html = require('choo/html');
 const css = require('sheetify');
 const Sortable = require('sortablejs');
+const Choices = require('choices.js');
+
+css('./../node_modules/choices.js/public/assets/styles/choices.min.css');
+
 
 // Components
 const SidebarHeader = require('../components/SidebarHeader');
@@ -336,6 +340,7 @@ function SidebarEdit(id, state, emit){
         return sortable.el;
       } else if (selected.resources){
         selected.resources.forEach( resource => {
+
           let newLi = document.createElement("li");
           newLi.className += " pointer ";
           let newContent = document.createTextNode(resource.title)
@@ -382,6 +387,34 @@ function SidebarEdit(id, state, emit){
     }
   }
 
+  function makeTagsChoices(state, emit){
+    let p = document.createElement("div");
+    let newInput = document.createElement("INPUT"); 
+    p.appendChild(newInput);
+    console.log("----------", newInput);
+    newInput.setAttribute("type", "text");
+    newInput.id = "test"
+
+    // let tags = state.edit.tags.map( (tag) => {return {"value":tag._id,"label":tag.tag,"id":tag._id} }) 
+    let tags = [{value:"hello", label:"hello", id:1, selected:true},{value:"world", label:"world",id:2}];
+
+    // let tags = ["Hello", "World"];
+    let textRemove = new Choices(newInput, {
+      delimiter: ',',
+      editItems: true,
+      searchEnabled: true,
+      choices:tags,
+      addItems:true,
+      removeItemButton: true
+    });
+
+    return p;
+    
+    //<input class="form-control" id="choices-text-remove-button" type="text" value="preset-1,preset-2" placeholder="Enter something">
+  }
+
+
+
     return html`
     <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between">
       <div>
@@ -391,6 +424,9 @@ function SidebarEdit(id, state, emit){
           <label class="">Title</label> <input type="text" name="title" value=${selected.title || "title"}/>
           <label class="">Description</label> <textarea form="inputEditor" name="description" class="h4">${ selected.description ||"description"}</textarea>
           <label class="">Tags</label> <input type="text" name="tags" value=${"tags"}/>
+          <label class="">Tags Choices</label> 
+          ${makeTagsChoices(state, emit)}
+          
           <label class="">Collaborators</label><input type="text" name="collaborators" value=${"collaborators"}/>
           <label class="">URL</label> <input type="text" name="url" value=${selected.url || "url"}/>
         </form>

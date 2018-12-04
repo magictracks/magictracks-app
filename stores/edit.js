@@ -13,6 +13,7 @@ function store(state, emitter) {
     playlists: [],
     sections: [],
     resources: [],
+    tags:[],
     selected: {},
 
   }
@@ -69,6 +70,9 @@ function store(state, emitter) {
   }).then(res => {
     console.log("3")
     state.edit.resources = res.data;
+    return feathersClient.service("tags").find({})
+  }).then(res =>{
+    state.edit.tags = res.data;
     emitter.emit(state.events.RENDER);
   }).catch(err => {
     return err;
