@@ -384,6 +384,7 @@ function SidebarEdit(id, state, emit){
 
     return html`
     <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between">
+      <div>
       <div class="w-100 tc"><small class="f7">Edit Selected | <span class="pointer hover-bg-purple" onclick=${deleteSelected}>🗑 delete </delete> </small></div>
       <div class="w-100 pa2 overflow-y-scroll mb2">
         <form id="inputEditor" name="inputEditor" class="w-100 flex flex-column f7">
@@ -397,6 +398,7 @@ function SidebarEdit(id, state, emit){
         ${makeSortableList(selected, state, emit)}
         </label>
         ${showAddOptions(selected, state, emit)}
+      </div>
       </div>
       <button onclick=${submitInputEditor} class="pa2 ba bw2 b--near-black white bg-near-black hover-washed-blue">SAVE</button>
     </section>
