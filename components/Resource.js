@@ -14,15 +14,20 @@ module.exports = function(resource, resourceIndex, state, emit){
     }
 
     function editSelected(e){
-      
-        let id = e.currentTarget.dataset.id;
-        let db = e.currentTarget.dataset.db;
-        emit("edit:selectAndEdit", id, db)
+        console.log(emit);
+        if(!e.target.classList.contains("dropdown")){
+            let id = e.currentTarget.dataset.id;
+            let db = e.currentTarget.dataset.db;
+
+            console.log(id, db);
+
+            emit("edit:selectAndEdit", id, db)
+        } 
+        
       }
 
     return html`
-        <tr class="bg-animate hover-bg-washed-green" data-id=${resource._id} data-db="resources" onclick=${ (e)=> {
-            if(!e.target.classList.contains("dropdown")) editSelected(e) }}>
+        <tr class="bg-animate hover-bg-washed-green" data-id=${resource._id} data-db="resources" onclick=${ editSelected }>
             <td class="pa3">${resourceIndex}</td>
             <td class="pa3">☑️</td>
             <td class="pa3"><a class="link black hover-bg-purple hover-white" href="${resource.url}" target="_blank">${resource.title}</a></td>

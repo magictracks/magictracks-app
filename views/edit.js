@@ -192,7 +192,7 @@ function MainContent(id, state, emit) {
     if (item.featureType == "playlists") {
       return Playlist(item, state, emit)
     } else if (item.featureType == "sections") {
-      return Section(item, state, emit)
+      return Section(item, 0, state, emit)
     } else if (item.featureType == "resources") {
       return html `
       <div class="flex flex-column w-100 pa2 ba bw2 b--pink">
@@ -302,9 +302,11 @@ function SidebarEdit(id, state, emit){
     }
   
     function deleteSelected(e){
-      let id = state.selected.data._id;
-      let db = state.selected.data.featureType;
-      emit("db:deleteSelectedFeature", id, db);
+      let id = state.edit.selected._id;
+      let db = state.edit.selected.featureType;
+      
+
+      emit("edit:deleteSelectedFeature", id, db);
       
     }
 
@@ -421,7 +423,7 @@ function SidebarNav(id, state, emit){
   function addPlaylist(e){
     e.preventDefault();
     console.log("addPlaylist");
-    emit("user:playlists:addJSON");
+    emit("edit:addPlaylist");
   }
 
   return html`

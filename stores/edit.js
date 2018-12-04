@@ -108,13 +108,58 @@ function store(state, emitter) {
     emitter.on("edit:selectAndEdit", function(_id, _db){
       console.log("SELECT AND EDIT", _id, _db);
       feathersClient.service(_db).get(_id).then(res => {
-
         state.edit.selected = res;
         emitter.emit(state.events.RENDER);
       })
       
-      
     })
+
+
+    // REFRESH ALL THE DATA
+    emitter.on("edit:refresh", function(){
+      let query = {
+        query: {
+          "submittedBy": state.user.id
+        }
+      }
+
+      feathersClient.service("playlists").find(query).then(res=>{
+        console.log(state.edit.playlists.length)
+        console.log(res.data.length)
+        console.log(1)
+        state.edit.playlists = res.data;
+        return feathersClient.service("sections").find(query);
+      }).then(res =>{
+        console.log(2)
+        state.edit.sections = res.data;
+        return feathersClient.service("resources").find(query);
+      }).then(res =>{
+        console.log(3)
+        state.edit.resources = res.data;
+        
+        if (Object.keys(state.params).length > 0) {
+          let itemId = state.params.id;
+          let itemDb = state.params.db;
+    
+          if (itemId && itemDb) {
+            return feathersClient.service(itemDb).get(itemId)
+          } else if (itemDb) {
+            return state.edit[itemDb][0]
+          }
+        } else {
+          return state.edit[itemDb][0];
+        }
+      }).then(res =>{
+        console.log(res);
+        state.edit.selected = res;
+        emitter.emit(state.events.RENDER);
+      })
+      .catch(err =>{
+        return err;
+      })
+
+    })
+
 
     // ADD PLAYLIST TO USER 
     emitter.on("edit:addPlaylist", function () {
@@ -139,7 +184,8 @@ function store(state, emitter) {
           .then(function (_newData) {
             state.edit.selected = _newData.data;
 
-            emitter.emit(state.events.RENDER); // NEED TO UPDATE ALL THE PLAYLISTS, SECTIONS, & RESOURCES
+            emitter.emit("edit:refresh");
+            // emitter.emit(state.events.RENDER); // NEED TO UPDATE ALL THE PLAYLISTS, SECTIONS, & RESOURCES
           })
           .catch(function (error) {
             console.log(error);
@@ -155,20 +201,23 @@ function store(state, emitter) {
     /**
      * DELETE
      */
-    emitter.on("db:deleteSelectedFeature", function(_id, _db){
-      feathersClient.service(_db).remove(_id).then( deleteResponse => {
-        console.log(deleteResponse)
-        state.selected.id = "";
-        state.selected.db = "";
-        state.selected.data = {};
-        if(_db == "playlists"){
-          state.user.playlists.selected = {};
+    // DELETE SELECTED
+    // TODO: if higher level is deleted, jump back to root 
+    emitter.on("edit:deleteSelectedFeature", function(_id, _db){
+      console.log("~~~~~~~~", state.params)
+        if(state.params.db == _db){   
+          console.log("IS THIS FIRING???")  
+          emitter.emit("pushState", `/edit/${_db}`)
         }
-        emitter.emit("user:playlists:refresh");
+
+      feathersClient.service(_db).remove(_id).then( deleteResponse => {
+        state.edit.selected = {};
+
+        emitter.emit("edit:refresh");
       }).catch(err => {
         return err;
       })
-    })
+  })
 
 
   });
