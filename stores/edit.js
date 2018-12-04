@@ -144,10 +144,10 @@ function store(state, emitter) {
           if (itemId && itemDb) {
             return feathersClient.service(itemDb).get(itemId)
           } else if (itemDb) {
-            return state.edit[itemDb][0]
+            return state.edit[itemDb][state.edit[itemDb].length - 1 ]
           }
         } else {
-          return state.edit[itemDb][0];
+          return state.edit[itemDb][state.edit[itemDb].length - 1];
         }
       }).then(res =>{
         console.log(res);
