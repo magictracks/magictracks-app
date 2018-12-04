@@ -13,7 +13,8 @@ function store(state, emitter) {
     playlists: [],
     sections: [],
     resources: [],
-    selected: {}
+    selected: {},
+
   }
 
   // Set Initial State
@@ -106,8 +107,13 @@ function store(state, emitter) {
     // SELECT AND EDIT THIS FEATURE USING QUERY PARAMS
     emitter.on("edit:selectAndEdit", function(_id, _db){
       console.log("SELECT AND EDIT", _id, _db);
-      // state.edit.selected 
-      emitter.emit(state.events.RENDER);
+      feathersClient.service(_db).get(_id).then(res => {
+
+        state.edit.selected = res;
+        emitter.emit(state.events.RENDER);
+      })
+      
+      
     })
 
     // ADD PLAYLIST TO USER 

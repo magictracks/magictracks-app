@@ -123,9 +123,12 @@ function MainContent(id, state, emit) {
     if (state.params && Object.keys(state.params).length > 0) {
 
       if (state.params.hasOwnProperty('id')) {
+        let id = state.params.id;
+        let db = state.params.db;
+        let selectedFeature = state.edit[db].filter(item => item._id == id)[0];
         return html `
           <section class="w-100 flex flex-column mt4">
-            ${RenderSelectedItem(state.edit.selected)}
+            ${RenderSelectedItem(selectedFeature)}
           </section>
           `
       } else if (state.params.db == "playlists") {
