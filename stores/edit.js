@@ -124,8 +124,6 @@ function store(state, emitter) {
       }
 
       feathersClient.service("playlists").find(query).then(res => {
-          console.log(state.edit.playlists.length)
-          console.log(res.data.length)
           console.log(1)
           state.edit.playlists = res.data;
           return feathersClient.service("sections").find(query);
@@ -150,8 +148,10 @@ function store(state, emitter) {
             return state.edit[itemDb][state.edit[itemDb].length - 1];
           }
         }).then(res => {
-          console.log(res);
-          state.edit.selected = res;
+          if(isEmpty(state.edit.selected) ){
+            state.edit.selected = res;
+          }
+          
           emitter.emit(state.events.RENDER);
         })
         .catch(err => {
