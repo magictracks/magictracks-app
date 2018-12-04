@@ -296,18 +296,15 @@ function SidebarEdit(id, state, emit){
       e.preventDefault();
       let form = document.querySelector("#inputEditor");
       let formData = new FormData(form);
-      let id = state.selected.data._id;
-      let db = state.selected.data.featureType;
-      emit("db:updateSelectedFeature", id, db, formData);
+      let id = state.edit.selected._id;
+      let db = state.edit.selected.featureType;
+      emit("edit:updateSelectedFeature", id, db, formData);
     }
   
     function deleteSelected(e){
       let id = state.edit.selected._id;
       let db = state.edit.selected.featureType;
-      
-
       emit("edit:deleteSelectedFeature", id, db);
-      
     }
 
     // TODO: add in toggle visibility - need to add into DB prop for show or hide 
@@ -332,7 +329,7 @@ function SidebarEdit(id, state, emit){
               onEnd: function(evt){
                 console.log("sortable", evt.newIndex);
                 // console.log("🌮🌮🌮",evt);
-                emit("db:selectedFeature:reorder", evt.clone.dataset.parentid, evt.clone.dataset.parentdb,  evt.clone.dataset.featureid, evt.newIndex)
+                emit("edit:selectedFeature:reorder", evt.clone.dataset.parentid, evt.clone.dataset.parentdb,  evt.clone.dataset.featureid, evt.newIndex)
               }
             });
 
@@ -352,7 +349,7 @@ function SidebarEdit(id, state, emit){
               onEnd: function(evt){
                 console.log(evt.newIndex);
                 console.log("🌮🌮🌮",evt);
-                emit("db:selectedFeature:reorder", evt.clone.dataset.parentid, evt.clone.dataset.parentdb,  evt.clone.dataset.featureid, evt.newIndex)
+                emit("edit:selectedFeature:reorder", evt.clone.dataset.parentid, evt.clone.dataset.parentdb,  evt.clone.dataset.featureid, evt.newIndex)
               }
             });
 
@@ -364,10 +361,10 @@ function SidebarEdit(id, state, emit){
 
   function showAddOptions(selected, state, emit){
     function addResourceToSection(e){
-      emit("user:sections:addResource", selected._id, selected.featureType)
+      emit("edit:sections:addResource", selected._id, selected.featureType)
     }
     function addSectionToPlaylist(e){
-      emit("user:playlists:addSection", selected._id, selected.featureType)
+      emit("edit:playlists:addSection", selected._id, selected.featureType)
     }
 
     if(selected.featureType == "playlists"){
