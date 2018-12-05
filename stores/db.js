@@ -107,20 +107,20 @@ function store(state, emitter, app) {
 
 
 
-    // emitter.on("db:deleteSelectedFeature", function(_id, _db){
-    //   feathersClient.service(_db).remove(_id).then( deleteResponse => {
-    //     console.log(deleteResponse)
-    //     state.selected.id = "";
-    //     state.selected.db = "";
-    //     state.selected.data = {};
-    //     if(_db == "playlists"){
-    //       state.user.playlists.selected = {};
-    //     }
-    //     emitter.emit("user:playlists:refresh");
-    //   }).catch(err => {
-    //     return err;
-    //   })
-    // })
+    emitter.on("db:deleteSelectedFeature", function(_id, _db){
+      feathersClient.service(_db).remove(_id).then( deleteResponse => {
+        console.log(deleteResponse)
+        state.selected.id = "";
+        state.selected.db = "";
+        state.selected.data = {};
+        if(_db == "playlists"){
+          state.user.playlists.selected = {};
+        }
+        emitter.emit("user:playlists:refresh");
+      }).catch(err => {
+        return err;
+      })
+    })
 
 
     

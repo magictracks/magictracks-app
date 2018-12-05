@@ -387,26 +387,89 @@ function SidebarEdit(id, state, emit){
     }
   }
 
-  function makeTagsChoices(state, emit){
+  function makeTagsChoices(tags, state, emit){
     let p = document.createElement("div");
     let newInput = document.createElement("INPUT"); 
     p.appendChild(newInput);
     console.log("----------", newInput);
     newInput.setAttribute("type", "text");
-    newInput.id = "test"
-
+    // newInput.setAttribute("value", "hello,world");
+    
+    newInput.id = "tagsSelector"
+    console.log(tags)
+    tags = tags.map( (tag) => {return {"value":tag._id,"label":tag.tag,"id":tag._id} }) 
     // let tags = state.edit.tags.map( (tag) => {return {"value":tag._id,"label":tag.tag,"id":tag._id} }) 
-    let tags = [{value:"hello", label:"hello", id:1, selected:true},{value:"world", label:"world",id:2}];
-
-    // let tags = ["Hello", "World"];
+    // let tags = [{value:"hello", label:"hello", id:1, selected:true},{value:"world", label:"world",id:2, selected: true}, {value:"rock", label:"rock",id:3,selected: false}];
     let textRemove = new Choices(newInput, {
       delimiter: ',',
       editItems: true,
       searchEnabled: true,
-      choices:tags,
+      items:tags,
       addItems:true,
       removeItemButton: true
     });
+
+    // newInput.parentNode.parentNode.classList.add("h3");
+    newInput.parentNode.classList.add("h3", "overflow-y-scroll");
+    newInput.parentNode.style = "max-height:60px;"
+
+    newInput.addEventListener('addItem', function(event) {
+      // do something creative here...
+      console.log("adding tag")
+      console.log(event.detail);
+      console.log(newInput.value);
+    }, false);
+
+    newInput.addEventListener('removeItem', function(event) {
+      // do something creative here...
+      console.log("removing tag")
+      console.log(event.detail);
+      console.log(newInput.value);
+    }, false);
+
+    return p;
+    
+    //<input class="form-control" id="choices-text-remove-button" type="text" value="preset-1,preset-2" placeholder="Enter something">
+  }
+
+  function makeCollaboratorChoices(collaborators, state, emit){
+    let p = document.createElement("div");
+    let newInput = document.createElement("INPUT"); 
+    p.appendChild(newInput);
+    console.log("----------", newInput);
+    newInput.setAttribute("type", "text");
+    // newInput.setAttribute("value", "hello,world");
+    
+    newInput.id = "collaboratorSelector"
+    collaborators = collaborators.map( (collaborator) => {return {"value":collaborator._id,"label":collaborator.username,"id":collaborator._id} }) 
+    // let tags = state.edit.tags.map( (tag) => {return {"value":tag._id,"label":tag.tag,"id":tag._id} }) 
+    // let tags = [{value:"hello", label:"hello", id:1, selected:true},{value:"world", label:"world",id:2, selected: true}, {value:"rock", label:"rock",id:3,selected: false}];
+    let textRemove = new Choices(newInput, {
+      delimiter: ',',
+      editItems: true,
+      searchEnabled: true,
+      items:collaborators,
+      addItems:true,
+      removeItemButton: true
+    });
+
+    // newInput.parentNode.parentNode.classList.add("h3");
+    newInput.parentNode.classList.add("h3", "overflow-y-scroll");
+    newInput.parentNode.style = "max-height:60px;"
+
+    newInput.addEventListener('addItem', function(event) {
+      // do something creative here...
+      console.log("adding tag")
+      console.log(event.detail);
+      console.log(newInput.value);
+    }, false);
+
+    newInput.addEventListener('removeItem', function(event) {
+      // do something creative here...
+      console.log("removing tag")
+      console.log(event.detail);
+      console.log(newInput.value);
+    }, false);
 
     return p;
     
@@ -417,24 +480,23 @@ function SidebarEdit(id, state, emit){
 
     return html`
     <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between">
-      <div>
-      <div class="w-100 tc"><small class="f7">Edit Selected | <span class="pointer hover-bg-purple" onclick=${deleteSelected}>🗑 delete </delete> </small></div>
-      <div class="w-100 pa2 overflow-y-scroll mb2">
-        <form id="inputEditor" name="inputEditor" class="w-100 flex flex-column f7">
-          <label class="">Title</label> <input type="text" name="title" value=${selected.title || "title"}/>
-          <label class="">Description</label> <textarea form="inputEditor" name="description" class="h4">${ selected.description ||"description"}</textarea>
-          <label class="">Tags</label> <input type="text" name="tags" value=${"tags"}/>
-          <label class="">Tags Choices</label> 
-          ${makeTagsChoices(state, emit)}
-          
-          <label class="">Collaborators</label><input type="text" name="collaborators" value=${"collaborators"}/>
-          <label class="">URL</label> <input type="text" name="url" value=${selected.url || "url"}/>
-        </form>
-        <label class="mt2 f7"> Drag to Reorder 
-        ${makeSortableList(selected, state, emit)}
-        </label>
-        ${showAddOptions(selected, state, emit)}
-      </div>
+      <div class="w-100 pa2 overflow-y-scroll mb2" style="max-height: 532px;">
+        <div class="w-100 tc"><small class="f7">Edit Selected | <span class="pointer hover-bg-purple" onclick=${deleteSelected}>🗑 delete </delete> </small></div>
+        <div class="">
+          <form id="inputEditor" name="inputEditor" class="w-100 flex flex-column f7">
+            <label class="">URL</label> <input type="text" name="url" value=${selected.url || "url"}/>
+            <label class="">Title</label> <input class="pa2 ba bw1" type="text" name="title" value=${selected.title || "title"}/>
+            <label class="">Description</label> <textarea form="inputEditor" name="description" class="h4 pa2 ba bw1">${ selected.description ||"description"}</textarea>
+            <label class="">Add Tags</label> 
+            ${makeTagsChoices(selected.tags, state, emit)}
+            <label class="">Add Collaborators</label>
+            ${makeCollaboratorChoices(selected.collaborators, state, emit)}
+          </form>
+          <label class="mt2 f7"> Drag to Reorder 
+          ${makeSortableList(selected, state, emit)}
+          </label>
+          ${showAddOptions(selected, state, emit)}
+        </div>
       </div>
       <button onclick=${submitInputEditor} class="pa2 ba bw2 b--near-black white bg-near-black hover-washed-blue">SAVE</button>
     </section>
@@ -445,56 +507,56 @@ function SidebarEdit(id, state, emit){
 
 //<button onclick=${()=>{console.log("clicked!")}} class="pa2 ba f6 bw2 b--near-black white bg-near-black hover-washed-blue">COPY TO YOUR LIBRARY</button>
 
-function SidebarNav(id, state, emit){
-  function switchSelected(e) {
-    e.preventDefault();
-    let id = e.currentTarget.dataset.id;
-    let db = e.currentTarget.dataset.db;
-    emit("user:playlists:select", id, db);
-  };
+// function SidebarNav(id, state, emit){
+//   function switchSelected(e) {
+//     e.preventDefault();
+//     let id = e.currentTarget.dataset.id;
+//     let db = e.currentTarget.dataset.db;
+//     emit("user:playlists:select", id, db);
+//   };
 
-  function addPlaylist(e){
-    e.preventDefault();
-    console.log("addPlaylist");
-    emit("edit:addPlaylist");
-  }
+//   function addPlaylist(e){
+//     e.preventDefault();
+//     console.log("addPlaylist");
+//     emit("edit:addPlaylist");
+//   }
 
-  return html`
-  <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto mh-400px overflow-y-scroll f7">
-    <div class="w-100 pa2">
+//   return html`
+//   <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto mh-400px overflow-y-scroll f7">
+//     <div class="w-100 pa2">
 
-      <!--
-      <p>YOUR LIBRARY</p>
-      <ul class="list pl1">
-        <li>Starred Playlists</li>
-        <li>Your Resources</li>
-      </ul>
-      -->
+//       <!--
+//       <p>YOUR LIBRARY</p>
+//       <ul class="list pl1">
+//         <li>Starred Playlists</li>
+//         <li>Your Resources</li>
+//       </ul>
+//       -->
 
-      <!--
-      <p>COLLABORATIONS</p>
-      <ul class="list pl1">
-        <li>None yet!</li>
-      </ul>
-      --> 
+//       <!--
+//       <p>COLLABORATIONS</p>
+//       <ul class="list pl1">
+//         <li>None yet!</li>
+//       </ul>
+//       --> 
 
-      <p>PLAYLISTS <span class="hover-bg-purple cursor fr" onclick=${addPlaylist}>⊕ Add</span> </p>
-      <ul class="list pl1">
-      ${
-          state.user.playlists.all.map( (playlist) => {
-          return html`
-            <li class="hover-bg-purple hover-white black" onclick=${switchSelected} data-id=${playlist._id} data-db="${playlist.featureType}">${playlist.title}</li>
-            `
-          })
-        }
-      </ul>
-    </div>
-  </section>
-  `
-}
+//       <p>PLAYLISTS <span class="hover-bg-purple cursor fr" onclick=${addPlaylist}>⊕ Add</span> </p>
+//       <ul class="list pl1">
+//       ${
+//           state.user.playlists.all.map( (playlist) => {
+//           return html`
+//             <li class="hover-bg-purple hover-white black" onclick=${switchSelected} data-id=${playlist._id} data-db="${playlist.featureType}">${playlist.title}</li>
+//             `
+//           })
+//         }
+//       </ul>
+//     </div>
+//   </section>
+//   `
+// }
 
-function test(e){
-  console.log("clicked")
-}
+// function test(e){
+//   console.log("clicked")
+// }
 
 
