@@ -48,13 +48,20 @@ function Sidebar(id, state, emit) {
 function SidebarEdit(id, state, emit) {
 
   function getSelectedTitle() {
-    let selected = state.browse.selected;
+    let selected;
+    if(state.browse.selected.hasOwnProperty("title")){
+      selected = state.browse.selected;
 
-    if (Object.keys(selected).length > 0) {
-      return selected.title;
+      if (Object.keys(selected).length > 0) {
+        return selected.title;
+      } else {
+        return "nothing selected yet"
+      }
+
     } else {
-      return "nothing selected yet"
+      return ""
     }
+    
   }
 
   function addToLibrary(e) {

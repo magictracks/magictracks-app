@@ -398,7 +398,6 @@ function SidebarEdit(id, state, emit){
     newInput.id = "tagsSelector"
     console.log(tags)
     tags = tags.map( (tag) => {return {"value":tag._id,"label":tag.tag,"id":tag._id} }) 
-    // let tags = state.edit.tags.map( (tag) => {return {"value":tag._id,"label":tag.tag,"id":tag._id} }) 
     // let tags = [{value:"hello", label:"hello", id:1, selected:true},{value:"world", label:"world",id:2, selected: true}, {value:"rock", label:"rock",id:3,selected: false}];
     let textRemove = new Choices(newInput, {
       delimiter: ',',
@@ -428,8 +427,7 @@ function SidebarEdit(id, state, emit){
     }, false);
 
     return p;
-    
-    //<input class="form-control" id="choices-text-remove-button" type="text" value="preset-1,preset-2" placeholder="Enter something">
+
   }
 
   function makeCollaboratorChoices(collaborators, state, emit){
@@ -438,12 +436,9 @@ function SidebarEdit(id, state, emit){
     p.appendChild(newInput);
     console.log("----------", newInput);
     newInput.setAttribute("type", "text");
-    // newInput.setAttribute("value", "hello,world");
     
     newInput.id = "collaboratorSelector"
     collaborators = collaborators.map( (collaborator) => {return {"value":collaborator._id,"label":collaborator.username,"id":collaborator._id} }) 
-    // let tags = state.edit.tags.map( (tag) => {return {"value":tag._id,"label":tag.tag,"id":tag._id} }) 
-    // let tags = [{value:"hello", label:"hello", id:1, selected:true},{value:"world", label:"world",id:2, selected: true}, {value:"rock", label:"rock",id:3,selected: false}];
     let textRemove = new Choices(newInput, {
       delimiter: ',',
       editItems: true,
@@ -453,7 +448,6 @@ function SidebarEdit(id, state, emit){
       removeItemButton: true
     });
 
-    // newInput.parentNode.parentNode.classList.add("h3");
     newInput.parentNode.classList.add("h3", "overflow-y-scroll");
     newInput.parentNode.style = "max-height:60px;"
 
@@ -473,7 +467,6 @@ function SidebarEdit(id, state, emit){
 
     return p;
     
-    //<input class="form-control" id="choices-text-remove-button" type="text" value="preset-1,preset-2" placeholder="Enter something">
   }
 
 
