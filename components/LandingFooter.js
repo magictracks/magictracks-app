@@ -20,7 +20,7 @@ module.exports = function(id, state, emit){
         <div>
           <ul class="list ma0 pl0">
             <li><a class="link dark-pink" href="/about">about</a></li>
-            <li>contact</li>
+            <li><a class="link dark-pink" href="mailto:joeyklee@nyu.edu">contact</a></li>
           </ul>
         </div>
         <div>

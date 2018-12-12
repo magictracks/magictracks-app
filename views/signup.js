@@ -11,6 +11,7 @@ function view (state, emit) {
       <p class="w-100">Start using Magic Tracks by creating an account with your email & password.</p>
       ${state.cache(SignupForm, "SignupForm", state, emit)}
       <p class="w-100 f6">Already have an account? <a href="/login">Log in here</a>.</p>
+      <p class="w-100 f6">Back <a href="/">Home</a>.</p>
     </section>
     </body>
   `

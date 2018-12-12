@@ -53,11 +53,11 @@ function store (state, emitter) {
           state.user.username = authResponse.username;
           state.user.id = authResponse._id;
           state.user.authenticated = true;
-          emitter.emit("pushState", "edit")
+          emitter.emit("pushState", "/edit")
         }).catch(err => {
           console.log("not auth'd friend!")
           state.user.authenticated = false;
-          emitter.emit("pushState", "login")
+          emitter.emit("pushState", "/login")
         });
     } else {
       // If we get login information, add the strategy we want to use for login
@@ -75,7 +75,7 @@ function store (state, emitter) {
           state.user.authenticated = true;
           state.user.username = authResponse.username;
           state.user.id = authResponse._id;
-          emitter.emit("pushState", "edit")
+          emitter.emit("pushState", "/edit")
         }).catch(err => {
           // Show login page (potentially with `e.message`)
           console.log('Authentication error', err);

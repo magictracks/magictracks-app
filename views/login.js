@@ -12,6 +12,7 @@ function view (state, emit) {
       <p class="w-100">Log in to your account with your email & password - we don't store your password!</p>
       ${state.cache(LoginForm, "LoginForm", state, emit)}
       <p class="w-100 f6">Don't have an account? <a href="/signup">Create an account here</a>.</p>
+      <p class="w-100 f6">Back <a href="/">Home</a>.</p>
     </section>
     </body>
   `
