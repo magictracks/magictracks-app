@@ -77,8 +77,11 @@ function view(state, emit) {
             <h1 class="pa0 ma0 f1 lh-solid">Support & Acknowledgements</h1>
           </section>
           <!-- right -->
-          <section class="pa0 flex flex-row bg-washed-blue w-100-l w-100-m w-100-ns justify-center pt4">
-            
+          <section class="pa0 flex flex-row bg-washed-blue w-100-l w-100-m w-100-ns justify-start pt4">
+          <div class="w-50-l w-100-m w-100-ns pr2">
+            <p>The Magic Tracks is supported and maintained by NYU's Intertelecommunications Program. The project was materialized by Joey Lee and friends through ITP's <a href="https://tisch.nyu.edu/itp/itp-people/faculty/somethings-in-residence-sirs" target="_blank">Something in Residence Program</a> under the supervision of Shawn Van Every, Dan Shiffman, and Dan O'Sullivan.</p>
+            <p>Contributions and support by Rik Smith & Alejandro Matamala.</p>
+            </div>
           </section>
       </section> <!-- row2 -->
     </main>
