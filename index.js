@@ -24,6 +24,7 @@ app.route('/', require('./views/main'))
 app.route('/app', require('./views/app'))
 app.route('/login', require('./views/login'))
 app.route('/signup', require('./views/signup'))
+app.route('/about', require('./views/about'))
 
 // BROWSE ROUTES
 app.route('/browse', require('./views/browse'))

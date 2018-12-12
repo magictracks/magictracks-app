@@ -3,7 +3,7 @@ var css = require('sheetify');
 var SignupForm = require('../components/SignupForm')
 var LandingFooter = require('../components/LandingFooter')
 
-var TITLE = 'app - main'
+var TITLE = 'app - about'
 
 module.exports = view
 
