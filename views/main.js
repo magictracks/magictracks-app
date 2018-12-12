@@ -2,6 +2,7 @@ var html = require('choo/html')
 var css = require('sheetify');
 var SignupForm = require('../components/SignupForm')
 var LandingFooter = require('../components/LandingFooter')
+var LandingHeader = require('../components/LandingHeader')
 
 var TITLE = 'app - main'
 
@@ -21,17 +22,7 @@ function view(state, emit) {
   return html `
 
 <body class="w-100 h-100 code lh-copy bg-washed-blue ma0 flex flex-column">
-  <header class="flex h-60px flex-column justify-center pa2">
-    <nav class="w-100 h-100 ma0 flex flex-row justify-between">
-      <ul class="flex flex-row list pl0 justify-start h-100 ma0 items-center">
-        <li class="mr4 f4 b"> ✨ Magic Tracks ✨</li>  
-        <li> <a class="link black" href="/browse">Browse</a> </li>
-      </ul>
-      <ul class="flex flex-row list pl0 justify-end ma0 h-100 items-center">
-        <li class="pa2" onclick=${triggerLogin}>Log In</li>
-      </ul>
-    </nav>
-  </header>
+  ${state.cache(LandingHeader, "LandingHeader", state, emit)}
   <main class="flex flex-column justify-center items-center pa2 flex-1">
     <!-- row1 -->
     <section class="flex-m flex-l flex-ns flex-row items-center justify-center flex-wrap-l flex-wrap-m">
@@ -48,7 +39,6 @@ function view(state, emit) {
           </div>
         </section>
     </section> <!-- row1 -->
-
   </main>
   ${state.cache(LandingFooter,"LandingFooter", state, emit)}
 </body>
