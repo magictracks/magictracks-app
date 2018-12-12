@@ -32,17 +32,19 @@ function view(state, emit) {
               <p>Whether you're new to a topic or an expert, sometimes it's hard to know how to puzzle together all of the pieces that make up an idea. It's also hard to know what you need to know when approaching a new idea.</p>
               <p>The Magic Tracks project is a web application and methodology for you and your collaborators to reuse and organize existing web references - e.g. tutorials, videos, etc - into playlists that help you to learn all the things you need to make your unique idea come true.</p>
             </div>
-            <div class="w-50-l w-100-m w-100-ns pl2">
+            <div class="w-50-l w-100-m w-100-ns pl2 pr2">
               
               <p>Why do we need another app for this? The reality is that we don't. However, here at ITP, we're looking at new ways to enhance sharing and reuse of the learning materials that our students, faculty, residents, and staff are producing and/or have found useful from our friends across the web.</p>
               <p>We're excited to see how Magic Tracks can help you learn!</p>
               <p>- Joey, Dan, Shawn, and friends</p>
+
+              <small>Interested to know more about the project? Read our <a href="#">blog post about the project (coming soon)</a></small>
             </div>
           </section>
       </section> <!-- row1 -->
 
       <!-- row2 -->
-      <section class="w-100 flex-m flex-l flex-ns flex-column items-start justify-center flex-wrap-l flex-wrap-m pt4 pl4">
+      <section class="w-100 flex-m flex-l flex-ns flex-column items-start justify-center flex-wrap-l flex-wrap-m pt4 pl4 mt4">
           <!-- left -->
           <section class="pb2 pt2 flex flex-column bg-washed-blue w-50-l w-100-m w-100-ns justify-center">
             <h1 class="pa0 ma0 f1 lh-solid">How does it work?</h1>
@@ -69,7 +71,7 @@ function view(state, emit) {
       </section> <!-- row2 -->
 
       <!-- row2 -->
-      <section class="w-100 flex-m flex-l flex-ns flex-column items-start justify-center flex-wrap-l flex-wrap-m pt4 pl4">
+      <section class="w-100 flex-m flex-l flex-ns flex-column items-start justify-center flex-wrap-l flex-wrap-m pt4 pl4 mt4">
           <!-- left -->
           <section class="pb2 pt2 flex flex-column bg-washed-blue w-50-l w-100-m w-100-ns justify-center">
             <h1 class="pa0 ma0 f1 lh-solid">Support & Acknowledgements</h1>
