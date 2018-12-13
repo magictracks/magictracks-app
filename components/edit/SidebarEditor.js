@@ -50,7 +50,7 @@ module.exports = function(id, state, emit) {
 
 
     return html `
-      <section class="bw2 flex flex-column ba w5-ns w-100 mt2 h-auto flex-1 justify-between">
+      <section class="bw2 flex flex-column ba w-100 mt2 h-auto flex-1 justify-between">
         <div class="w-100 pa2 overflow-y-scroll mb2" style="max-height: 532px;">
           <div class="w-100 tc"><small class="f7">Edit Selected | <span class="pointer hover-bg-purple" onclick=${deleteSelected}>🗑 delete </delete> </small></div>
           <div class="">

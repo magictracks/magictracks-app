@@ -12,7 +12,7 @@ function view(state, emit) {
   if (state.user.authenticated === true) {
     return html `
     <body class="w-100 h-100 code lh-copy bg-washed-blue ma0 flex flex-column items-center">
-      <section class="mw8 w-100 h-100 pa2 flex flex-row">
+      <section class="mw9 w-100 h-100 pa2 flex flex-row">
         <!-- SIDEBAR -->
         ${Sidebar("Sidebar", state, emit)}
 

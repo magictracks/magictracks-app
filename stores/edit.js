@@ -111,6 +111,7 @@ function store(state, emitter) {
     // SELECT AND EDIT THIS FEATURE USING QUERY PARAMS
     emitter.on("edit:selectAndEdit", function (_id, _db) {
       console.log("SELECT AND EDIT", _id, _db);
+      console.log(state.params, state.query)
       feathersClient.service(_db).get(_id).then(res => {
         state.edit.selected = res;
         emitter.emit(state.events.RENDER);

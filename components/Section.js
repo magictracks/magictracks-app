@@ -13,13 +13,14 @@ module.exports = function(section, sectionIndex, state, emit){
         if(state.params.db == "playlists"){
             emit("pushState", `?${db}=${id}`)
         }
+
         emit("edit:selectAndEdit", id, db)
       }
 
     return html`
         <section class="w-100 ba bw1 b--near-black mt2" data-id=${section._id} data-db="sections">
             <!-- SECTION HEADER -->
-            <section class="w-100 pa2 bg-near-black white flex flex-column bg-animate hover-bg-washed-green hover-near-black" 
+            <section class="w-100 pa2 bg-dark-pink white flex flex-column bg-animate hover-bg-washed-green hover-near-black" 
             data-id=${section._id} data-db="sections" 
             onclick=${setSelected}>
             <h4 class="f4 mt0 mb2">${section.title}</h4>

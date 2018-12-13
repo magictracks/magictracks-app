@@ -36,7 +36,7 @@ module.exports = function(id, state, emit) {
   
   
     return html`
-        <section class="w-100 h-auto overflow-y-scroll flex flex-column pa2 mt2">
+        <section class="w-100 h-auto overflow-y-scroll flex flex-column pl4 pr4 pt2 pb4 mt2">
           <!-- FILTER MENU -->
           ${MainFilterMenu("MainFilterMenu", state, emit)}
     
