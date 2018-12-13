@@ -10,6 +10,7 @@ module.exports = function(resource, resourceIndex, state, emit){
         e.preventDefault();
         let id = e.currentTarget.dataset.id;
         let db = e.currentTarget.dataset.db;
+
         // emit("db:getSelectedFeature", id, db);
     }
 
@@ -20,6 +21,14 @@ module.exports = function(resource, resourceIndex, state, emit){
             let db = e.currentTarget.dataset.db;
 
             console.log(id, db);
+
+            if(state.params.db == "playlists"){
+                let sectionId = state.query.sections;
+                console.log(sectionId)
+                emit("pushState", `?sections=${sectionId}&${db}=${id}`)
+            } else if (state.params.db == "sections"){
+                emit("pushState", `?${db}=${id}`)   
+            }
 
             emit("edit:selectAndEdit", id, db)
         } 

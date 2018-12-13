@@ -14,7 +14,7 @@ module.exports = function(id, state, emit) {
 
         if (state.params.hasOwnProperty('id')) {
             // if the params have an ID, get the specific item 
-            return MainEditView(state, edit);
+            return MainEditView(state, emit);
         } else {
             // otherwise, show which items can be edited
             // Show the cards if we're looking for items to edit

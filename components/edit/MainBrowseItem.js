@@ -38,7 +38,7 @@ module.exports = function(item, state, emit) {
     }
 
     return html`
-        <div class="overflow-auto w-100 w-50-m w-33-l h5 ba b--near-white bw1 pa2 f7 grow ${checkDb()}" data-id="${item._id}"
+        <div class="overflow-auto w-100 w-50-m w-33-l h5 ba b--near-white bw1 pa3 f7 grow ${checkDb()}" data-id="${item._id}"
           data-db="${item.featureType}" onclick=${changeRoute}>
           <p class="ma0 f4 b">${item.title}</p>
           <p class="ma0 f7 mt2 textOverflow">${item.description}</p>

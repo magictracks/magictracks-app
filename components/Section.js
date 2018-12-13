@@ -8,6 +8,11 @@ module.exports = function(section, sectionIndex, state, emit){
         let id = e.currentTarget.dataset.id;
         let db = e.currentTarget.dataset.db;
         // emit("db:getSelectedFeature", id, db);
+        console.log(state.params.db)
+
+        if(state.params.db == "playlists"){
+            emit("pushState", `?${db}=${id}`)
+        }
         emit("edit:selectAndEdit", id, db)
       }
 
