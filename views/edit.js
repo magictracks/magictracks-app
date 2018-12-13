@@ -2,7 +2,7 @@ const html = require('choo/html');
 const css = require('sheetify');
 
 // Components
-const MainView = require('../components/edit/MainView');
+const EditMain = require('../components/edit/Main');
 const Sidebar = require('../components/edit/Sidebar');
 
 module.exports = view;
@@ -17,7 +17,7 @@ function view(state, emit) {
         ${Sidebar("Sidebar", state, emit)}
 
         <!-- BROWSE AREA -->
-        ${MainView("MainView", state, emit)}
+        ${EditMain("MainView", state, emit)}
       </section>
     </body> 
   `;
