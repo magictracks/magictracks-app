@@ -5,7 +5,6 @@ const MainBrowseItem = require('./MainBrowseItem');
 module.exports = function(state, emit){
 
     let currentDbSelection;
-    console.log("hello there!")
 
     if (state.params.db == "playlists") {
         currentDbSelection = state.browse["playlists"];
@@ -18,9 +17,6 @@ module.exports = function(state, emit){
     } else if (state.params.db == "tags") {
         currentDbSelection = state.browse["tags"];
     } 
-
-    console.log("🌶🌶🌶🌶🌶", currentDbSelection);
-
 
     return html`
         <section class="w-100 flex flex-row flex-wrap mt4">
