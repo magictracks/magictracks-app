@@ -18,8 +18,8 @@ module.exports = function(item, state, emit) {
       `
 
     function changeRoute(e) {
-      emit("pushState", `/edit/${item.featureType}/${item._id}`)
-      emit("edit:select");
+      emit("pushState", `/browse/${item.featureType}/${item._id}`)
+      emit("browse:select");
     }
 
     function checkDb() {
@@ -40,9 +40,9 @@ module.exports = function(item, state, emit) {
     return html`
         <div class="overflow-auto w-100 w-50-m w-33-l h5 ba b--near-white bw2 pa3 f7 bg-animate hover-bg-pink ${checkDb()}" data-id="${item._id}"
           data-db="${item.featureType}" onclick=${changeRoute}>
-          <p class="ma0 f4 b">${item.title}</p>
-          <p class="ma0 f7 mt2 textOverflow">${item.description}</p>
-          <p class="ma0 f7 mt2">By: ${item.submittedBy}</p>
+          <p class="ma0 f4 b">${item.title || ""}</p>
+          <p class="ma0 f7 mt2 textOverflow">${item.description || ""}</p>
+          <p class="ma0 f7 mt2">By: ${item.submittedBy || ""}</p>
         </div>
     `
   }

@@ -36,7 +36,7 @@ module.exports = function(resource, resourceIndex, state, emit){
       }
 
     return html`
-        <tr class="bg-animate hover-bg-washed-green" data-id=${resource._id} data-db="resources" onclick=${ editSelected }>
+        <tr class="bg-animate hover-bg-washed-blue" data-id=${resource._id} data-db="resources" onclick=${ editSelected }>
             <td class="pa3">${resourceIndex}</td>
             <td class="pa3">☑️</td>
             <td class="pa3"><a class="link black hover-bg-purple hover-white" href="${resource.url}" target="_blank">${resource.title}</a></td>

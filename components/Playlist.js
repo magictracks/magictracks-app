@@ -14,7 +14,7 @@ module.exports = function(playlist, state, emit){
     return html`
     <section class="shadow-1">
       <!-- HEADER AREA -->
-      <div class="pl4 pt4 pr4 pb4 bg-washed-red black bg-animate hover-bg-washed-green" data-id="${playlist._id}" data-db="${playlist.featureType}" onclick=${editSelected}>
+      <div class="pl4 pt4 pr4 pb4 bg-washed-red black bg-animate hover-bg-washed-blue" data-id="${playlist._id}" data-db="${playlist.featureType}" onclick=${editSelected}>
         <div>
           <h3 class="f3 mt0 mb2">${playlist.title}</h3>
         </div>
