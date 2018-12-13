@@ -11,16 +11,18 @@ module.exports = function(id, state, emit) {
     function RenderItems() {
   
       if (state.params && Object.keys(state.params).length > 0 && state.edit.selected.hasOwnProperty("_id")) {
-        // if the params have an ID, get the specific item 
+
         if (state.params.hasOwnProperty('id')) {
+            // if the params have an ID, get the specific item 
             return MainEditView(state, edit);
-        // otherwise, show which items can be edited
         } else {
+            // otherwise, show which items can be edited
             // Show the cards if we're looking for items to edit
            return MainBrowseItems(state, emit);
         }
-        // default to playlists as the edit 
+        
       } else {
+          // default to playlists as the edit 
         return html`
           <section class="w-100 flex flex-row flex-wrap mt4">
             ${state.edit.playlists.map( playlist => {
@@ -32,15 +34,13 @@ module.exports = function(id, state, emit) {
   
     }
   
-    
-  
   
     return html`
         <section class="w-100 h-auto overflow-y-scroll flex flex-column pa2 mt2">
           <!-- FILTER MENU -->
           ${MainFilterMenu("MainFilterMenu", state, emit)}
     
-          <!-- SELECTED ITEMS TO BROWSE -->
+          <!-- SELECTED ITEMS TO BROWSE OR EDIT -->
           ${RenderItems()}
 
         </section>
