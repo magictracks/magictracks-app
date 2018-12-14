@@ -14,13 +14,18 @@ module.exports = function(tags, state, emit) {
 
     newInput.id = "tagsSelector"
     console.log(tags)
-    tags = tags.map((tag) => {
-        return {
-            "value": tag._id,
-            "label": tag.tag,
-            "id": tag._id
-        }
-    })
+    if(tags){
+        tags = tags.map((tag) => {
+            return {
+                "value": tag._id,
+                "label": tag.tag,
+                "id": tag._id
+            }
+        })
+    } else{
+        tags = []
+    }
+    
     // let tags = [{value:"hello", label:"hello", id:1, selected:true},{value:"world", label:"world",id:2, selected: true}, {value:"rock", label:"rock",id:3,selected: false}];
     let textRemove = new Choices(newInput, {
         delimiter: ',',
