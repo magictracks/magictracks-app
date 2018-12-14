@@ -2,6 +2,7 @@ const {
   feathersClient
 } = require('../components/api');
 const axios = require('axios');
+var FileSaver = require('file-saver');
 
 module.exports = store
 
@@ -326,6 +327,23 @@ function store(state, emitter) {
         return err;
       })
     });
+
+
+    emitter.on("edit:download", function () {
+      let _db = state.params.db;
+      let _id = state.params.id;
+      console.log(FileSaver)
+      feathersClient.service(_db).get(_id).then(res => {
+        var blob = new Blob([JSON.stringify(res) ], {type: "text/plain;charset=utf-8"});
+        console.log(blob)
+        FileSaver.saveAs(blob, `${_db}_${_id}.json`);
+      }).catch(err => {
+        return err;
+      })
+    });
+
+
+
 
 
 
