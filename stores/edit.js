@@ -336,7 +336,20 @@ function store(state, emitter) {
       feathersClient.service(_db).get(_id).then(res => {
         var blob = new Blob([JSON.stringify(res) ], {type: "text/plain;charset=utf-8"});
         console.log(blob)
+        // TODO: add in title of downloaded file to output with underscores separating spaces & removing weird characters
         FileSaver.saveAs(blob, `${_db}_${_id}.json`);
+      }).catch(err => {
+        return err;
+      })
+    });
+
+    emitter.on("edit:share", function () {
+      let _db = state.params.db;
+      let _id = state.params.id;
+      console.log(FileSaver)
+      feathersClient.service(_db).get(_id).then(res => {
+        // Make a page with the resulting data - maybe a new view?
+        return res
       }).catch(err => {
         return err;
       })
