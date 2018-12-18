@@ -41,7 +41,7 @@ function MainNav(id, state, emit){
   }
 
   function triggerExport(e){
-    return ""
+    emit("edit:share")
   }
 
   function triggerDownload(e){
@@ -54,11 +54,11 @@ function MainNav(id, state, emit){
     <ul class="w-50 list flex flex-row ma0 pa0 h-100 z-max">
       <li onclick=${navBack} class="hover-bg-purple pl2 pr2 f5 white pointer">⨞</li>
       <li onclick=${navForward} class="hover-bg-purple h-flip pl2 pr2 f5 white pointer">⨞</li>
-      <li class="pointer mainNavTab h-100 ${checkRoute("edit")} pr2 pl2">
-        <span> <a class="link ${checkRoute("edit")}" href="/edit">Edit</a> </span> <span onclick=${toggleDropdown}>▾</span>
-        <ul class="dn ba bw1 pa2 bg-pink list black">
-          <li onclick=${triggerExport}>export/share</li>
-          <li onclick=${triggerDownload}>download</li>
+      <li class="pointer mainNavTab h-100 ${checkRoute("edit")}">
+        <span class="pr2"> <a class="pl2 link ${checkRoute("edit")}" href="/edit">Edit</a> </span> <span class="pr2" onclick=${toggleDropdown}>▾</span>
+        <ul class="dn bl br bb bw2 b--near-white bg-near-white pl0 list black">
+          <li class="f7 hover-animate hover-bg-purple hover-white black" onclick=${triggerExport}>export/share</li>
+          <li class="f7 hover-animate hover-bg-purple hover-white black" onclick=${triggerDownload}>download</li>
         </ul>
       </li>
       <li class="mainNavTab h-100 ${checkRoute("browse")} pr2 pl2"><span> <a class="link ${checkRoute("browse")}" href="/browse">Browse</a> </span></li>
